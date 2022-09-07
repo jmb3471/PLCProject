@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * This class is responsible for tokenizing Jott code.
  * 
- * @author Jonathan Baxley
+ * @author Jonathan Baxley, Jake Hunter
  **/
 
 import java.util.ArrayList;
