@@ -36,35 +36,35 @@ public class JottTokenizer {
 				String line = sc.nextLine();
 				int j = 0;
 				while (j < line.length()) {
-					Char ch = line.charAt(j);
+					char ch = line.charAt(j);
 					String token = "";
-					if (ch == " ") {
+					if (ch == ' ') {
 						j++;
 					}
-					else if (ch == "#") {
+					else if (ch == '#') {
 						break;
 					}
-					else if (ch == ",") {
+					else if (ch == ',') {
 						token = ",";
 						Token token1 = new Token(token, filename, i, TokenType.COMMA);
 						tokenList.add(token1);
 					}
-					else if (ch == "[") {
+					else if (ch == '[') {
 						token = "[";
 						Token token1 = new Token(token, filename, i, TokenType.L_BRACKET);
 						tokenList.add(token1);
 					}
-					else if (ch == "]") {
+					else if (ch == ']') {
 						token = "]";
 						Token token1 = new Token(token, filename, i, TokenType.R_BRACKET);
 						tokenList.add(token1);
 					}
-					else if (ch == "{") {
+					else if (ch == '{') {
 						token = "{";
 						Token token1 = new Token(token, filename, i, TokenType.L_BRACE);
 						tokenList.add(token1);
 					}
-					else if (ch == "}") {
+					else if (ch == '}') {
 						token = "}";
 						Token token1 = new Token(token, filename, i, TokenType.R_BRACE);
 						tokenList.add(token1);
