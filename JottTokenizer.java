@@ -31,7 +31,7 @@ public class JottTokenizer {
 		
 		if(sc != null)
 		{
-			int i = 0;
+			int i = 1;
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
 				int j = 0;
@@ -68,6 +68,92 @@ public class JottTokenizer {
 						token = "}";
 						Token token1 = new Token(token, filename, i, TokenType.R_BRACE);
 						tokenList.add(token1);
+					}
+					else if (ch == '=') {
+						token = "=";
+						ch = line.charAt(j+1);
+						if (ch == '=') {
+							token += "=";
+							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+							tokenList.add(token1);
+						}
+					}
+					else if (ch == '<' || ch == '>') {
+						token = Character.toString(ch);
+						ch = line.charAt(j+1);
+						if (ch == '=') {
+							token += "=";
+							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+							tokenList.add(token1);
+						}
+						else {
+							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+							tokenList.add(token1);
+						}
+					}
+					else if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
+						token = Character.toString(ch);
+						Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+						tokenList.add(token1);
+					}
+					else if (ch == ';') {
+						token = ";";
+						Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+						tokenList.add(token1);
+					}
+					else if (ch == '.') {
+						token = ".";
+						ch = line.charAt(j+1);
+						if (Character.isDigit(ch)) {
+							token += Character.toString(ch);
+							j++;
+							while (true) {
+								ch = line.charAt(j+1);
+								if (Character.isDigit(ch)) {
+									token += Character.toString(ch);
+									j++;
+								}
+								else {
+									Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+									tokenList.add(token1);
+									break;
+								}
+							}
+						}
+						else {
+							//throw error
+						}
+					}
+					else if (Character.isDigit(ch)) {
+						token = Character.toString(ch);
+						while (true) {
+							ch = line.charAt(j+1);
+							if (Character.isDigit(ch)) {
+								token += Character.toString(ch);
+								j++;
+							}
+							else if (ch == '.') {
+								token += ".";
+								break;
+							}
+							else {
+								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+								tokenList.add(token1);
+								break;
+							}
+						}
+						while (true) {
+							ch = line.charAt(j+1);
+							if (Character.isDigit(ch)) {
+								token += Character.toString(ch);
+								j++;
+							}
+							else {
+								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+								tokenList.add(token1);
+								break;
+							}
+						}
 					}
 					j++;
 				}
