@@ -31,58 +31,71 @@ public class JottTokenizer {
 		
 		if(sc != null)
 		{
-			int i = 1;
+			int i = 1;	// line number
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
 				int j = 0;
-				while (j < line.length()) {
+				while (j < line.length()-1) {
 					char ch = line.charAt(j);
 					String token = "";
 					if (ch == ' ') {
-						j++;
+						// do nothing
 					}
-					else if (ch == '#') {
+					if (ch == '#') {
 						break;
 					}
-					else if (ch == ',') {
+					if (ch == ',') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.COMMA);
 						tokenList.add(token1);
 					}
-					else if (ch == '[') {
+					if (ch == '[') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.L_BRACKET);
 						tokenList.add(token1);
 					}
-					else if (ch == ']') {
+					if (ch == ']') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.R_BRACKET);
 						tokenList.add(token1);
 					}
-					else if (ch == '{') {
+					if (ch == '{') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.L_BRACE);
 						tokenList.add(token1);
 					}
-					else if (ch == '}') {
+					if (ch == '}') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.R_BRACE);
 						tokenList.add(token1);
 					}
-					else if (ch == '=') {
+					if (ch == '=') {
 						token = Character.toString(ch);
-						ch = line.charAt(j+1);
-						if (ch == '=') {
-							token += "=";
-							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+						if(j+1 < line.length())
+						{
+							ch = line.charAt(j+1);
+							if (ch == '=') {
+								token += "=";
+								j++;
+								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+								tokenList.add(token1);
+							}
+							else {
+								Token token1 = new Token(token, filename, i, TokenType.ASSIGN);
+								tokenList.add(token1);
+							}
+						}
+						else {
+							Token token1 = new Token(token, filename, i, TokenType.ASSIGN);
 							tokenList.add(token1);
 						}
 					}
-					else if (ch == '<' || ch == '>') {
+					if (ch == '<' || ch == '>') {
 						token = Character.toString(ch);
 						ch = line.charAt(j+1);
 						if (ch == '=') {
 							token += "=";
+							j++;
 							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
 							tokenList.add(token1);
 						}
@@ -91,17 +104,17 @@ public class JottTokenizer {
 							tokenList.add(token1);
 						}
 					}
-					else if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
+					if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.MATH_OP);
 						tokenList.add(token1);
 					}
-					else if (ch == ';') {
+					if (ch == ';') {
 						token = ";";
 						Token token1 = new Token(token, filename, i, TokenType.SEMICOLON);
 						tokenList.add(token1);
 					}
-					else if (ch == '.') {
+					if (ch == '.') {
 						token = Character.toString(ch);
 						ch = line.charAt(j+1);
 						if (Character.isDigit(ch)) {
@@ -124,9 +137,9 @@ public class JottTokenizer {
 							//throw error
 						}
 					}
-					else if (Character.isDigit(ch)) {
+					if (Character.isDigit(ch)) {
 						token = Character.toString(ch);
-						while (true) {
+						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
 							if (Character.isDigit(ch)) {
 								token += Character.toString(ch);
@@ -134,19 +147,20 @@ public class JottTokenizer {
 							}
 							else if (ch == '.') {
 								token += ".";
-								break;
-							}
-							else {
-								Token token1 = new Token(token, filename, i, TokenType.NUMBER);
-								tokenList.add(token1);
-								break;
-							}
-						}
-						while (true) {
-							ch = line.charAt(j+1);
-							if (Character.isDigit(ch)) {
-								token += Character.toString(ch);
 								j++;
+								while (j+1 < line.length()) {
+										
+									ch = line.charAt(j+1);
+									if (Character.isDigit(ch)) {
+										token += Character.toString(ch);
+										j++;
+									}
+									else {
+										Token token1 = new Token(token, filename, i, TokenType.NUMBER);
+										tokenList.add(token1);
+										break;
+									}
+								}
 							}
 							else {
 								Token token1 = new Token(token, filename, i, TokenType.NUMBER);
@@ -155,9 +169,9 @@ public class JottTokenizer {
 							}
 						}
 					}
-					else if (Character.isLetterOrDigit(ch)) {
+					if (Character.isLetter(ch)) {
 						token = Character.toString(ch);
-						while (true) {
+						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
 							if (Character.isLetterOrDigit(ch)) {
 								token += Character.toString(ch);
@@ -169,19 +183,18 @@ public class JottTokenizer {
 								break;
 							}
 						}
-
 					}
-					else if (ch == ':') {
+					if (ch == ':') {
 						token = Character.toString(ch);
 						Token token1 = new Token(token, filename, i, TokenType.COLON);
 						tokenList.add(token1);
 					}
-					else if (ch == '!') {
+					if (ch == '!') {
 						token = Character.toString(ch);
 						ch = line.charAt(j+1);
 						if (ch == '=') {
-							j++;
 							token += Character.toString(ch);
+							j++;
 							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
 							tokenList.add(token1);
 						}
@@ -189,19 +202,20 @@ public class JottTokenizer {
 							//throw error
 						}
 					}
-					else if (ch == '"') {
+					if (ch == '"') {
 						token = Character.toString(ch);
-						while (true) {
+						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
 							if (Character.isLetterOrDigit(ch) || ch == ' ') {
-								j++;
 								token += Character.toString(ch);
+								j++;
 							}
 							else if (ch == '"') {
-								j++;
 								token += Character.toString(ch);
+								j++;
 								Token token1 = new Token(token, filename, i, TokenType.STRING);
 								tokenList.add(token1);
+								break;
 							}
 							else {
 								// throw error
