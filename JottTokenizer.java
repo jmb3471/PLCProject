@@ -18,7 +18,7 @@ public class JottTokenizer {
      * @param filename the name of the file to tokenize; can be relative or absolute path
      * @return an ArrayList of Jott Tokens
      */
-    public static ArrayList<Token> tokenize(String filename)
+    public static ArrayList<Token> tokenize(String filename)throws Exception
 	{
 		ArrayList<Token> tokenList = new ArrayList<Token>();
 		File file = new File(filename);
@@ -35,7 +35,7 @@ public class JottTokenizer {
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
 				int j = 0;
-				while (j < line.length()-1) {
+				while (j < line.length()) {
 					char ch = line.charAt(j);
 					String token = "";
 					if (ch == ' ') {
@@ -116,25 +116,30 @@ public class JottTokenizer {
 					}
 					if (ch == '.') {
 						token = Character.toString(ch);
-						ch = line.charAt(j+1);
-						if (Character.isDigit(ch)) {
-							token += Character.toString(ch);
-							j++;
-							while (true) {
-								ch = line.charAt(j+1);
-								if (Character.isDigit(ch)) {
-									token += Character.toString(ch);
-									j++;
+						if(j+1 < line.length()) {
+							ch = line.charAt(j+1);
+							if (Character.isDigit(ch)) {
+								token += Character.toString(ch);
+								j++;
+								while (j+1 < line.length()) {
+									ch = line.charAt(j+1);
+									if (Character.isDigit(ch)) {
+										token += Character.toString(ch);
+										j++;
+									}
+									else {
+										Token token1 = new Token(token, filename, i, TokenType.NUMBER);
+										tokenList.add(token1);
+										break;
+									}
 								}
-								else {
-									Token token1 = new Token(token, filename, i, TokenType.NUMBER);
-									tokenList.add(token1);
-									break;
-								}
+							}
+							else {
+								throw new Exception("Missing a digit after the '.'");
 							}
 						}
 						else {
-							//throw error
+							throw new Exception("Missing a digit after the '.'");
 						}
 					}
 					if (Character.isDigit(ch)) {
@@ -161,6 +166,7 @@ public class JottTokenizer {
 										break;
 									}
 								}
+								break;
 							}
 							else {
 								Token token1 = new Token(token, filename, i, TokenType.NUMBER);

@@ -138,7 +138,7 @@ public class JottTokenizerTester {
                                                   t.getFilename(), t.getLineNum());
     }
 
-    private boolean runTest(TestCase test){
+    private boolean runTest(TestCase test)throws Exception{
         System.out.println("Running Test: " + test.testName);
         ArrayList<Token> testResults = JottTokenizer.tokenize(test.fileName);
         if(test.error){
@@ -191,12 +191,17 @@ public class JottTokenizerTester {
         tester.createTestCases();
         for(TestCase test: tester.testCases){
             numTests++;
-            if(tester.runTest(test)){
-                passedTests++;
-                System.out.println("\tPassed\n");
+            try {
+                if(tester.runTest(test)){
+                    passedTests++;
+                    System.out.println("\tPassed\n");
+                }
+                else{
+                    System.out.println("\tFailed\n");
+                }
             }
-            else{
-                System.out.println("\tFailed\n");
+            catch(Exception e) {
+                System.err.println(e.getMessage());
             }
         }
 
