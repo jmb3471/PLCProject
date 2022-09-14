@@ -5,12 +5,16 @@ import java.util.Scanner;
 /**
  * This class is responsible for tokenizing Jott code.
  * 
- * @author Jonathan Baxley, Jake Hunter
+ * @author Jonathan Baxley, Jake Hunter, Jose Estevez
  **/
 
 import java.util.ArrayList;
 
 public class JottTokenizer {
+
+	private static void reportError(String errType, String message, String filename, int lineNumber) {
+		System.out.println(errType + "Error" + "\n" + message + "\n" + filename + ".jott:" + lineNumber);
+	}
 
 	/**
      * Takes in a filename and tokenizes that file into Tokens
@@ -135,11 +139,13 @@ public class JottTokenizer {
 								}
 							}
 							else {
-								throw new Exception("Missing a digit after the '.'");
+								reportError("Syntax", "Missing a digit after the '.'", filename, i);
+								return;
 							}
 						}
 						else {
-							throw new Exception("Missing a digit after the '.'");
+							reportError("Syntax", "Missing a digit after the '.'", filename, i);
+							return;
 						}
 					}
 					if (Character.isDigit(ch)) {
@@ -205,7 +211,8 @@ public class JottTokenizer {
 							tokenList.add(token1);
 						}
 						else {
-							//throw error
+							reportError("Syntax", "Missing '=' after the '!'", filename, i);
+							return;
 						}
 					}
 					if (ch == '"') {
