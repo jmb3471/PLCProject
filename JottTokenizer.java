@@ -140,12 +140,12 @@ public class JottTokenizer {
 							}
 							else {
 								reportError("Syntax", "Missing a digit after the '.'", filename, i);
-								return;
+								return null;
 							}
 						}
 						else {
 							reportError("Syntax", "Missing a digit after the '.'", filename, i);
-							return;
+							return null;
 						}
 					}
 					if (Character.isDigit(ch)) {
@@ -212,7 +212,7 @@ public class JottTokenizer {
 						}
 						else {
 							reportError("Syntax", "Missing '=' after the '!'", filename, i);
-							return;
+							return null;
 						}
 					}
 					if (ch == '"') {
