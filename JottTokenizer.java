@@ -224,6 +224,7 @@ public class JottTokenizer {
 					}
 					if (ch == '"') {
 						token = Character.toString(ch);
+						boolean tok_added = false;
 						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
 							if (Character.isLetterOrDigit(ch) || ch == ' ') {
@@ -235,12 +236,17 @@ public class JottTokenizer {
 								j++;
 								Token token1 = new Token(token, filename, i, TokenType.STRING);
 								tokenList.add(token1);
+								tok_added = true;
 								break;
 							}
 							else {
 								reportError("Synatx", "Invalid string contents", filename, i);
 								return null;
 							}
+						}
+						if (!tok_added) {
+							reportError("Synatx", "Missing closing quotation", filename, i);
+							return null;
 						}
 					}
 					j++;
