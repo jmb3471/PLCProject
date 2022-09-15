@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class JottTokenizer {
 
 	private static void reportError(String errType, String message, String filename, int lineNumber) {
-		System.err.println(errType + "Error" + "\n" + message + "\n" + filename + lineNumber);
+		System.err.println(errType + "Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
 	}
 
 	/**
@@ -26,6 +26,7 @@ public class JottTokenizer {
 	{
 		ArrayList<Token> tokenList = new ArrayList<Token>();
 		File file = new File(filename);
+		
 		Scanner sc = null;
 		try {
 			sc = new Scanner(file);
@@ -50,28 +51,24 @@ public class JottTokenizer {
 					}
 					if (ch == ',') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.COMMA);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.COMMA));
 					}
 					if (ch == '[') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.L_BRACKET);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.L_BRACKET));
 					}
 					if (ch == ']') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.R_BRACKET);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.R_BRACKET));
 					}
 					if (ch == '{') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.L_BRACE);
-						tokenList.add(token1);
+
+						tokenList.add(new Token(token, filename, i, TokenType.L_BRACE));
 					}
 					if (ch == '}') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.R_BRACE);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.R_BRACE));
 					}
 					if (ch == '=') {
 						token = Character.toString(ch);
@@ -81,17 +78,14 @@ public class JottTokenizer {
 							if (ch == '=') {
 								token += "=";
 								j++;
-								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 							}
 							else {
-								Token token1 = new Token(token, filename, i, TokenType.ASSIGN);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.ASSIGN));
 							}
 						}
 						else {
-							Token token1 = new Token(token, filename, i, TokenType.ASSIGN);
-							tokenList.add(token1);
+							tokenList.add(new Token(token, filename, i, TokenType.ASSIGN));
 						}
 					}
 					if (ch == '<' || ch == '>') {
@@ -100,23 +94,19 @@ public class JottTokenizer {
 						if (ch == '=') {
 							token += "=";
 							j++;
-							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
-							tokenList.add(token1);
+							tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 						}
 						else {
-							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
-							tokenList.add(token1);
+							tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 						}
 					}
 					if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.MATH_OP);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.MATH_OP));
 					}
 					if (ch == ';') {
 						token = ";";
-						Token token1 = new Token(token, filename, i, TokenType.SEMICOLON);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.SEMICOLON));
 					}
 					if (ch == '.') {
 						token = Character.toString(ch);
@@ -132,8 +122,7 @@ public class JottTokenizer {
 										j++;
 									}
 									else {
-										Token token1 = new Token(token, filename, i, TokenType.NUMBER);
-										tokenList.add(token1);
+										tokenList.add(new Token(token, filename, i, TokenType.NUMBER));
 										break;
 									}
 								}
@@ -170,13 +159,11 @@ public class JottTokenizer {
 										break;
 									}
 								}
-								Token token1 = new Token(token, filename, i, TokenType.NUMBER);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.NUMBER));
 								break;
 							}
 							else {
-								Token token1 = new Token(token, filename, i, TokenType.NUMBER);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.NUMBER));
 								break;
 							}
 						}
@@ -193,13 +180,11 @@ public class JottTokenizer {
 								break;
 							}
 						}
-						Token token1 = new Token(token, filename, i, TokenType.ID_KEYWORD);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.ID_KEYWORD));
 					}
 					if (ch == ':') {
 						token = Character.toString(ch);
-						Token token1 = new Token(token, filename, i, TokenType.COLON);
-						tokenList.add(token1);
+						tokenList.add(new Token(token, filename, i, TokenType.COLON));
 					}
 					if (ch == '!') {
 						token = Character.toString(ch);
@@ -208,8 +193,7 @@ public class JottTokenizer {
 							if (ch == '=') {
 								token += Character.toString(ch);
 								j++;
-								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 							}
 							else {
 								reportError("Syntax", "Missing '=' after the '!'", filename, i);
@@ -234,8 +218,7 @@ public class JottTokenizer {
 							else if (ch == '"') {
 								token += Character.toString(ch);
 								j++;
-								Token token1 = new Token(token, filename, i, TokenType.STRING);
-								tokenList.add(token1);
+								tokenList.add(new Token(token, filename, i, TokenType.STRING));
 								tok_added = true;
 								break;
 							}
