@@ -190,11 +190,11 @@ public class JottTokenizer {
 								j++;
 							}
 							else {
-								Token token1 = new Token(token, filename, i, TokenType.ID_KEYWORD);
-								tokenList.add(token1);
 								break;
 							}
 						}
+						Token token1 = new Token(token, filename, i, TokenType.ID_KEYWORD);
+						tokenList.add(token1);
 					}
 					if (ch == ':') {
 						token = Character.toString(ch);
