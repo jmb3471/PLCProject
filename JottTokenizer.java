@@ -203,17 +203,24 @@ public class JottTokenizer {
 					}
 					if (ch == '!') {
 						token = Character.toString(ch);
-						ch = line.charAt(j+1);
-						if (ch == '=') {
-							token += Character.toString(ch);
-							j++;
-							Token token1 = new Token(token, filename, i, TokenType.REL_OP);
-							tokenList.add(token1);
+						if (j+1 < line.length()) {
+							ch = line.charAt(j+1);
+							if (ch == '=') {
+								token += Character.toString(ch);
+								j++;
+								Token token1 = new Token(token, filename, i, TokenType.REL_OP);
+								tokenList.add(token1);
+							}
+							else {
+								reportError("Syntax", "Missing '=' after the '!'", filename, i);
+								return null;
+							}
 						}
 						else {
 							reportError("Syntax", "Missing '=' after the '!'", filename, i);
 							return null;
 						}
+						
 					}
 					if (ch == '"') {
 						token = Character.toString(ch);
