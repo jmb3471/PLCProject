@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class JottTokenizer {
 
 	private static void reportError(String errType, String message, String filename, int lineNumber) {
-		System.out.println(errType + "Error" + "\n" + message + "\n" + filename + ".jott:" + lineNumber);
+		System.err.println(errType + "Error" + "\n" + message + "\n" + filename + lineNumber);
 	}
 
 	/**
@@ -231,7 +231,8 @@ public class JottTokenizer {
 								break;
 							}
 							else {
-								// throw error
+								reportError("Synatx", "Invalid string contents", filename, i);
+								return null;
 							}
 						}
 					}
