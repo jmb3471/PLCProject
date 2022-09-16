@@ -5,13 +5,20 @@ import java.util.Scanner;
 /**
  * This class is responsible for tokenizing Jott code.
  * 
- * @author Jonathan Baxley, Jake Hunter, Jose Estevez
+ * @author Jonathan Baxley, Jake Hunter, Jose Estevez, Sam Siock
  **/
 
 import java.util.ArrayList;
 
 public class JottTokenizer {
 
+	/**
+	 * Prints out an error message
+	 * @param errType the type of error
+	 * @param message the error message
+	 * @param filename the filename where the error occurred
+	 * @param lineNumber the line number where the error occured
+	 */
 	private static void reportError(String errType, String message, String filename, int lineNumber) {
 		System.err.println(errType + "Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
 	}
