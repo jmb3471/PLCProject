@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 
 
-public class JottNode implements JottTree {
+abstract class JottNode implements JottTree {
 
     private ArrayList<JottNode> children = new ArrayList<JottNode>();
 
