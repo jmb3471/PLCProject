@@ -6,6 +6,7 @@
  */
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class JottParser {
 
@@ -19,10 +20,32 @@ public class JottParser {
     public static JottTree parse(ArrayList<Token> tokens) {
 		
 		ProgramNode root = new ProgramNode();
-
-		
-
-
+        parseHelper(tokens, root);
       	return root;
     }
+
+    public static JottNode parseHelper(ArrayList<Token> tokens, JottNode node) {
+        if (Objects.equals(node.type, "Program")) {
+            FunctionListNode functionListNode = new FunctionListNode();
+            node.addChild(functionListNode);
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                parseHelper(tokens, node.getChildren().get(i));
+            }
+        }
+        else if (Objects.equals(node.type, "FunctionList")) {
+            // THIS LOGIC NEEDS FLESHED OUT, Figure out how to add the tokens
+            FunctionDefNode functionDefNode = new FunctionDefNode();
+            node.addChild(functionDefNode);
+
+            FunctionListNode functionListNode = new FunctionListNode();
+            node.addChild(functionListNode);
+
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                parseHelper(tokens, node.getChildren().get(i));
+            }
+        }
+        else if (Objects.equals(node.type, "FunctionDef")) {
+            // Continue fleshing out the token logic
+
+        }
 }

@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class FunctionDefNode extends JottNode implements JottTree{
     private Token token;
     private JottNode id;
@@ -10,7 +8,7 @@ public class FunctionDefNode extends JottNode implements JottTree{
     private String type;
 
 
-    public FunctionDefNode(Token token) {
+    public FunctionDefNode() {
         this.token = token;
         this.id = null;
         this.func_def_params = null;;

@@ -1,15 +1,12 @@
 import java.util.List;
 
 public class FunctionListNode extends JottNode implements JottTree {
-    private Token token;
     private List<JottNode> functionList;
     private FunctionListNode functionDef;
-
     private String type;
 
 
-    public FunctionListNode(Token token) {
-        this.token = token;
+    public FunctionListNode() {
         this.functionList = null;
         this.functionDef = null;;
         this.type = "FunctionList";

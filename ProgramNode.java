@@ -1,30 +1,20 @@
-public class ProgramNode implements JottTree {
+public class ProgramNode extends JottNode implements JottTree {
 
-    private Token token;
-    private JottNode functionList;
-    private JottNode endOfFile;
+    public JottNode functionList;
+    public String endOfFile;
+
+    public String type;
+
 
     public ProgramNode() {
-        
-    }
-
-    public ProgramNode(Token token) {
-
-        this.token = null;
         this.functionList = null;
-        this.endOfFile = null;;
-    }
-    
-    public void addFunctionList(JottNode functionList) {
-        this.functionList = functionList;
+        this.endOfFile = "$$";
+        this.type = "Program";
     }
 
-    public void addEndOfFile(JottNode endOfFile) {
-        this.endOfFile = endOfFile;
-    }
     @Override
     public String convertToJott() {
-        return null;
+        return this.functionList.convertToJott();
     }
 
     @Override

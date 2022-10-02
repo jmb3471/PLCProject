@@ -6,6 +6,14 @@ abstract class JottNode implements JottTree {
 
     private ArrayList<JottNode> children = new ArrayList<JottNode>();
 
+    public String value;
+
+    public String type;
+
+    public JottNode() {
+
+    }
+
     public ArrayList<JottNode> getChildren(){
         return this.children;
     }
