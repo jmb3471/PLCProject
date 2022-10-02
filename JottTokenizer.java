@@ -14,13 +14,12 @@ public class JottTokenizer {
 
 	/**
 	 * Prints out an error message
-	 * @param errType the type of error
 	 * @param message the error message
 	 * @param filename the filename where the error occurred
 	 * @param lineNumber the line number where the error occured
 	 */
-	private static void reportError(String errType, String message, String filename, int lineNumber) {
-		System.err.println(errType + "Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
+	private static void reportError(String message, String filename, int lineNumber) {
+		System.err.println("Syntax Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
 	}
 
 	/**
@@ -135,12 +134,12 @@ public class JottTokenizer {
 								}
 							}
 							else {
-								reportError("Syntax", "Missing a digit after the '.'", filename, i);
+								reportError("Missing a digit after the '.'", filename, i);
 								return null;
 							}
 						}
 						else {
-							reportError("Syntax", "Missing a digit after the '.'", filename, i);
+							reportError("Missing a digit after the '.'", filename, i);
 							return null;
 						}
 					}
@@ -203,12 +202,12 @@ public class JottTokenizer {
 								tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 							}
 							else {
-								reportError("Syntax", "Missing '=' after the '!'", filename, i);
+								reportError("Missing '=' after the '!'", filename, i);
 								return null;
 							}
 						}
 						else {
-							reportError("Syntax", "Missing '=' after the '!'", filename, i);
+							reportError("Missing '=' after the '!'", filename, i);
 							return null;
 						}
 						
@@ -230,12 +229,12 @@ public class JottTokenizer {
 								break;
 							}
 							else {
-								reportError("Synatx", "Invalid string contents", filename, i);
+								reportError("Invalid string contents", filename, i);
 								return null;
 							}
 						}
 						if (!tok_added) {
-							reportError("Synatx", "Missing closing quotation", filename, i);
+							reportError("Missing closing quotation", filename, i);
 							return null;
 						}
 					}

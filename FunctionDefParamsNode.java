@@ -1,15 +1,13 @@
 import java.util.List;
 
 public class FunctionDefParamsNode extends JottNode implements JottTree{
-    private Token token;
     private JottNode id;
     private JottNode varType;
     private JottNode function_def_params_t;
     private String type;
 
 
-    public FunctionDefParamsNode(Token token) {
-        this.token = token;
+    public FunctionDefParamsNode() {
         this.id = null;
         this.varType = null;;
         this.function_def_params_t = null;

@@ -1,15 +1,9 @@
-public class BodyNode extends JottNode implements JottTree{
-    private JottNode bodyStmt;
-    private JottNode body;
-    private JottNode returnStmt;
+public class IdNode extends JottNode implements JottTree {
+    private Token token;
     private String type;
 
-
-    public BodyNode() {
-        this.bodyStmt = null;
-        this.body = null;;
-        this.returnStmt = null;
-        this.type = "Body";
+    public IdNode() {
+        this.type = "Id";
     }
 
     @Override
@@ -35,5 +29,9 @@ public class BodyNode extends JottNode implements JottTree{
     @Override
     public boolean validateTree() {
         return false;
+    }
+
+    public void setId(Token token) {
+        this.token = token;
     }
 }

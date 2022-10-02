@@ -10,6 +10,10 @@ import java.util.Objects;
 
 public class JottParser {
 
+    private static void reportError(String message, String filename, int lineNumber) {
+        System.err.println("Syntax Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
+    }
+
     /**
      * Parses an ArrayList of Jotton tokens into a Jott Parse Tree.
      * @param tokens the ArrayList of Jott tokens to parse
@@ -46,6 +50,54 @@ public class JottParser {
         }
         else if (Objects.equals(node.type, "FunctionDef")) {
             // Continue fleshing out the token logic
+            IdNode idNode = new IdNode();
+            node.addChild(idNode);
+            ((FunctionDefNode)node).setIdNode(idNode);
+            parseHelper(tokens, node.getChildren().get(0));
+            tokens.remove(0);
+            tokens.remove(0);
+
+            FunctionDefParamsNode functionDefParamsNode = new FunctionDefParamsNode();
+            node.addChild(functionDefParamsNode);
+            ((FunctionDefNode)node).setFuncDefParamsNode(functionDefParamsNode);
+            parseHelper(tokens, node.getChildren().get(0));
+            while (!tokens.get(0).getTokenType().equals(TokenType.R_BRACKET)) {
+                tokens.remove(0);
+            }
+            tokens.remove(0);
+            tokens.remove(0);
+
+            FunctionReturnNode functionReturnNode = new FunctionReturnNode();
+            node.addChild(functionReturnNode);
+            ((FunctionDefNode)node).setFuncReturnNode(functionReturnNode);
+            parseHelper(tokens, node.getChildren().get(0));
+            tokens.remove(0);
+            tokens.remove(0);
+
+            BodyNode bodyNode = new BodyNode();
+            node.addChild(bodyNode);
+            ((FunctionDefNode)node).setBodyNode(bodyNode);
+
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                parseHelper(tokens, node.getChildren().get(i));
+            }
+        }
+        else if (Objects.equals(node.type, "Id")) {
+            Token token = tokens.get(0);
+            if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
+                if (!tokens.get(1).getTokenType().equals(TokenType.L_BRACKET)) {
+                    reportError("Left bracket expected", token.getFilename(), token.getLineNum());
+                    return null;
+                }
+                ((IdNode) node).setId(token);
+            }
+            else {
+                reportError("Id expected", token.getFilename(), token.getLineNum());
+                return null;
+            }
+        }
+        else if (Objects.equals(node.type, "FunctionDefParam")) {
 
         }
+    }
 }
