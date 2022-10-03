@@ -24,17 +24,18 @@ public class JottParser {
     public static JottTree parse(ArrayList<Token> tokens) {
 		
 		ProgramNode root = new ProgramNode();
-        parseHelper(tokens, root);
+        Boolean success = parseHelper(tokens, root);
+        if (!success) {
+            return null;
+        }
       	return root;
     }
 
-    public static void parseHelper(ArrayList<Token> tokens, JottNode node) {
+    public static Boolean parseHelper(ArrayList<Token> tokens, JottNode node) {
         if (Objects.equals(node.type, "Program")) {
             FunctionListNode functionListNode = new FunctionListNode();
             node.addChild(functionListNode);
-            for (int i = 0; i < node.getChildren().size(); i++) {
-                parseHelper(tokens, node.getChildren().get(i));
-            }
+            return parseHelper(tokens, node.getChildren().get(0));
         }
         else if (Objects.equals(node.type, "FunctionList")) {
             // THIS LOGIC NEEDS FLESHED OUT, Figure out how to add the tokens
@@ -44,23 +45,29 @@ public class JottParser {
             FunctionListNode functionListNode = new FunctionListNode();
             node.addChild(functionListNode);
 
-            for (int i = 0; i < node.getChildren().size(); i++) {
-                parseHelper(tokens, node.getChildren().get(i));
-            }
+            Boolean def_suc = parseHelper(tokens, node.getChildren().get(0));
+            Boolean list_suc = parseHelper(tokens, node.getChildren().get(1));
+            return def_suc && list_suc;
         }
         else if (Objects.equals(node.type, "FunctionDef")) {
             // Continue fleshing out the token logic
             IdNode idNode = new IdNode();
             node.addChild(idNode);
             ((FunctionDefNode)node).setIdNode(idNode);
-            parseHelper(tokens, node.getChildren().get(0));
+            Boolean suc = parseHelper(tokens, node.getChildren().get(0));
+            if (!suc) {
+                return false;
+            }
             tokens.remove(0);
             tokens.remove(0);
 
             FunctionDefParamsNode functionDefParamsNode = new FunctionDefParamsNode();
             node.addChild(functionDefParamsNode);
             ((FunctionDefNode)node).setFuncDefParamsNode(functionDefParamsNode);
-            parseHelper(tokens, node.getChildren().get(0));
+            suc = parseHelper(tokens, node.getChildren().get(1));
+            if (!suc) {
+                return false;
+            }
             while (!tokens.get(0).getTokenType().equals(TokenType.R_BRACKET)) {
                 tokens.remove(0);
             }
@@ -70,43 +77,73 @@ public class JottParser {
             FunctionReturnNode functionReturnNode = new FunctionReturnNode();
             node.addChild(functionReturnNode);
             ((FunctionDefNode)node).setFuncReturnNode(functionReturnNode);
-            parseHelper(tokens, node.getChildren().get(0));
+            suc = parseHelper(tokens, node.getChildren().get(2));
+            if (!suc) {
+                return false;
+            }
             tokens.remove(0);
             tokens.remove(0);
 
             BodyNode bodyNode = new BodyNode();
             node.addChild(bodyNode);
             ((FunctionDefNode)node).setBodyNode(bodyNode);
-
-            for (int i = 0; i < node.getChildren().size(); i++) {
-                parseHelper(tokens, node.getChildren().get(i));
+            suc = parseHelper(tokens, node.getChildren().get(3));
+            if (!suc) {
+                return false;
             }
+            return true;
         }
         else if (Objects.equals(node.type, "Id")) {
             Token token = tokens.get(0);
             if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
                 if (!tokens.get(1).getTokenType().equals(TokenType.L_BRACKET)) {
                     reportError("Left bracket expected", token.getFilename(), token.getLineNum());
-                    return;
+                    return false;
                 }
                 ((IdNode) node).setId(token);
                 tokens.remove(0);
+                return true;
             }
             else {
                 reportError("Id expected", token.getFilename(), token.getLineNum());
+                return false;
             }
         }
         else if (Objects.equals(node.type, "FunctionDefParam")) {
-            Token token = tokens.get(0);
-            while (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
-                IdNode idNode = new IdNode();
-                node.addChild(idNode);
-                // Not sure how to set up func def params and func def params t
+            if (tokens.get(0).getTokenType().equals(TokenType.R_BRACKET)) {
+                return true;
             }
             IdNode idNode = new IdNode();
+            node.addChild(idNode);
+            ((FunctionDefParamsNode)node).setIdNode(idNode);
+            Boolean suc = parseHelper(tokens, node.getChildren().get(0));
+            if (!suc) {
+                return false;
+            }
+            tokens.remove(0);
+            tokens.remove(0);
+
+            VarTypeNode varTypeNode = new VarTypeNode();
+            node.addChild(varTypeNode);
+            ((FunctionDefParamsNode)node).setVarTypeNode(varTypeNode);
+            suc = parseHelper(tokens, node.getChildren().get(1));
+            if (!suc) {
+                return false;
+            }
+            tokens.remove(0);
+
+            FunctionDefParamsTNode functionDefParamsTNode = new FunctionDefParamsTNode();
+            node.addChild(functionDefParamsTNode);
+            ((FunctionDefParamsNode)node).setFunctionDefParamsTNode(functionDefParamsTNode);
+            suc = parseHelper(tokens, node.getChildren().get(2));
+            if (!suc) {
+                return false;
+            }
+            return true;
+
         }
         else if (Objects.equals(node.type, "FunctionDefParamT")) {
-
+            //essentially same as FunctionDefParam
         }
         else if (Objects.equals(node.type, "BodyStmt")) {
             Token token = tokens.get(0);

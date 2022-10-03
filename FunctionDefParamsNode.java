@@ -6,6 +6,17 @@ public class FunctionDefParamsNode extends JottNode implements JottTree{
     private JottNode function_def_params_t;
     private String type;
 
+    public void setIdNode(JottNode id) {
+        this.id = id;
+    }
+
+    public void setVarTypeNode(JottNode varType) {
+        this.varType = varType;
+    }
+
+    public void setFunctionDefParamsTNode(JottNode function_def_params_t) {
+        this.function_def_params_t = function_def_params_t;
+    }
 
     public FunctionDefParamsNode() {
         this.id = null;
