@@ -1,7 +1,6 @@
 import java.util.List;
 
 public class IfStmtNode extends JottNode implements JottTree{
-    private Token token;
     private String ifstmt = "if ";
     private JottNode b_expr;
     private JottNode body;
@@ -11,8 +10,7 @@ public class IfStmtNode extends JottNode implements JottTree{
     private String type;
 
 
-    public IfStmtNode(Token token) {
-        this.token = token;
+    public IfStmtNode() {
         this.else_stmt = null;
         this.elseif_lst = null;;
         this.body = null;

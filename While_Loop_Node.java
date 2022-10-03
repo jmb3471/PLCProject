@@ -1,15 +1,17 @@
-public class BodyStmtNode extends JottNode implements JottTree {
-    private JottNode if_stmt;
-    private JottNode while_stmt;
-    private JottNode stmt;
+import java.util.List;
+
+public class While_Loop_Node extends JottNode implements JottTree{
+    private String ifstmt = "while ";
+    private JottNode b_expr;
+    private JottNode body;
+
     private String type;
 
 
-    public BodyStmtNode() {
-        this.if_stmt = null;
-        this.while_stmt = null;
-        this.stmt = null;
-        this.type = "BodyStmt";
+    public While_Loop_Node() {
+        this.body = null;
+        this.b_expr = null;
+        this.type = "Ifstmt";
     }
 
     @Override

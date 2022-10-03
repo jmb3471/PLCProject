@@ -28,7 +28,7 @@ public class JottParser {
       	return root;
     }
 
-    public static JottNode parseHelper(ArrayList<Token> tokens, JottNode node) {
+    public static void parseHelper(ArrayList<Token> tokens, JottNode node) {
         if (Objects.equals(node.type, "Program")) {
             FunctionListNode functionListNode = new FunctionListNode();
             node.addChild(functionListNode);
@@ -87,17 +87,53 @@ public class JottParser {
             if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
                 if (!tokens.get(1).getTokenType().equals(TokenType.L_BRACKET)) {
                     reportError("Left bracket expected", token.getFilename(), token.getLineNum());
-                    return null;
+                    return;
                 }
                 ((IdNode) node).setId(token);
+                tokens.remove(0);
             }
             else {
                 reportError("Id expected", token.getFilename(), token.getLineNum());
-                return null;
             }
         }
         else if (Objects.equals(node.type, "FunctionDefParam")) {
+            Token token = tokens.get(0);
+            while (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
+                IdNode idNode = new IdNode();
+                node.addChild(idNode);
+                // Not sure how to set up func def params and func def params t
+            }
+            IdNode idNode = new IdNode();
+        }
+        else if (Objects.equals(node.type, "FunctionDefParamT")) {
 
+        }
+        else if (Objects.equals(node.type, "BodyStmt")) {
+            Token token = tokens.get(0);
+            if (token.getToken().equals("if")) {
+                IfStmtNode ifStmtNode = new IfStmtNode();
+                node.addChild(ifStmtNode);
+            }
+            else if (token.getToken().equals("while")) {
+                While_Loop_Node while_loop_node = new While_Loop_Node();
+                node.addChild(while_loop_node);
+            }
+            else {
+                // Insert Stmt node when it is made
+            }
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                parseHelper(tokens, node.getChildren().get(i));
+            }
+        }
+        else if (Objects.equals(node.type, "Body")){
+            // Insert token logic
+            BodyNode bodyNode = new BodyNode();
+            BodyStmtNode bodyStmtNode = new BodyStmtNode();
+            node.addChild(bodyStmtNode);
+            node.addChild(bodyNode);
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                parseHelper(tokens, node.getChildren().get(i));
+            }
         }
     }
 }
