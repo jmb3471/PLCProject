@@ -158,19 +158,33 @@ public class JottParser {
             else {
                 // Insert Stmt node when it is made
             }
-            for (int i = 0; i < node.getChildren().size(); i++) {
-                parseHelper(tokens, node.getChildren().get(i));
-            }
+            return runChildren(tokens, node);
+
         }
         else if (Objects.equals(node.type, "Body")){
-            // Insert token logic
+            // Insert token logic choose either body or return or empty based on token
+
             BodyNode bodyNode = new BodyNode();
             BodyStmtNode bodyStmtNode = new BodyStmtNode();
             node.addChild(bodyStmtNode);
             node.addChild(bodyNode);
-            for (int i = 0; i < node.getChildren().size(); i++) {
-                parseHelper(tokens, node.getChildren().get(i));
-            }
+            return runChildren(tokens, node);
         }
+        else if (Objects.equals(node.type, "ReturnStmt")) {
+            ExprNode exprNode = new ExprNode();
+            node.addChild(exprNode);
+            EndStmtNode endStmtNode = new EndStmtNode();
+            node.addChild(endStmtNode);
+            return runChildren(tokens, node);
+        }
+        return true;
+    }
+
+    public static boolean runChildren(ArrayList<Token> tokens, JottNode node) {
+        Boolean passed = true;
+        for (int i = 0; i < node.getChildren().size(); i++) {
+            passed = parseHelper(tokens, node.getChildren().get(i));
+        }
+        return passed;
     }
 }

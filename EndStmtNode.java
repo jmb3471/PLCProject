@@ -1,13 +1,11 @@
-public class ReturnStmtNode extends JottNode implements JottTree{
-    private JottNode expr;
-    private JottNode end_stmt;
-    private String return_stmt = "return";
+public class EndStmtNode  extends JottNode implements JottTree{
+    private Token token;
+    private String end_stmt = ";";
     private String type;
 
 
-    public ReturnStmtNode() {
-        this.expr = null;
-        this.type = "ReturnStmt";
+    public EndStmtNode() {
+        this.type = "EndStmt";
     }
 
     @Override
