@@ -2,6 +2,19 @@ public class BodyNode extends JottNode implements JottTree{
     private JottNode bodyStmt;
     private JottNode body;
     private JottNode returnStmt;
+
+    public void setBodyStmt(JottNode bodyStmt) {
+        this.bodyStmt = bodyStmt;
+    }
+
+    public void setBody(JottNode body) {
+        this.body = body;
+    }
+
+    public void setReturnStmt(JottNode returnStmt) {
+        this.returnStmt = returnStmt;
+    }
+
     private String type;
 
 
