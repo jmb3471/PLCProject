@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class FunctionDefParamsNode extends JottNode implements JottTree{
+public class FunctionDefParamsNode extends JottNode{
     private JottNode id;
     private JottNode varType;
     private JottNode function_def_params_t;
@@ -22,7 +22,7 @@ public class FunctionDefParamsNode extends JottNode implements JottTree{
         this.id = null;
         this.varType = null;;
         this.function_def_params_t = null;
-        this.type = "FunctionDefParam";
+        this.type = "FunctionDefParams";
     }
 
     @Override

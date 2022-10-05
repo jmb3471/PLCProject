@@ -15,7 +15,7 @@ public class JottParser {
     }
 
     /**
-     * Parses an ArrayList of Jotton tokens into a Jott Parse Tree.
+     * Parses an ArrayList of Jott tokens into a Jott Parse Tree.
      * @param tokens the ArrayList of Jott tokens to parse
      * @return the root of the Jott Parse Tree represented by the tokens.
      *         or null upon an error in parsing.
@@ -58,8 +58,8 @@ public class JottParser {
             if (!suc) {
                 return false;
             }
-            tokens.remove(0);
-            tokens.remove(0);
+            tokens.remove(0);   // ID
+            tokens.remove(0);   // L_BRACKET
 
             FunctionDefParamsNode functionDefParamsNode = new FunctionDefParamsNode();
             node.addChild(functionDefParamsNode);
@@ -71,8 +71,6 @@ public class JottParser {
             while (!tokens.get(0).getTokenType().equals(TokenType.R_BRACKET)) {
                 tokens.remove(0);
             }
-            tokens.remove(0);
-            tokens.remove(0);
 
             FunctionReturnNode functionReturnNode = new FunctionReturnNode();
             node.addChild(functionReturnNode);
@@ -81,8 +79,10 @@ public class JottParser {
             if (!suc) {
                 return false;
             }
-            tokens.remove(0);
-            tokens.remove(0);
+            while (!tokens.get(0).getTokenType().equals(TokenType.L_BRACE)) {
+                tokens.remove(0);
+            }
+            tokens.remove(0);   // L_BRACE
 
             BodyNode bodyNode = new BodyNode();
             node.addChild(bodyNode);
@@ -91,9 +91,14 @@ public class JottParser {
             if (!suc) {
                 return false;
             }
+            while (!tokens.get(0).getTokenType().equals(TokenType.R_BRACE)) {
+                tokens.remove(0);
+            }
+            tokens.remove(0);   // R_BRACE
             return true;
         }
         else if (Objects.equals(node.type, "Id")) {
+            // missing cases for things besides left bracket (such as a colon)
             Token token = tokens.get(0);
             if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
                 if (!tokens.get(1).getTokenType().equals(TokenType.L_BRACKET)) {
@@ -109,7 +114,7 @@ public class JottParser {
                 return false;
             }
         }
-        else if (Objects.equals(node.type, "FunctionDefParam")) {
+        else if (Objects.equals(node.type, "FunctionDefParams")) {
             if (tokens.get(0).getTokenType().equals(TokenType.R_BRACKET)) {
                 return true;
             }
@@ -120,8 +125,8 @@ public class JottParser {
             if (!suc) {
                 return false;
             }
-            tokens.remove(0);
-            tokens.remove(0);
+            tokens.remove(0);   // COLON
+            //tokens.remove(0);
 
             VarTypeNode varTypeNode = new VarTypeNode();
             node.addChild(varTypeNode);
@@ -130,7 +135,7 @@ public class JottParser {
             if (!suc) {
                 return false;
             }
-            tokens.remove(0);
+            tokens.remove(0);   // TYPE
 
             FunctionDefParamsTNode functionDefParamsTNode = new FunctionDefParamsTNode();
             node.addChild(functionDefParamsTNode);
@@ -144,6 +149,36 @@ public class JottParser {
         }
         else if (Objects.equals(node.type, "FunctionDefParamT")) {
             //essentially same as FunctionDefParam
+            if (tokens.get(0).getTokenType().equals(TokenType.COMMA)) {
+                return true;
+            }
+            IdNode idNode = new IdNode();
+            node.addChild(idNode);
+            ((FunctionDefParamsNode)node).setIdNode(idNode);
+            Boolean suc = parseHelper(tokens, node.getChildren().get(0));
+            if (!suc) {
+                return false;
+            }
+            tokens.remove(0);   // COLON
+            //tokens.remove(0);
+
+            VarTypeNode varTypeNode = new VarTypeNode();
+            node.addChild(varTypeNode);
+            ((FunctionDefParamsNode)node).setVarTypeNode(varTypeNode);
+            suc = parseHelper(tokens, node.getChildren().get(1));
+            if (!suc) {
+                return false;
+            }
+            tokens.remove(0);   // TYPE
+
+            FunctionDefParamsTNode functionDefParamsTNode = new FunctionDefParamsTNode();
+            node.addChild(functionDefParamsTNode);
+            ((FunctionDefParamsNode)node).setFunctionDefParamsTNode(functionDefParamsTNode);
+            suc = parseHelper(tokens, node.getChildren().get(2));
+            if (!suc) {
+                return false;
+            }
+            return true;
         }
         else if (Objects.equals(node.type, "BodyStmt")) {
             Token token = tokens.get(0);
@@ -156,13 +191,20 @@ public class JottParser {
                 node.addChild(while_loop_node);
             }
             else {
-                // Insert Stmt node when it is made
+                // Insert Stmt node 
             }
             return runChildren(tokens, node);
 
         }
         else if (Objects.equals(node.type, "Body")){
             // Insert token logic choose either body or return or empty based on token
+
+            Token token = tokens.get(0);
+            if(token.getToken().equals("return"))
+            {
+                ReturnStmtNode returnStmtNode = new ReturnStmtNode();
+                node.addChild(returnStmtNode);
+            } // else if ...
 
             BodyNode bodyNode = new BodyNode();
             BodyStmtNode bodyStmtNode = new BodyStmtNode();
@@ -187,4 +229,7 @@ public class JottParser {
         }
         return passed;
     }
+
+    // missing necessary node types: <elseif_lst>, <params>, <params_t>, <str>
+
 }
