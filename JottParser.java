@@ -140,10 +140,45 @@ public class JottParser {
                 return false;
             }
             return true;
-
         }
         else if (Objects.equals(node.type, "FunctionDefParamT")) {
             //essentially same as FunctionDefParam
+            Token token = tokens.get(0);
+            if (token.getTokenType().equals(TokenType.R_BRACKET)) {
+                return true;
+            }
+            else if (!token.getTokenType().equals(TokenType.COMMA)) {
+                return false;
+            }
+            else {
+                IdNode idNode = new IdNode();
+                node.addChild(idNode);
+                ((FunctionDefParamsNode)node).setIdNode(idNode);
+                Boolean suc = parseHelper(tokens, node.getChildren().get(0));
+                if (!suc) {
+                    return false;
+                }
+                tokens.remove(0);
+                tokens.remove(0);
+
+                VarTypeNode varTypeNode = new VarTypeNode();
+                node.addChild(varTypeNode);
+                ((FunctionDefParamsNode)node).setVarTypeNode(varTypeNode);
+                suc = parseHelper(tokens, node.getChildren().get(1));
+                if (!suc) {
+                    return false;
+                }
+                tokens.remove(0);
+
+                FunctionDefParamsTNode functionDefParamsTNode = new FunctionDefParamsTNode();
+                node.addChild(functionDefParamsTNode);
+                ((FunctionDefParamsNode)node).setFunctionDefParamsTNode(functionDefParamsTNode);
+                suc = parseHelper(tokens, node.getChildren().get(2));
+                if (!suc) {
+                    return false;
+                }
+                return true;
+            }
         }
         else if (Objects.equals(node.type, "BodyStmt")) {
             Token token = tokens.get(0);
@@ -163,7 +198,11 @@ public class JottParser {
         }
         else if (Objects.equals(node.type, "Body")){
             // Insert token logic choose either body or return or empty based on token
-
+            if (tokens.get(0).getToken().equals("return")) {
+                ReturnStmtNode returnStmtNode = new ReturnStmtNode();
+                node.addChild(returnStmtNode);
+                ((BodyNode)node).setReturnStmt(returnStmtNode);
+            }
             BodyNode bodyNode = new BodyNode();
             BodyStmtNode bodyStmtNode = new BodyStmtNode();
             node.addChild(bodyStmtNode);
