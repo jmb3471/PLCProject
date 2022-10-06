@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 
-public class IdNode extends JottNode implements JottTree {
+public class VarNode extends JottNode implements JottTree {
     private String id;
 
-    public IdNode(String id) {
+
+    public VarNode(String id) {
         this.id = id;
     }
 
-    public static IdNode ParseIdNode(ArrayList<Token> tokens) {
-        return new IdNode(tokens.get(0).getToken());
+    public static VarNode ParseVarNode(ArrayList<Token> tokens) {
+        return new VarNode(tokens.get(0).getToken());
     }
 
     @Override

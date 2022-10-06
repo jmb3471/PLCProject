@@ -14,6 +14,10 @@ abstract class JottNode implements JottTree {
 
     }
 
+    public static void reportError(String message, String filename, int lineNumber) {
+        System.err.println("Syntax Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
+    }
+
     public ArrayList<JottNode> getChildren(){
         return this.children;
     }

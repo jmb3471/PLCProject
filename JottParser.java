@@ -23,18 +23,18 @@ public class JottParser {
 
     public static JottTree parse(ArrayList<Token> tokens) {
 		
-		ProgramNode root = new ProgramNode();
+		/*ProgramNode root = new ProgramNode();
         Boolean success = parseHelper(tokens, root);
         if (!success) {
             return null;
         }
-      	return root;
+      	return root;*/
 
-        //JottTree root = ProgramNode.ParseProgram(tokens);
-        //return root;
+        JottTree root = ProgramNode.ParseProgram(tokens);
+        return root;
     }
 
-    public static Boolean parseHelper(ArrayList<Token> tokens, JottNode node) {
+    /*public static Boolean parseHelper(ArrayList<Token> tokens, JottNode node) {
         if (Objects.equals(node.type, "Program")) {
             FunctionListNode functionListNode = new FunctionListNode();
             node.addChild(functionListNode);
@@ -225,15 +225,15 @@ public class JottParser {
             return runChildren(tokens, node);
         }
         return true;
-    }
+    }*/
 
-    public static boolean runChildren(ArrayList<Token> tokens, JottNode node) {
+    /*public static boolean runChildren(ArrayList<Token> tokens, JottNode node) {
         Boolean passed = true;
         for (int i = 0; i < node.getChildren().size(); i++) {
             passed = parseHelper(tokens, node.getChildren().get(i));
         }
         return passed;
-    }
+    }*/
 
     // missing necessary node types: <elseif_lst>, <params>, <params_t>, <str>
 
