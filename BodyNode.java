@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class BodyNode extends JottNode implements JottTree{
     private JottNode bodyStmt;
     private JottNode body;
     private JottNode returnStmt;
+
+    private ArrayList<BodyStmtNode> bodyStmts;
 
     public void setBodyStmt(JottNode bodyStmt) {
         this.bodyStmt = bodyStmt;
@@ -23,6 +27,15 @@ public class BodyNode extends JottNode implements JottTree{
         this.body = null;;
         this.returnStmt = null;
         this.type = "Body";
+    }
+
+
+    public BodyNode(ArrayList<BodyStmtNode> bodyStmts) {
+        this.bodyStmts = bodyStmts;
+    }
+
+    public static BodyNode ParseBodyNode(ArrayList<Token> tokens) {
+        return null;
     }
 
     @Override
