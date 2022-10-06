@@ -6,6 +6,7 @@ public class BodyNode extends JottNode implements JottTree{
     private JottNode returnStmt;
 
     private ArrayList<BodyStmtNode> bodyStmts;
+    private ExprNode ReturnStmt;
 
     public void setBodyStmt(JottNode bodyStmt) {
         this.bodyStmt = bodyStmt;
@@ -30,13 +31,30 @@ public class BodyNode extends JottNode implements JottTree{
     }
 
 
-    public BodyNode(ArrayList<BodyStmtNode> bodyStmts) {
+    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt) {
         this.bodyStmts = bodyStmts;
+        this.ReturnStmt = returnStmt;
     }
 
+
     public static BodyNode ParseBodyNode(ArrayList<Token> tokens) {
-        return null;
+        if (tokens.get(0).getToken() == "if") {
+
+        }
+
+        ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
+
+        while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens);
+            bodyStmts.add(bodyStmt);
+        }
+
+        // NEED TO FIGURE OUT RETURN STMTS
+        BodyNode bodyNode = new BodyNode(bodyStmts, null);
+
+        return bodyNode;
     }
+    
 
     @Override
     public String convertToJott() {

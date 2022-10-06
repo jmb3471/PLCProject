@@ -16,9 +16,11 @@ public class ProgramNode extends JottNode implements JottTree {
         this.type = "Program";
     }
 
+
     public ProgramNode(ArrayList<FunctionDefNode> funcDefs) {
         this.funcDefs = funcDefs;
     }
+
 
     public static JottTree ParseProgram(ArrayList<Token> tokens)
     {
@@ -30,10 +32,11 @@ public class ProgramNode extends JottNode implements JottTree {
             FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens);
             funcDefs.add(funcDefNode);
         }
-        
+
         ProgramNode program = new ProgramNode(funcDefs);
         return program;
     }
+    
 
     @Override
     public String convertToJott() {

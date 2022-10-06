@@ -1,4 +1,4 @@
-public class StmtNode extends JottNode 
+public class StmtNode extends BodyStmtNode implements JottTree 
 {
     private JottNode asmtNode;
     private JottNode varDecNode;

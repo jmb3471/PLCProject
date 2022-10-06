@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class While_Loop_Node extends JottNode implements JottTree{
+public class While_Loop_Node extends BodyStmtNode implements JottTree{
     private String ifstmt = "while ";
     private JottNode b_expr;
     private JottNode body;

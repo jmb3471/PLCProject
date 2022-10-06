@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 import java.util.List;
 
-public class IfStmtNode extends JottNode implements JottTree{
+public class IfStmtNode extends BodyStmtNode implements JottTree{
     private String ifstmt = "if ";
     private JottNode b_expr;
     private JottNode body;
@@ -16,6 +17,18 @@ public class IfStmtNode extends JottNode implements JottTree{
         this.body = null;
         this.b_expr = null;
         this.type = "Ifstmt";
+    }
+
+    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens) {
+        if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
+            return null;
+        }
+
+        tokens.remove(0);
+
+        BExprNode bExpr= BExprNode.ParseBExprNode(tokens);
+
+        return null;
     }
 
     @Override

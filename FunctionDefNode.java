@@ -21,7 +21,15 @@ public class FunctionDefNode extends JottNode implements JottTree{
         this.func_return = null;
         this.type = "FunctionDef";
     }
+    
 
+    /**
+     * FunctionDefNode constructor
+     * @param id            The ID/Keyword of the function
+     * @param params        An arraylist of FunctionDefParamsNodes for the params of the function
+     * @param return_type   The return type of the fundtion
+     * @param body          The body of the function
+     */
     public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, String return_type, BodyNode body) {
         this.ID = id;
         this.params = params;
@@ -29,6 +37,12 @@ public class FunctionDefNode extends JottNode implements JottTree{
         this.Body = body;
     }
 
+
+    /**
+     * Parses the current tokens and returns a FunctionDefNode object
+     * @param tokens    The tokens of the program
+     * @return          A FunctionDefNode object
+     */
     public static FunctionDefNode ParseFunctionDefNode(ArrayList<Token> tokens) {
         // Check if first token is an ID
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
@@ -101,6 +115,7 @@ public class FunctionDefNode extends JottNode implements JottTree{
 
         return funcDef;
     }
+
 
     @Override
     public String convertToJott() {

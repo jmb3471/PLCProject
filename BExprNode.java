@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class BExprNode extends JottNode {
     
     private JottNode id;
@@ -19,6 +21,10 @@ public class BExprNode extends JottNode {
         iExpr = null;
         sExpr = null;
         bExpr = null;
+    }
+
+    public static BExprNode ParseBExprNode(ArrayList<Token> tokens) {
+        return null;
     }
 
     @Override
