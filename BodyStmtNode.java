@@ -18,20 +18,23 @@ public class BodyStmtNode extends JottNode implements JottTree {
     public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens) {
         BodyStmtNode bodyStmt = null;
         // Check if the BodyStmt is an if stmt
-        if (tokens.get(0).getToken() == "if") {
+        if (tokens.get(0).getToken().equals("if")) {
             // Remove the "if"
             tokens.remove(0);
             bodyStmt = IfStmtNode.ParseBodyStmtNode(tokens);
         }
 
-         // Check if the BodyStmt is a whlile loop
-        else if (tokens.get(0).getToken() == "while") {
-
+         // Check if the BodyStmt is a while loop
+        else if (tokens.get(0).getToken().equals("while")) {
+            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens);
         }
 
         // The BodyStmt must just be a stmt
         else {
-
+            if (!tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
+                return null;
+            }
+            bodyStmt = StmtNode.ParseStmtNode(tokens);
         }
         return bodyStmt;
     }

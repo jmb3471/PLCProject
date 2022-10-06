@@ -25,7 +25,7 @@ public class ProgramNode extends JottNode implements JottTree {
     public static JottTree ParseProgram(ArrayList<Token> tokens)
     {
         // While there are still tokens left, create new FunctionDefNodes
-        // and add them to the ArrayLisy of FunctionDefNodes
+        // and add them to the ArrayList of FunctionDefNodes
 
         ArrayList<FunctionDefNode> funcDefs = new ArrayList<>();
         while (!tokens.isEmpty()){

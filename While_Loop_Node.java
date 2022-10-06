@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class While_Loop_Node extends BodyStmtNode implements JottTree{
@@ -12,6 +13,13 @@ public class While_Loop_Node extends BodyStmtNode implements JottTree{
         this.body = null;
         this.b_expr = null;
         this.type = "Ifstmt";
+    }
+
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens) {
+
+        // stubbed out to finish body node
+        While_Loop_Node while_loop_node = new While_Loop_Node();
+        return while_loop_node;
     }
 
     @Override

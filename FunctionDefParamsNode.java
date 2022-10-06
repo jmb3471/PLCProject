@@ -49,7 +49,7 @@ public class FunctionDefParamsNode extends JottNode{
         String type = tokens.get(2).getToken();
 
         // Check if the next token is a valid type
-        if (type != "Double" || type != "Integer" || type != "String" || type != "Boolean") {
+        if (!type.equals("Double") && !type.equals("Integer") && !type.equals("String") && !type.equals("Boolean")) {
             return null;
         }
 

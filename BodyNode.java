@@ -38,19 +38,25 @@ public class BodyNode extends JottNode implements JottTree{
 
 
     public static BodyNode ParseBodyNode(ArrayList<Token> tokens) {
-        if (tokens.get(0).getToken() == "if") {
-
-        }
-
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
+        ExprNode exprNode = null;
 
         while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-            BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens);
-            bodyStmts.add(bodyStmt);
+            if (tokens.get(0).getToken().equals("return")) {
+
+                // remove return token
+                tokens.remove(0);
+
+                exprNode = ExprNode.ParseExprNode(tokens);
+                break;
+            }
+            else {
+                BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens);
+                bodyStmts.add(bodyStmt);
+            }
         }
 
-        // NEED TO FIGURE OUT RETURN STMTS
-        BodyNode bodyNode = new BodyNode(bodyStmts, null);
+        BodyNode bodyNode = new BodyNode(bodyStmts, exprNode);
 
         return bodyNode;
     }

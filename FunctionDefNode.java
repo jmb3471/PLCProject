@@ -63,7 +63,7 @@ public class FunctionDefNode extends JottNode implements JottTree{
         ArrayList<FunctionDefParamsNode> params = new ArrayList<>();
         boolean firstParam = true;
 
-        // While a "]" hasent been seen yet, create new FunctionDefParamsNodes and add
+        // While a "]" hasn't been seen yet, create new FunctionDefParamsNodes and add
         // them to the params ArrayList
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET)
         {
@@ -74,7 +74,7 @@ public class FunctionDefNode extends JottNode implements JottTree{
                 if (tokens.get(0).getTokenType() != TokenType.COMMA) {
                     return null;
                 }
-
+                tokens.remove(0);
             }
             else {
                 firstParam = false;
@@ -94,7 +94,8 @@ public class FunctionDefNode extends JottNode implements JottTree{
         String type = tokens.get(1).getToken();
 
         // Check if the return type is a valid type
-        if (type != "Double" || type != "Integer" || type != "String" || type != "Boolean") {
+        if (!type.equals("Double") && !type.equals("Integer") && !type.equals("String")
+                && !type.equals("Boolean") && !type.equals("Void")) {
             return null;
         }
 

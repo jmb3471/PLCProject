@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class ReturnStmtNode extends JottNode implements JottTree{
     private JottNode expr;
     private JottNode end_stmt;
@@ -8,6 +10,13 @@ public class ReturnStmtNode extends JottNode implements JottTree{
     public ReturnStmtNode() {
         this.expr = null;
         this.type = "ReturnStmt";
+    }
+
+    public static ReturnStmtNode ParseReturnStmtNode(ArrayList<Token> tokens) {
+
+        // stubbed out to finish body node
+        ReturnStmtNode returnStmtNode = new ReturnStmtNode();
+        return returnStmtNode;
     }
 
     @Override
