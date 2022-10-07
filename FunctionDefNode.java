@@ -1,27 +1,12 @@
 import java.util.ArrayList;
 
 public class FunctionDefNode extends JottNode implements JottTree{
-    private Token token;
-    private JottNode id;
-    private JottNode func_def_params;
-    private JottNode func_return;
-    private JottNode body;
-
     private String ID;
     private ArrayList<FunctionDefParamsNode> params;
     private String return_type;
     private BodyNode Body;
 
 
-    public FunctionDefNode() {
-        this.token = token;
-        this.id = null;
-        this.func_def_params = null;;
-        this.body = null;
-        this.func_return = null;
-        this.type = "FunctionDef";
-    }
-    
 
     /**
      * FunctionDefNode constructor
@@ -120,7 +105,12 @@ public class FunctionDefNode extends JottNode implements JottTree{
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = this.ID + "[";
+        for (int i = 0; i < this.params.size(); i++) {
+            jott += this.params.get(i).convertToJott();
+        }
+        jott += "]" + this.return_type + "{" + this.Body.convertToJott();
+        return jott;
     }
 
     @Override
@@ -141,21 +131,5 @@ public class FunctionDefNode extends JottNode implements JottTree{
     @Override
     public boolean validateTree() {
         return false;
-    }
-
-    public void setIdNode(IdNode node) {
-        this.id = node;
-    }
-
-    public void setFuncDefParamsNode(FunctionDefParamsNode func_def_params) {
-        this.func_def_params = func_def_params;
-    }
-
-    public void setFuncReturnNode(FunctionReturnNode func_return) {
-        this.func_return = func_return;
-    }
-
-    public void setBodyNode(BodyNode body) {
-        this.body = body;
     }
 }

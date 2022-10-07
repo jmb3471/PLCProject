@@ -2,14 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IfStmtNode extends BodyStmtNode implements JottTree{
-    private String ifstmt = "if ";
-    private JottNode b_expr;
-    private JottNode body;
-    private List<JottNode> elseif_lst;
-    private JottNode else_stmt;
-
-    private String type;
-
     private ExprNode cond;
     private BodyNode Body;
     private ArrayList<BodyNode> elseIfBodys;
@@ -17,13 +9,6 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
     private BodyNode elseBody;
 
 
-    public IfStmtNode() {
-        this.else_stmt = null;
-        this.elseif_lst = null;;
-        this.body = null;
-        this.b_expr = null;
-        this.type = "Ifstmt";
-    }
 
     public IfStmtNode(ExprNode cond, BodyNode body, ArrayList<BodyNode> elseIfBodys, ArrayList<ExprNode> elseIfExprs, BodyNode elseBody) {
         this.cond = cond;
@@ -100,17 +85,36 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
         }
 
         if (tokens.get(0).getToken() == "else") {
+            if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
+                return null;
+            }
+
+            tokens.remove(1);
+            tokens.remove(0);
             elseNode = BodyNode.ParseBodyNode(tokens);
+            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+                return null;
+            }
+
+            tokens.remove(0);
         }
 
-        IfStmtNode ifNode = new IfStmtNode(expr, body, elseIFBodys, elseIfExprs, body);
+        IfStmtNode ifNode = new IfStmtNode(expr, body, elseIFBodys, elseIfExprs, elseNode);
 
         return ifNode;
     }
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = "if[" + this.cond.convertToJott() + "]{" + this.Body.convertToJott() + "}";
+        for (int i = 0; i < this.elseIfBodys.size(); i++) {
+            jott += "elseif[" + this.elseIfExprs.get(i).convertToJott() + "]{"
+                    + this.elseIfBodys.get(i).convertToJott() + "}";
+        }
+        if (this.elseBody != null) {
+            jott += "else{" + this.elseBody.convertToJott() + "}";
+        }
+        return jott;
     }
 
     @Override

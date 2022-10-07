@@ -1,35 +1,9 @@
 import java.util.ArrayList;
 
 public class BodyNode extends JottNode implements JottTree{
-    private JottNode bodyStmt;
-    private JottNode body;
-    private JottNode returnStmt;
 
     private ArrayList<BodyStmtNode> bodyStmts;
     private ExprNode ReturnStmt;
-
-    public void setBodyStmt(JottNode bodyStmt) {
-        this.bodyStmt = bodyStmt;
-    }
-
-    public void setBody(JottNode body) {
-        this.body = body;
-    }
-
-    public void setReturnStmt(JottNode returnStmt) {
-        this.returnStmt = returnStmt;
-    }
-
-    private String type;
-
-
-    public BodyNode() {
-        this.bodyStmt = null;
-        this.body = null;;
-        this.returnStmt = null;
-        this.type = "Body";
-    }
-
 
     public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt) {
         this.bodyStmts = bodyStmts;
@@ -64,7 +38,14 @@ public class BodyNode extends JottNode implements JottTree{
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = "";
+        for (int i = 0; i < this.bodyStmts.size(); i++) {
+            jott += this.bodyStmts.get(i).convertToJott();
+        }
+        if (this.ReturnStmt != null) {
+            jott += this.ReturnStmt.convertToJott();
+        }
+        return jott;
     }
 
     @Override

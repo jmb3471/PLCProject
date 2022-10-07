@@ -2,31 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionDefParamsNode extends JottNode{
-    private JottNode id;
-    private JottNode varType;
-    private JottNode function_def_params_t;
+
     private String type;
 
     private String ID;
 
-    public void setIdNode(JottNode id) {
-        this.id = id;
-    }
-
-    public void setVarTypeNode(JottNode varType) {
-        this.varType = varType;
-    }
-
-    public void setFunctionDefParamsTNode(JottNode function_def_params_t) {
-        this.function_def_params_t = function_def_params_t;
-    }
-
-    public FunctionDefParamsNode() {
-        this.id = null;
-        this.varType = null;;
-        this.function_def_params_t = null;
-        this.type = "FunctionDefParams";
-    }
 
     public FunctionDefParamsNode(String id, String type) {
         this.type = type;
@@ -64,7 +44,8 @@ public class FunctionDefParamsNode extends JottNode{
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = this.type + ":" + this.ID;
+        return jott;
     }
 
     @Override

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class BodyStmtNode extends JottNode implements JottTree {
-    private JottNode if_stmt;
+    private BodyStmtNode if_stmt;
     private JottNode while_stmt;
     private JottNode stmt;
     private String type;
@@ -16,7 +16,7 @@ public class BodyStmtNode extends JottNode implements JottTree {
 
 
     public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens) {
-        BodyStmtNode bodyStmt = null;
+        BodyStmtNode bodyStmt;
         // Check if the BodyStmt is an if stmt
         if (tokens.get(0).getToken().equals("if")) {
             // Remove the "if"
