@@ -14,7 +14,6 @@ public class ConstantNode extends JottNode implements JottTree {
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
-                tokens.remove(0);
                 return new ConstantNode(token.getToken(), "Boolean");
             }
             return null;
@@ -27,7 +26,9 @@ public class ConstantNode extends JottNode implements JottTree {
             else if (token.getTokenType().equals(TokenType.NUMBER)) {
                 type = "Number";
             }
-            tokens.remove(0);
+            else {
+                return null;
+            }
             return new ConstantNode(token.getToken(), type);
         }
     }

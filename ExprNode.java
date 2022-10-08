@@ -17,6 +17,7 @@ public class ExprNode extends JottNode implements JottTree {
                     return new ExprNode(operationNode);
                 }
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
+                tokens.remove(0);
                 return new ExprNode(constantNode);
             }
             else {
@@ -32,6 +33,7 @@ public class ExprNode extends JottNode implements JottTree {
                 }
                 else {
                     VarNode varNode = VarNode.ParseVarNode(tokens);
+                    tokens.remove(0);
                     return new ExprNode(varNode);
                 }
             }
@@ -45,11 +47,13 @@ public class ExprNode extends JottNode implements JottTree {
                 }
                 else {
                     ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
+                    tokens.remove(0);
                     return new ExprNode(constantNode);
                 }
             }
             if (token.getTokenType().equals(TokenType.STRING)) {
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
+                tokens.remove(0);
                 return new ExprNode(constantNode);
             }
             else {

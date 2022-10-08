@@ -3,11 +3,12 @@ import java.util.ArrayList;
 public class FuncCallNode extends JottNode implements JottTree {
     
     private JottNode id;
-    private JottNode params;
+    private ArrayList<ExprNode> exprNodes;
 
-    public FuncCallNode()
+    public FuncCallNode(JottNode id, ArrayList<ExprNode> exprNodes)
     {
-        id = null;
+        this.id = id;
+        this.exprNodes = exprNodes;
     }
 
     public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) {
@@ -16,6 +17,13 @@ public class FuncCallNode extends JottNode implements JottTree {
         // remove id and [
         tokens.remove(1);
         tokens.remove(0);
+
+        ArrayList<ExprNode> exprNodes = new ArrayList<>();
+
+        while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            ExprNode exprNode = ExprNode.ParseExprNode(tokens);
+            exprNodes.add(exprNode);
+        }
 
 
     }
