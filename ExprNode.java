@@ -29,7 +29,7 @@ public class ExprNode extends JottNode implements JottTree {
                 else if (secondToken.getTokenType().equals(TokenType.MATH_OP) ||
                         secondToken.getTokenType().equals(TokenType.REL_OP)) {
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens);
-                    return  new ExprNode(operationNode);
+                    return new ExprNode(operationNode);
                 }
                 else {
                     VarNode varNode = VarNode.ParseVarNode(tokens);
