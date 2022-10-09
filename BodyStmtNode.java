@@ -26,14 +26,12 @@ public class BodyStmtNode extends JottNode implements JottTree {
 
          // Check if the BodyStmt is a while loop
         else if (tokens.get(0).getToken().equals("while")) {
+            tokens.remove(0);
             bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens);
         }
 
         // The BodyStmt must just be a stmt
         else {
-            if (!tokens.get(0).getTokenType().equals(TokenType.ID_KEYWORD)) {
-                return null;
-            }
             bodyStmt = StmtNode.ParseStmtNode(tokens);
         }
         return bodyStmt;

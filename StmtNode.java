@@ -16,9 +16,16 @@ public class StmtNode extends BodyStmtNode implements JottTree
     }
 
     public static StmtNode ParseStmtNode(ArrayList<Token> tokens) {
-
-        // stubbed out to finish body node
-        StmtNode stmtNode = new StmtNode();
+        StmtNode stmtNode;
+        if (tokens.get(2).getToken() == "=") {
+            stmtNode = AsmtNode.ParseAstmtNode(tokens);
+        }
+        else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
+            stmtNode = FuncCallNode.ParseStmtNode(tokens);
+        }
+        else {
+            stmtNode = VarDecNode.ParseStmtNode(tokens);
+        }
         return stmtNode;
     }
 

@@ -1,6 +1,7 @@
 import java.net.IDN;
+import java.util.ArrayList;
 
-public class AsmtNode extends JottNode {
+public class AsmtNode extends StmtNode {
     
     private JottNode id;
     private JottNode dExpr;
@@ -17,6 +18,10 @@ public class AsmtNode extends JottNode {
         sExpr = null;
         bExpr = null;
         endStmt = null;
+    }
+
+    public static AsmtNode ParseAstmtNode(ArrayList<Token> tokens) {
+        return new AsmtNode();
     }
 
     @Override
@@ -43,32 +48,6 @@ public class AsmtNode extends JottNode {
     public boolean validateTree() {
         return false;
     }
-
-    public void setIdNode(IdNode node)
-    {
-        id = node;
-    }
-    public void setDExpr(DExprNode node)
-    {
-        dExpr = node;
-    }
-    public void setIExpr(IExprNode node)
-    {
-        iExpr = node;
-    }
-    public void setSExpr(SExprNode node)
-    {
-        sExpr = node;
-    }
-    public void setBExpr(BExprNode node)
-    {
-        bExpr = node;
-    }
-    public void setEndStmtNode(EndStmtNode node)
-    {
-        endStmt = node;
-    }
-
 
 
 

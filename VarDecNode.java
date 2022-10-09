@@ -1,18 +1,33 @@
-public class VarDecNode extends JottNode {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    private JottNode type;
-    private JottNode id;
-    private JottNode endStmt;
+public class VarDecNode extends StmtNode {
+
+    private String type;
+    private IdNode id;
 
 
-    public VarDecNode()
+    public VarDecNode(String type, IdNode id)
     {
-        type = null;
-        id = null;
-        endStmt = null;
+        this.type = type;
+        this.id = id;
     }
 
-
+    public static VarDecNode ParseVarDecNode(ArrayList<Token> tokens) {
+        List<String> Types = Arrays.asList("Double", "Integer", "String", "Boolean");
+        String type = tokens.get(0).getToken();
+        if (!Types.contains(type)) {
+            return null;
+        }
+        tokens.remove(0);
+        IdNode idNode = IdNode.ParseIdNode(tokens);
+        tokens.remove(0);
+        if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
+            return null;
+        }
+        return new VarDecNode(type, idNode);
+    }
     @Override
     public String convertToJott() {
         return null;
@@ -38,19 +53,4 @@ public class VarDecNode extends JottNode {
         return false;
     }
 
-    public void setTypeNode(TypeNode node)
-    {
-        type = node;
-    }
-
-    public void setIdNode(IdNode node)
-    {
-        id = node;
-    }
-
-    public void setEndStmtNode(EndStmtNode node)
-    {
-        endStmt = node;
-    }
-    
 }
