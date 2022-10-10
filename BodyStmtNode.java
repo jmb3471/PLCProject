@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
-public class BodyStmtNode extends JottNode implements JottTree {
+public class BodyStmtNode extends JottNode {
+
     private BodyStmtNode if_stmt;
     private JottNode while_stmt;
     private JottNode stmt;
@@ -40,7 +41,17 @@ public class BodyStmtNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = "";
+        if (this.if_stmt != null) {
+            jott += this.if_stmt.convertToJott();
+        }
+        if (this.while_stmt != null) {
+            jott += this.while_stmt.convertToJott();
+        }
+        if (this.stmt != null) {
+            jott += this.stmt.convertToJott();
+        }
+        return jott;
     }
 
     @Override

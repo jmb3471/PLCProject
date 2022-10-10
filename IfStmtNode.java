@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfStmtNode extends BodyStmtNode implements JottTree{
+public class IfStmtNode extends BodyStmtNode {
+
     private ExprNode cond;
     private BodyNode Body;
     private ArrayList<BodyNode> elseIfBodys;
     private ArrayList<ExprNode> elseIfExprs;
     private BodyNode elseBody;
-
 
 
     public IfStmtNode(ExprNode cond, BodyNode body, ArrayList<BodyNode> elseIfBodys, ArrayList<ExprNode> elseIfExprs, BodyNode elseBody) {
@@ -19,12 +19,15 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
     }
 
     public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens) {
+
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             return null;
         }
 
+        // remove left bracket
         tokens.remove(0);
 
+        // parse b_expr
         ExprNode expr = ExprNode.ParseExprNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
@@ -35,6 +38,7 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
             return null;
         }
 
+        // remove left brace and right bracket
         tokens.remove(1);
         tokens.remove(0);
 
@@ -43,6 +47,9 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
             return null;
         }
+
+        // remove right brace
+        tokens.remove(0);
 
         ArrayList<BodyNode> elseIFBodys = new ArrayList<>();
         ArrayList<ExprNode> elseIfExprs = new ArrayList<>();
@@ -54,6 +61,7 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
                 return null;
             }
 
+            // remove left bracket and "elseif"
             tokens.remove(1);
             tokens.remove(0);
 
@@ -67,6 +75,7 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
                 return null;
             }
 
+            // remove left brace and right bracket
             tokens.remove(1);
             tokens.remove(0);
 
@@ -76,6 +85,7 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
                 return null;
             }
 
+            // remove right brace
             tokens.remove(0);
 
             elseIFBodys.add(elseIfBody);
@@ -89,13 +99,16 @@ public class IfStmtNode extends BodyStmtNode implements JottTree{
                 return null;
             }
 
+            // remove left brace and "else"
             tokens.remove(1);
             tokens.remove(0);
+
             elseNode = BodyNode.ParseBodyNode(tokens);
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 return null;
             }
 
+            // removbe right brace
             tokens.remove(0);
         }
 

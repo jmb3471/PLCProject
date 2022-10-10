@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class BodyNode extends JottNode implements JottTree{
+public class BodyNode extends JottNode {
 
     private ArrayList<BodyStmtNode> bodyStmts;
     private ExprNode ReturnStmt;

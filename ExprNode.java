@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 
-public class ExprNode extends JottNode implements JottTree {
-    private JottNode expr;
+public class ExprNode extends JottNode {
 
+    private JottNode expr;
 
     public ExprNode(JottNode node) {
         this.expr = node;
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens) {
+        
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {

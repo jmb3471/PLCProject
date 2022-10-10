@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class ProgramNode extends JottNode implements JottTree {
+public class ProgramNode extends JottNode {
 
     private ArrayList<FunctionDefNode> funcDefs;
 

@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-public class FunctionDefNode extends JottNode implements JottTree{
+public class FunctionDefNode extends JottNode {
+
     private String ID;
     private ArrayList<FunctionDefParamsNode> params;
     private String return_type;
     private BodyNode Body;
-
 
 
     /**

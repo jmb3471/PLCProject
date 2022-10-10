@@ -1,24 +1,23 @@
 import java.util.ArrayList;
 
-public class StmtNode extends BodyStmtNode implements JottTree
-{
+public class StmtNode extends BodyStmtNode {
+
     private JottNode asmtNode;
     private JottNode varDecNode;
     private JottNode funcCallNode;
-    private JottNode endStmtNode;
+
 
     public StmtNode()
     {
         asmtNode = null;
         varDecNode = null;
         funcCallNode = null;
-        endStmtNode = null;
     }
 
     public static StmtNode ParseStmtNode(ArrayList<Token> tokens) {
         StmtNode stmtNode;
-        if (tokens.get(2).getToken() == "=") {
-            stmtNode = AsmtNode.ParseAstmtNode(tokens);
+        if (tokens.get(2).getToken() == "=" || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && tokens.get(1).getToken() == "=")) {
+            stmtNode = AsmtNode.ParseAsmtNode(tokens);
         }
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
             stmtNode = FuncCallNode.ParseStmtNode(tokens);
@@ -31,7 +30,16 @@ public class StmtNode extends BodyStmtNode implements JottTree
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = "";
+        if (this.asmtNode != null) {
+            jott += this.asmtNode.convertToJott();
+        } else if (this.varDecNode != null) {
+            jott += this.varDecNode.convertToJott();
+        } else if (this.funcCallNode != null) {
+            jott += this.funcCallNode.convertToJott();
+            jott += ";";
+        }
+        return jott;
     }
 
     @Override
@@ -67,11 +75,6 @@ public class StmtNode extends BodyStmtNode implements JottTree
     public void setFuncCallNode(FuncCallNode node)
     {
         funcCallNode = node;
-    }
-
-    public void setEndStmtNode(EndStmtNode node)
-    {
-        endStmtNode = node;
     }
 
 }
