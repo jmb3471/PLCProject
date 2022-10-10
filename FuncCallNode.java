@@ -11,7 +11,7 @@ public class FuncCallNode extends StmtNode implements JottTree {
         this.exprNodes = exprNodes;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [

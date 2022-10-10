@@ -12,9 +12,11 @@ public class While_Loop_Node extends BodyStmtNode {
         this.cond = cond;
     }
 
-    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens) {
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
+            While_Loop_Node.reportError("Expected [ for while loop",
+                    tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -24,10 +26,14 @@ public class While_Loop_Node extends BodyStmtNode {
         ExprNode expr = ExprNode.ParseExprNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
+            While_Loop_Node.reportError("Expected ] for while loop",
+                    tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
+            While_Loop_Node.reportError("Expected { for while loop",
+                    tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -38,6 +44,8 @@ public class While_Loop_Node extends BodyStmtNode {
         BodyNode body = BodyNode.ParseBodyNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            While_Loop_Node.reportError("Expected } for while loop",
+                    tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 

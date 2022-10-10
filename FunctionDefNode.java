@@ -28,9 +28,10 @@ public class FunctionDefNode extends JottNode {
      * @param tokens    The tokens of the program
      * @return          A FunctionDefNode object
      */
-    public static FunctionDefNode ParseFunctionDefNode(ArrayList<Token> tokens) {
+    public static FunctionDefNode ParseFunctionDefNode(ArrayList<Token> tokens) throws Exception {
         // Check if first token is an ID
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
+            FunctionDefNode.reportError("Expected ID for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -38,6 +39,7 @@ public class FunctionDefNode extends JottNode {
 
         // Check if there is a "[" in the correct spot
         if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
+            FunctionDefNode.reportError("Expected [ to be after ID for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -56,7 +58,8 @@ public class FunctionDefNode extends JottNode {
             // there is a "," where it should be
             if (!firstParam)
             {
-                if (tokens.get(0).getTokenType() != TokenType.COMMA) {
+                if (tokens.get(0).getTokenType() != TokenType.COMMA && tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
+                    FunctionDefNode.reportError("Expected , between params for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                     return null;
                 }
                 tokens.remove(0);
@@ -73,6 +76,7 @@ public class FunctionDefNode extends JottNode {
 
         // Check if the next element is a ":"
         if (tokens.get(0).getTokenType() != TokenType.COLON) {
+            FunctionDefNode.reportError("Expected : for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -81,11 +85,13 @@ public class FunctionDefNode extends JottNode {
         // Check if the return type is a valid type
         if (!type.equals("Double") && !type.equals("Integer") && !type.equals("String")
                 && !type.equals("Boolean") && !type.equals("Void")) {
+            FunctionDefNode.reportError("Expected return type to be valid for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         // Check if the next element is a "{"
         if (tokens.get(2).getTokenType() != TokenType.L_BRACE) {
+            FunctionDefNode.reportError("Expected function to start with { for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 

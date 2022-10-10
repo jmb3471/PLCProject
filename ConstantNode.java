@@ -10,12 +10,13 @@ public class ConstantNode extends JottNode implements JottTree {
         this.type = type;
     }
 
-    public static ConstantNode ParseConstantNode(ArrayList<Token> tokens) {
+    public static ConstantNode ParseConstantNode(ArrayList<Token> tokens) throws Exception {
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 return new ConstantNode(token.getToken(), "Boolean");
             }
+            ConstantNode.reportError("Incorrect ID for Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
         else {
@@ -27,6 +28,7 @@ public class ConstantNode extends JottNode implements JottTree {
                 type = "Number";
             }
             else {
+                AsmtNode.reportError("Incorrect Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
             return new ConstantNode(token.getToken(), type);
@@ -35,7 +37,7 @@ public class ConstantNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        return this.type + " " + this.value;
     }
 
     @Override

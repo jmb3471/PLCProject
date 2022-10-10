@@ -13,7 +13,7 @@ public class AsmtNode extends StmtNode {
         this.type = type;
     }
 
-    public static AsmtNode ParseAsmtNode(ArrayList<Token> tokens) {
+    public static AsmtNode ParseAsmtNode(ArrayList<Token> tokens) throws Exception {
 
         ExprNode cond = null;
         String id = null;
@@ -45,7 +45,7 @@ public class AsmtNode extends StmtNode {
             cond = ExprNode.ParseExprNode(tokens);
         }
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-            return null;
+            AsmtNode.reportError("Expected Semicolon, found none", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
         return new AsmtNode(id, cond, type);
     }

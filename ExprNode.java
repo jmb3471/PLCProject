@@ -8,7 +8,7 @@ public class ExprNode extends JottNode {
         this.expr = node;
     }
 
-    public static ExprNode ParseExprNode(ArrayList<Token> tokens) {
+    public static ExprNode ParseExprNode(ArrayList<Token> tokens) throws Exception {
         
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
@@ -58,6 +58,7 @@ public class ExprNode extends JottNode {
                 return new ExprNode(constantNode);
             }
             else {
+                ExprNode.reportError("Incorrect expression", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
         }
