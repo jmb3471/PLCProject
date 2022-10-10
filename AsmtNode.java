@@ -44,7 +44,9 @@ public class AsmtNode extends StmtNode {
             tokens.remove(0);
             cond = ExprNode.ParseExprNode(tokens);
         }
-
+        if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
+            return null;
+        }
         return new AsmtNode(id, cond, type);
     }
 

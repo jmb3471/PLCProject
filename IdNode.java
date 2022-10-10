@@ -13,7 +13,7 @@ public class IdNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        return this.id;
     }
 
     @Override

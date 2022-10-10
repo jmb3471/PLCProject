@@ -30,7 +30,7 @@ public class VarDecNode extends StmtNode {
     }
     @Override
     public String convertToJott() {
-        return null;
+        return this.type + " " + this.id + ";";
     }
 
     @Override

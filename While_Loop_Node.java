@@ -50,8 +50,7 @@ public class While_Loop_Node extends BodyStmtNode {
 
     @Override
     public String convertToJott() {
-        String jott = "while[" + cond.convertToJott() + "]{" + body.convertToJott() + "}";
-        return jott;
+        return "while[" + cond.convertToJott() + "]{" + body.convertToJott() + "}";
     }
 
     @Override
