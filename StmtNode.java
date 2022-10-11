@@ -14,7 +14,7 @@ public class StmtNode extends BodyStmtNode {
         funcCallNode = null;
     }
 
-    public static StmtNode ParseStmtNode(ArrayList<Token> tokens) {
+    public static StmtNode ParseStmtNode(ArrayList<Token> tokens) throws Exception {
         StmtNode stmtNode;
         if (tokens.get(2).getToken() == "=" || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && tokens.get(1).getToken() == "=")) {
             stmtNode = AsmtNode.ParseAsmtNode(tokens);

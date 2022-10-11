@@ -21,7 +21,7 @@ public class JottParser {
      *         or null upon an error in parsing.
      */
 
-    public static JottTree parse(ArrayList<Token> tokens) {
+    public static JottTree parse(ArrayList<Token> tokens) throws Exception {
 		
 		/*ProgramNode root = new ProgramNode();
         Boolean success = parseHelper(tokens, root);

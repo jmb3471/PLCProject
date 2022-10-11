@@ -14,7 +14,7 @@ public class OperationNode extends JottNode implements JottTree {
         this.opType = opType;
     }
 
-    public static OperationNode ParseOperationNode(ArrayList<Token> tokens) {
+    public static OperationNode ParseOperationNode(ArrayList<Token> tokens) throws Exception {
         Token token = tokens.get(0);
         JottNode left = null;
         String operator = null;
@@ -89,7 +89,7 @@ public class OperationNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        return this.left + " " + this.operator + " " + this.right;
     }
 
     @Override

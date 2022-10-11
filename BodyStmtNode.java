@@ -16,7 +16,7 @@ public class BodyStmtNode extends JottNode {
     }
 
 
-    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens) {
+    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens) throws Exception {
         BodyStmtNode bodyStmt;
         // Check if the BodyStmt is an if stmt
         if (tokens.get(0).getToken().equals("if")) {

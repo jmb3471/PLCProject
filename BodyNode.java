@@ -11,7 +11,7 @@ public class BodyNode extends JottNode {
     }
 
 
-    public static BodyNode ParseBodyNode(ArrayList<Token> tokens) {
+    public static BodyNode ParseBodyNode(ArrayList<Token> tokens) throws Exception {
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
         ExprNode exprNode = null;
 

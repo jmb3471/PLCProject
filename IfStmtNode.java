@@ -18,9 +18,10 @@ public class IfStmtNode extends BodyStmtNode {
         this.elseBody = elseBody;
     }
 
-    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens) {
+    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
+            IfStmtNode.reportError("Expected [ for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -31,10 +32,12 @@ public class IfStmtNode extends BodyStmtNode {
         ExprNode expr = ExprNode.ParseExprNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
+            IfStmtNode.reportError("Expected ] for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
+            IfStmtNode.reportError("Expected { for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -45,6 +48,7 @@ public class IfStmtNode extends BodyStmtNode {
         BodyNode body = BodyNode.ParseBodyNode(tokens);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+            IfStmtNode.reportError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -58,6 +62,7 @@ public class IfStmtNode extends BodyStmtNode {
 
         while (tokens.get(0).getToken() == "elseif") {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
+                IfStmtNode.reportError("Expected [ for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -68,10 +73,12 @@ public class IfStmtNode extends BodyStmtNode {
             ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
+                IfStmtNode.reportError("Expected ] for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
             if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
+                IfStmtNode.reportError("Expected { for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -82,6 +89,7 @@ public class IfStmtNode extends BodyStmtNode {
             BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+                IfStmtNode.reportError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -90,12 +98,11 @@ public class IfStmtNode extends BodyStmtNode {
 
             elseIFBodys.add(elseIfBody);
             elseIfExprs.add(elseIfExpr);
-
-
         }
 
         if (tokens.get(0).getToken() == "else") {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
+                IfStmtNode.reportError("Expected [ for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -105,10 +112,11 @@ public class IfStmtNode extends BodyStmtNode {
 
             elseNode = BodyNode.ParseBodyNode(tokens);
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+                IfStmtNode.reportError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
-            // removbe right brace
+            // remove right brace
             tokens.remove(0);
         }
 

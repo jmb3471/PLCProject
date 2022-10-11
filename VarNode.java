@@ -14,7 +14,7 @@ public class VarNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return null;
+        return this.id;
     }
 
     @Override

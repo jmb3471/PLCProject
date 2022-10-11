@@ -11,7 +11,7 @@ public class FuncCallNode extends StmtNode {
         this.exprNodes = exprNodes;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -30,7 +30,17 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToJott() {
-        return null;
+        String jott = this.id + "[";
+        for (int i = 0; i < exprNodes.size(); i++) {
+            if (i == exprNodes.size() - 1) {
+                jott += this.exprNodes.get(i).convertToJott();
+            }
+            else {
+                jott += this.exprNodes.get(i).convertToJott() + ",";
+            }
+        }
+        return jott;
+
     }
 
     @Override
@@ -51,11 +61,6 @@ public class FuncCallNode extends StmtNode {
     @Override
     public boolean validateTree() {
         return false;
-    }
-
-    public void setIdNode(IdNode node)
-    {
-        id = node;
     }
 
 }

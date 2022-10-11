@@ -10,8 +10,7 @@ public class ProgramNode extends JottNode {
     }
 
 
-    public static JottTree ParseProgram(ArrayList<Token> tokens)
-    {
+    public static JottTree ParseProgram(ArrayList<Token> tokens) throws Exception {
         // While there are still tokens left, create new FunctionDefNodes
         // and add them to the ArrayList of FunctionDefNodes
 
