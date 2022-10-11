@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class FuncCallNode extends StmtNode implements JottTree {
+public class FuncCallNode extends StmtNode {
     
     private JottNode id;
     private ArrayList<ExprNode> exprNodes;

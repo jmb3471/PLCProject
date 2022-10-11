@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
-public class ParamsNode extends JottNode implements JottTree {
+public class ParamsNode extends JottNode {
+
     private ArrayList<ExprNode> exprNodes;
 
     public ParamsNode(ArrayList<ExprNode> exprNodes) {
@@ -17,6 +18,7 @@ public class ParamsNode extends JottNode implements JottTree {
             ExprNode exprNode = ExprNode.ParseExprNode(tokens);
             exprNodes.add(exprNode);
         }
+        return new ParamsNode(exprNodes);
     }
 
     @Override

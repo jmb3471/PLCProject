@@ -20,10 +20,10 @@ public class StmtNode extends BodyStmtNode {
             stmtNode = AsmtNode.ParseAsmtNode(tokens);
         }
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
-            stmtNode = FuncCallNode.ParseStmtNode(tokens);
+            stmtNode = FuncCallNode.ParseFuncCallNode(tokens);
         }
         else {
-            stmtNode = VarDecNode.ParseStmtNode(tokens);
+            stmtNode = VarDecNode.ParseVarDecNode(tokens);
         }
         return stmtNode;
     }
