@@ -52,31 +52,31 @@ public class JottTokenizer {
 					if (ch == ' ') {
 						// do nothing
 					}
-					if (ch == '#') {
+					else if (ch == '#') {
 						break;
 					}
-					if (ch == ',') {
+					else if (ch == ',') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.COMMA));
 					}
-					if (ch == '[') {
+					else if (ch == '[') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.L_BRACKET));
 					}
-					if (ch == ']') {
+					else if (ch == ']') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.R_BRACKET));
 					}
-					if (ch == '{') {
+					else if (ch == '{') {
 						token = Character.toString(ch);
 
 						tokenList.add(new Token(token, filename, i, TokenType.L_BRACE));
 					}
-					if (ch == '}') {
+					else if (ch == '}') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.R_BRACE));
 					}
-					if (ch == '=') {
+					else if (ch == '=') {
 						token = Character.toString(ch);
 						if(j+1 < line.length())
 						{
@@ -94,7 +94,7 @@ public class JottTokenizer {
 							tokenList.add(new Token(token, filename, i, TokenType.ASSIGN));
 						}
 					}
-					if (ch == '<' || ch == '>') {
+					else if (ch == '<' || ch == '>') {
 						token = Character.toString(ch);
 						ch = line.charAt(j+1);
 						if (ch == '=') {
@@ -106,15 +106,15 @@ public class JottTokenizer {
 							tokenList.add(new Token(token, filename, i, TokenType.REL_OP));
 						}
 					}
-					if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
+					else if (ch == '/' || ch == '+' || ch == '-' || ch == '*') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.MATH_OP));
 					}
-					if (ch == ';') {
+					else if (ch == ';') {
 						token = ";";
 						tokenList.add(new Token(token, filename, i, TokenType.SEMICOLON));
 					}
-					if (ch == '.') {
+					else if (ch == '.') {
 						token = Character.toString(ch);
 						if(j+1 < line.length()) {
 							ch = line.charAt(j+1);
@@ -143,7 +143,7 @@ public class JottTokenizer {
 							return null;
 						}
 					}
-					if (Character.isDigit(ch)) {
+					else if (Character.isDigit(ch)) {
 						token = Character.toString(ch);
 						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
@@ -174,7 +174,7 @@ public class JottTokenizer {
 							}
 						}
 					}
-					if (Character.isLetter(ch)) {
+					else if (Character.isLetter(ch)) {
 						token = Character.toString(ch);
 						while (j+1 < line.length()) {
 							ch = line.charAt(j+1);
@@ -188,11 +188,11 @@ public class JottTokenizer {
 						}
 						tokenList.add(new Token(token, filename, i, TokenType.ID_KEYWORD));
 					}
-					if (ch == ':') {
+					else if (ch == ':') {
 						token = Character.toString(ch);
 						tokenList.add(new Token(token, filename, i, TokenType.COLON));
 					}
-					if (ch == '!') {
+					else if (ch == '!') {
 						token = Character.toString(ch);
 						if (j+1 < line.length()) {
 							ch = line.charAt(j+1);
@@ -212,7 +212,7 @@ public class JottTokenizer {
 						}
 						
 					}
-					if (ch == '"') {
+					else if (ch == '"') {
 						token = Character.toString(ch);
 						boolean tok_added = false;
 						while (j+1 < line.length()) {
