@@ -5,7 +5,6 @@ public class BodyStmtNode extends JottNode {
     private BodyStmtNode if_stmt;
     private JottNode while_stmt;
     private JottNode stmt;
-    private String type;
 
 
     public BodyStmtNode() {

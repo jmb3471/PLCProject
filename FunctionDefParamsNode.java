@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class FunctionDefParamsNode extends JottNode{
 
@@ -47,7 +46,7 @@ public class FunctionDefParamsNode extends JottNode{
 
     @Override
     public String convertToJott() {
-        return this.type + ":" + this.ID;
+        return this.ID + ":" + this.type;
     }
 
     @Override
