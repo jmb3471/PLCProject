@@ -30,8 +30,13 @@ public class JottParser {
         }
       	return root;*/
 
-        JottTree root = ProgramNode.ParseProgram(tokens);
-        return root;
+        try {
+            JottTree root = ProgramNode.ParseProgram(tokens);
+            return root;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     /*public static Boolean parseHelper(ArrayList<Token> tokens, JottNode node) {
