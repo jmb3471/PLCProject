@@ -25,21 +25,21 @@ public class AsmtNode extends StmtNode {
         types.add("String");
         types.add("Boolean");
 
-        // if the assignment begins with an <id>
-        if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
-            id = tokens.get(0).getToken();
-            // remove <id> and "="
-            tokens.remove(1);
-            tokens.remove(0);
-            cond = ExprNode.ParseExprNode(tokens);
-        } 
-        else if (types.contains(tokens.get(0).getToken())) 
+        if (types.contains(tokens.get(0).getToken()))
         {
             type = tokens.get(0).getToken();
             id = tokens.get(1).getToken();
-            
+
             // remove "=" and <id> and string value
             tokens.remove(2);
+            tokens.remove(1);
+            tokens.remove(0);
+            cond = ExprNode.ParseExprNode(tokens);
+        }
+        // if the assignment begins with an <id>
+        else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
+            id = tokens.get(0).getToken();
+            // remove <id> and "="
             tokens.remove(1);
             tokens.remove(0);
             cond = ExprNode.ParseExprNode(tokens);
@@ -55,8 +55,8 @@ public class AsmtNode extends StmtNode {
 
         String jott = "";
         if (!type.equals(null))
-            jott += type;
-        jott += type + " = ";
+            jott += type + " ";
+        jott += id + " = ";
         jott += cond.convertToJott();
         jott += ";";
 
