@@ -54,7 +54,7 @@ public class AsmtNode extends StmtNode {
     public String convertToJott() {
 
         String jott = "";
-        if (!type.equals(null))
+        if (type != null)
             jott += type + " ";
         jott += id + " = ";
         jott += cond.convertToJott();

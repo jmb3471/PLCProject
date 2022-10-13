@@ -43,15 +43,6 @@ public class While_Loop_Node extends BodyStmtNode {
 
         BodyNode body = BodyNode.ParseBodyNode(tokens);
 
-        if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-            While_Loop_Node.reportError("Expected } for while loop",
-                    tokens.get(0).getFilename(), tokens.get(0).getLineNum());
-            return null;
-        }
-
-        // remove right brace
-        tokens.remove(0);
-
         While_Loop_Node while_loop_node = new While_Loop_Node(expr, body);
         return while_loop_node;
     }
