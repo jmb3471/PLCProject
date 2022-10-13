@@ -58,7 +58,9 @@ public class AsmtNode extends StmtNode {
             jott += type + " ";
         jott += id + " = ";
         jott += cond.convertToJott();
-        jott += ";";
+        if (jott.charAt(jott.length() - 1) != ';') {
+            jott += ';';
+        }
 
         return jott;
     }
