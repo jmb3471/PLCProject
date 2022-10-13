@@ -23,11 +23,14 @@ public class BodyNode extends JottNode {
 
                 exprNode = ExprNode.ParseExprNode(tokens);
 
-                if (tokens.get(0).getToken().equals("}")) {
+                if (tokens.get(0).getToken().equals(";")) {
+
+                    // remove ;
+                    tokens.remove(0);
                     break;
                 }
                 else {
-                    BodyNode.reportError("Expected '}' did not get it", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                    BodyNode.reportError("Expected ';' did not get it", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                     return null;
                 }
             }
@@ -53,7 +56,7 @@ public class BodyNode extends JottNode {
             jott += this.bodyStmts.get(i).convertToJott();
         }
         if (this.ReturnStmt != null) {
-            jott = "return " + this.ReturnStmt.convertToJott();
+            jott += "return " + this.ReturnStmt.convertToJott() + ";";
         }
         return jott;
     }
