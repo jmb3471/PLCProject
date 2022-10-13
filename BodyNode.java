@@ -23,7 +23,7 @@ public class BodyNode extends JottNode {
 
                 exprNode = ExprNode.ParseExprNode(tokens);
 
-                if (tokens.get(0).getToken() == "}") {
+                if (tokens.get(0).getToken().equals("}")) {
                     break;
                 }
                 else {
@@ -36,6 +36,9 @@ public class BodyNode extends JottNode {
                 bodyStmts.add(bodyStmt);
             }
         }
+
+        // remove }
+        tokens.remove(0);
 
         BodyNode bodyNode = new BodyNode(bodyStmts, exprNode);
 

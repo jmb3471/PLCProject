@@ -48,7 +48,10 @@ public class ExprNode extends JottNode {
                 }
                 else {
                     ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
+
+                    // remove constant
                     tokens.remove(0);
+
                     return new ExprNode(constantNode);
                 }
             }

@@ -43,7 +43,7 @@ public class FunctionDefNode extends JottNode {
             return null;
         }
 
-        // Remove the ID and the "]"
+        // Remove the ID and the "["
         tokens.remove(1);
         tokens.remove(0);
 
@@ -115,7 +115,7 @@ public class FunctionDefNode extends JottNode {
         for (int i = 0; i < this.params.size(); i++) {
             jott += this.params.get(i).convertToJott();
         }
-        jott += "]" + this.return_type + "{" + this.Body.convertToJott();
+        jott += "]:" + this.return_type + "{" + this.Body.convertToJott() + "}";
         return jott;
     }
 

@@ -37,7 +37,7 @@ public class ConstantNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return this.type + " " + this.value;
+        return this.value;
     }
 
     @Override

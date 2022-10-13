@@ -20,17 +20,21 @@ public class FuncCallNode extends StmtNode {
 
         ArrayList<ExprNode> exprNodes = new ArrayList<>();
 
-        while (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+        while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             ExprNode exprNode = ExprNode.ParseExprNode(tokens);
             exprNodes.add(exprNode);
         }
+
+        // remove ]
+        tokens.remove(0);
+
         return new FuncCallNode(idNode, exprNodes);
 
     }
 
     @Override
     public String convertToJott() {
-        String jott = this.id + "[";
+        String jott = this.id.convertToJott() + "[";
         for (int i = 0; i < exprNodes.size(); i++) {
             if (i == exprNodes.size() - 1) {
                 jott += this.exprNodes.get(i).convertToJott();
@@ -39,6 +43,7 @@ public class FuncCallNode extends StmtNode {
                 jott += this.exprNodes.get(i).convertToJott() + ",";
             }
         }
+        jott += "];";
         return jott;
 
     }
