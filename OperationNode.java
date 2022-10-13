@@ -89,7 +89,7 @@ public class OperationNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJott() {
-        return this.left + " " + this.operator + " " + this.right;
+        return this.left.convertToJott() + " " + this.operator + " " + this.right.convertToJott();
     }
 
     @Override

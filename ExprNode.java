@@ -66,7 +66,7 @@ public class ExprNode extends JottNode {
 
     @Override
     public String convertToJott() {
-        return null;
+        return this.expr.convertToJott();
     }
 
     @Override
