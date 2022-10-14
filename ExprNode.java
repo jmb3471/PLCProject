@@ -1,11 +1,19 @@
+import java.rmi.server.Operation;
 import java.util.ArrayList;
 
 public class ExprNode extends JottNode {
 
     private JottNode expr;
 
+    public ExprNode() {}
+    
     public ExprNode(JottNode node) {
         this.expr = node;
+    }
+
+    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType)
+    {
+        return new ExprNode(new OperationNode(left, op, right, ""));
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens) throws Exception {
@@ -25,6 +33,18 @@ public class ExprNode extends JottNode {
                 Token secondToken = tokens.get(1);
                 if (secondToken.getTokenType().equals(TokenType.L_BRACKET)) {
                     FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens);
+                    if (tokens.get(0).getTokenType().equals(TokenType.REL_OP))
+                    {
+                        String op = tokens.get(0).getToken();
+                        if(op.length() == 2)
+                        {
+                            tokens.remove(1);
+                        }
+                        tokens.remove(0);
+                        ExprNode rightNode = ExprNode.ParseExprNode(tokens);
+                        JottNode tempNode = makeNestedExprNode(new ExprNode(funcCallNode), op, rightNode, "relational");
+                        return new ExprNode(tempNode);
+                    }
                     return new ExprNode(funcCallNode);
                 }
                 else if (secondToken.getTokenType().equals(TokenType.MATH_OP) ||
