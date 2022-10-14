@@ -13,7 +13,7 @@ public class ExprNode extends JottNode {
 
     public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType)
     {
-        return new ExprNode(new OperationNode(left, op, right, ""));
+        return new ExprNode(new OperationNode(left, op, right, opType));
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens) throws Exception {
