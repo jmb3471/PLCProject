@@ -5,12 +5,17 @@ public class FuncCallNode extends StmtNode {
     private JottNode id;
     private ArrayList<ExprNode> exprNodes;
 
+    public Boolean endStmt;
     public FuncCallNode(JottNode id, ArrayList<ExprNode> exprNodes)
     {
         this.id = id;
         this.exprNodes = exprNodes;
+        this.endStmt = true;
     }
 
+    public void setEndStmt() {
+        this.endStmt = false;
+    }
     public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
@@ -43,7 +48,10 @@ public class FuncCallNode extends StmtNode {
                 jott += this.exprNodes.get(i).convertToJott() + ",";
             }
         }
-        jott += "];";
+        jott += "]";
+        if (this.endStmt) {
+            jott += ';';
+        }
         return jott;
 
     }
