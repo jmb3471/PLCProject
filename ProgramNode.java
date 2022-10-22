@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ProgramNode extends JottNode {
 
     private ArrayList<FunctionDefNode> funcDefs;
+
+    public static HashMap<String, FunctionDefNode> globalTable = new HashMap<String, FunctionDefNode>();
 
     public ProgramNode(ArrayList<FunctionDefNode> funcDefs) {
         this.funcDefs = funcDefs;
@@ -17,6 +20,7 @@ public class ProgramNode extends JottNode {
         ArrayList<FunctionDefNode> funcDefs = new ArrayList<>();
         while (!tokens.isEmpty()){
             FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens);
+            globalTable.put(funcDefNode.ID, funcDefNode);
             funcDefs.add(funcDefNode);
         }
 
