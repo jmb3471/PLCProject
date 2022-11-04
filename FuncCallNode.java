@@ -16,6 +16,7 @@ public class FuncCallNode extends StmtNode {
     public void setEndStmt() {
         this.endStmt = false;
     }
+
     public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
@@ -58,18 +59,56 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = this.id.convertToJava() + "(";
+        for (int i = 0; i < exprNodes.size(); i++) {
+            if (i == exprNodes.size() - 1) {
+                java += this.exprNodes.get(i).convertToJava();
+            }
+            else {
+                java += this.exprNodes.get(i).convertToJava() + ",";
+            }
+        }
+        java += ")";
+        if (this.endStmt) {
+            java += ';';
+        }
+        return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String c = this.id.convertToJava() + "(";
+        for (int i = 0; i < exprNodes.size(); i++) {
+            if (i == exprNodes.size() - 1) {
+                c += this.exprNodes.get(i).convertToJava();
+            }
+            else {
+                c += this.exprNodes.get(i).convertToJava() + ",";
+            }
+        }
+        c += ")";
+        if (this.endStmt) {
+            c += ';';
+        }
+        return c;
     }
 
     @Override
     public String convertToPython() {
-        return null;
-    }
+        String python = this.id.convertToJava() + "(";
+        for (int i = 0; i < exprNodes.size(); i++) {
+            if (i == exprNodes.size() - 1) {
+                python += this.exprNodes.get(i).convertToJava();
+            }
+            else {
+                python += this.exprNodes.get(i).convertToJava() + ",";
+            }
+        }
+        python += ")";
+        if (this.endStmt) {
+            python += '\n';
+        }
+        return python;    }
 
     @Override
     public boolean validateTree() {

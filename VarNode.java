@@ -19,17 +19,17 @@ public class VarNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.id;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.id;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.id;
     }
 
     @Override

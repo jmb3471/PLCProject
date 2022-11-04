@@ -121,17 +121,49 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = "public " + this.return_type + " " + this.ID + "(";
+        for (int i = 0; i < this.params.size(); i++) {
+            if (i == this.params.size() - 1) {
+                java += this.params.get(i).convertToJava();
+            }
+            else {
+                java += this.params.get(i).convertToJava() + ",";
+            }
+        }
+        java += ") { " + this.Body.convertToJava() + "}";
+        return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String c = this.return_type + " " + this.ID + "(";
+        for (int i = 0; i < this.params.size(); i++) {
+            if (i == this.params.size() - 1) {
+                c += this.params.get(i).convertToC();
+            }
+            else {
+                c += this.params.get(i).convertToC() + ",";
+            }
+        }
+        c += ") { " + this.Body.convertToC() + "}";
+
+        return c;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String python = "def " + this.ID + "(";
+        for (int i = 0; i < this.params.size(); i++) {
+            if (i == this.params.size() - 1) {
+                python += this.params.get(i).convertToPython();
+            }
+            else {
+                python += this.params.get(i).convertToPython() + ",";
+            }
+        }
+        python += "):\n\t" + this.Body.convertToPython();
+
+        return python;
     }
 
     @Override

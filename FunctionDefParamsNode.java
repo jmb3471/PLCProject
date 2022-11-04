@@ -51,17 +51,17 @@ public class FunctionDefParamsNode extends JottNode{
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.type + " " + this.ID;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.type + " " + this.ID;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.ID;
     }
 
     @Override

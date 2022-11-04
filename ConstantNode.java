@@ -42,17 +42,17 @@ public class ConstantNode extends JottNode implements JottTree {
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.value;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.value;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.value;
     }
 
     @Override

@@ -39,17 +39,18 @@ public class VarDecNode extends StmtNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.type + " " + this.id + ";";
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.type + " " + this.id + ";";
     }
 
+    // Someone should double check this but i think this is right because python doesn't do type declaration
     @Override
     public String convertToPython() {
-        return null;
+        return "\n";
     }
 
     @Override
