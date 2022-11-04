@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class ProgramNode extends JottNode {
 
     private ArrayList<FunctionDefNode> funcDefs;
-
-    public static HashMap<String, FunctionDefNode> globalTable = new HashMap<String, FunctionDefNode>();
+    public static boolean hasDuplicate = false;
+    public static boolean hasMain = false;
 
     public ProgramNode(ArrayList<FunctionDefNode> funcDefs) {
         this.funcDefs = funcDefs;
@@ -20,7 +21,14 @@ public class ProgramNode extends JottNode {
         ArrayList<FunctionDefNode> funcDefs = new ArrayList<>();
         while (!tokens.isEmpty()){
             FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens);
-            globalTable.put(funcDefNode.ID, funcDefNode);
+            for (FunctionDefNode funcDef : funcDefs) {
+                if (Objects.equals(funcDef.ID, funcDefNode.ID)) {
+                    hasDuplicate = true;
+                }
+            }
+            if (Objects.equals(funcDefNode.ID, "main")) {
+                hasMain = true;
+            }
             funcDefs.add(funcDefNode);
         }
 
@@ -55,6 +63,16 @@ public class ProgramNode extends JottNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (hasMain && !hasDuplicate) {
+            for (FunctionDefNode funcDef : funcDefs) {
+                if (!funcDef.validateTree()) {
+                    return false;
+                }
+            }
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 }

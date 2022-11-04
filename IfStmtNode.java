@@ -139,17 +139,37 @@ public class IfStmtNode extends BodyStmtNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = "if (" + this.cond.convertToJava() + ") {" + this.Body.convertToJava() + "}";
+        for (int i = 0; i < this.elseIfBodys.size(); i++) {
+            java += " else if (" + this.elseIfExprs.get(i).convertToJava() + ") {" + this.elseIfBodys.get(i).convertToJava() + "}";
+        }
+        if (this.elseBody != null) {
+            java += " else {" + this.elseBody.convertToJava() + "}";
+        }
+            return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
-    }
+        String c = "if (" + this.cond.convertToC() + ") {" + this.Body.convertToC() + "}";
+        for (int i = 0; i < this.elseIfBodys.size(); i++) {
+            c += " else if (" + this.elseIfExprs.get(i).convertToC() + ") {" + this.elseIfBodys.get(i).convertToC() + "}";
+        }
+        if (this.elseBody != null) {
+            c += " else {" + this.elseBody.convertToC() + "}";
+        }
+        return c;    }
 
     @Override
     public String convertToPython() {
-        return null;
+        String python = "if " + this.cond.convertToPython() + ":\n\t" + this.Body.convertToPython() + "\n";
+        for (int i = 0; i < this.elseIfBodys.size(); i++) {
+            python += "elif " + this.elseIfExprs.get(i).convertToPython() + ":\n\t" + this.elseIfBodys.get(i).convertToPython() + "\n";
+        }
+        if (this.elseBody != null) {
+            python += "else:\n\t" + this.elseBody.convertToPython() + "\n";
+        }
+        return python;
     }
 
     @Override

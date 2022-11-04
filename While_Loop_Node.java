@@ -54,17 +54,17 @@ public class While_Loop_Node extends BodyStmtNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        return "while (" + cond.convertToJava() + ") {" + body.convertToJava() + "}";
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return "while (" + cond.convertToC() + ") {\n\t" + body.convertToC() + "}\n";
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return "while " + cond.convertToPython() + ":\n\t" + body.convertToPython();
     }
 
     @Override
