@@ -1,17 +1,19 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BodyNode extends JottNode {
 
     private ArrayList<BodyStmtNode> bodyStmts;
     private ExprNode ReturnStmt;
+    private HashMap symTab;
 
-    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt) {
+    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt, HashMap symTab) {
         this.bodyStmts = bodyStmts;
         this.ReturnStmt = returnStmt;
+        this.symTab = symTab;
     }
 
-
-    public static BodyNode ParseBodyNode(ArrayList<Token> tokens) throws Exception {
+    public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
         ExprNode exprNode = null;
 
@@ -21,7 +23,7 @@ public class BodyNode extends JottNode {
                 // remove return token
                 tokens.remove(0);
 
-                exprNode = ExprNode.ParseExprNode(tokens);
+                exprNode = ExprNode.ParseExprNode(tokens, symTab);
 
                 if (tokens.get(0).getToken().equals(";")) {
 
@@ -35,7 +37,7 @@ public class BodyNode extends JottNode {
                 }
             }
             else {
-                BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens);
+                BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens, symTab);
                 bodyStmts.add(bodyStmt);
             }
         }
@@ -43,7 +45,7 @@ public class BodyNode extends JottNode {
         // remove }
         tokens.remove(0);
 
-        BodyNode bodyNode = new BodyNode(bodyStmts, exprNode);
+        BodyNode bodyNode = new BodyNode(bodyStmts, exprNode, symTab);
 
         return bodyNode;
     }
@@ -79,5 +81,24 @@ public class BodyNode extends JottNode {
     @Override
     public boolean validateTree() {
         return false;
+    }
+
+    public boolean validateTree(String type) {
+        if (this.ReturnStmt == null) {
+            if (!type.equals("Void")) {
+                return false;
+            }
+        }
+        else {
+            if (!this.ReturnStmt.equals(type)) {
+                return false;
+            }
+        }
+        for (BodyStmtNode bodyStmtNode: this.bodyStmts) {
+            if (!bodyStmtNode.validateTree()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

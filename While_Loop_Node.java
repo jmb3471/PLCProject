@@ -1,18 +1,21 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class While_Loop_Node extends BodyStmtNode {
 
     private ExprNode cond;
     private BodyNode body;
+    private HashMap symTab;
 
 
-    public While_Loop_Node(ExprNode cond, BodyNode body) {
+    public While_Loop_Node(ExprNode cond, BodyNode body, HashMap symTab) {
         this.body = body;
         this.cond = cond;
+        this.symTab = symTab;
     }
 
-    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens) throws Exception {
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             While_Loop_Node.reportError("Expected [ for while loop",
@@ -23,7 +26,7 @@ public class While_Loop_Node extends BodyStmtNode {
         // remove left bracket
         tokens.remove(0);
 
-        ExprNode expr = ExprNode.ParseExprNode(tokens);
+        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             While_Loop_Node.reportError("Expected ] for while loop",
@@ -41,9 +44,9 @@ public class While_Loop_Node extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
 
-        While_Loop_Node while_loop_node = new While_Loop_Node(expr, body);
+        While_Loop_Node while_loop_node = new While_Loop_Node(expr, body, symTab);
         return while_loop_node;
     }
 

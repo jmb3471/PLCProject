@@ -1,20 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OperationNode extends JottNode implements JottTree {
     private JottNode left;
     private String operator;
     private JottNode right;
     private String opType;
+    private HashMap symTab;
 
 
-    public OperationNode(JottNode left, String operator, JottNode right, String opType) {
+    public OperationNode(JottNode left, String operator, JottNode right, String opType, HashMap symTab) {
         this.left = left;
         this.right = right;
         this.operator = operator;
         this.opType = opType;
+        this.symTab = symTab;
     }
 
-    public static OperationNode ParseOperationNode(ArrayList<Token> tokens) throws Exception {
+    public static OperationNode ParseOperationNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         Token token = tokens.get(0);
         JottNode left = null;
         String operator = null;
@@ -54,11 +57,11 @@ public class OperationNode extends JottNode implements JottTree {
 
         // assign right operand
         if (tokens.get(1).getTokenType().equals(TokenType.MATH_OP) || tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
-            right = OperationNode.ParseOperationNode(tokens);
+            right = OperationNode.ParseOperationNode(tokens, symTab);
         }
         else {
             if (tokens.get(1).getTokenType().equals(TokenType.MATH_OP) || tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
-                right = OperationNode.ParseOperationNode(tokens);
+                right = OperationNode.ParseOperationNode(tokens, symTab);
             }
             else {
                 Token thirdToken = tokens.get(0);
@@ -84,7 +87,7 @@ public class OperationNode extends JottNode implements JottTree {
         }
 
 
-        return new OperationNode(left, operator, right, opType);
+        return new OperationNode(left, operator, right, opType, symTab);
     }
 
     @Override

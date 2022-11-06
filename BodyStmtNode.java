@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BodyStmtNode extends JottNode {
 
@@ -15,24 +16,24 @@ public class BodyStmtNode extends JottNode {
     }
 
 
-    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens) throws Exception {
+    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         BodyStmtNode bodyStmt;
         // Check if the BodyStmt is an if stmt
         if (tokens.get(0).getToken().equals("if")) {
             // Remove the "if"
             tokens.remove(0);
-            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens);
+            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab);
         }
 
          // Check if the BodyStmt is a while loop
         else if (tokens.get(0).getToken().equals("while")) {
             tokens.remove(0);
-            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens);
+            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens, symTab);
         }
 
         // The BodyStmt must just be a stmt
         else {
-            bodyStmt = StmtNode.ParseStmtNode(tokens);
+            bodyStmt = StmtNode.ParseStmtNode(tokens, symTab);
         }
         return bodyStmt;
     }

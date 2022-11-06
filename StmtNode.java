@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StmtNode extends BodyStmtNode {
 
     private JottNode asmtNode;
     private JottNode varDecNode;
     private JottNode funcCallNode;
+    private HashMap symTab;
 
 
     public StmtNode()
@@ -14,16 +16,16 @@ public class StmtNode extends BodyStmtNode {
         funcCallNode = null;
     }
 
-    public static StmtNode ParseStmtNode(ArrayList<Token> tokens) throws Exception {
+    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         StmtNode stmtNode;
         if (tokens.get(2).getToken().equals("=") || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && (tokens.get(1).getToken().equals("=") || tokens.get(2).getToken().equals("=")))) {
-            stmtNode = AsmtNode.ParseAsmtNode(tokens);
+            stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab);
         }
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
-            stmtNode = FuncCallNode.ParseFuncCallNode(tokens);
+            stmtNode = FuncCallNode.ParseFuncCallNode(tokens, symTab);
         }
         else {
-            stmtNode = VarDecNode.ParseVarDecNode(tokens);
+            stmtNode = VarDecNode.ParseVarDecNode(tokens, symTab);
         }
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
             ExprNode.reportError("Expected end of line", tokens.get(0).getFilename(), tokens.get(0).getLineNum());

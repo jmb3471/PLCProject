@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FunctionDefNode extends JottNode {
 
@@ -6,6 +7,7 @@ public class FunctionDefNode extends JottNode {
     private ArrayList<FunctionDefParamsNode> params;
     private String return_type;
     private BodyNode Body;
+    private HashMap symTab;
 
 
     /**
@@ -13,13 +15,12 @@ public class FunctionDefNode extends JottNode {
      * @param id            The ID/Keyword of the function
      * @param params        An arraylist of FunctionDefParamsNodes for the params of the function
      * @param return_type   The return type of the fundtion
-     * @param body          The body of the function
      */
-    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, String return_type, BodyNode body) {
+    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, String return_type) {
         this.ID = id;
         this.params = params;
         this.return_type = return_type;
-        this.Body = body;
+        this.symTab = new HashMap();
     }
 
 
@@ -100,12 +101,18 @@ public class FunctionDefNode extends JottNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        // Parse the body
-        BodyNode body = BodyNode.ParseBodyNode(tokens);
+        FunctionDefNode funcDef = new FunctionDefNode(id, params, type);
 
-        FunctionDefNode funcDef = new FunctionDefNode(id, params, type, body);
+        // Parse the body
+        BodyNode body = BodyNode.ParseBodyNode(tokens, funcDef.symTab);
+
+        funcDef.addBody(body);
 
         return funcDef;
+    }
+
+    private void addBody(BodyNode bodyNode) {
+        this.Body = bodyNode;
     }
 
 

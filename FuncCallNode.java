@@ -1,23 +1,26 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FuncCallNode extends StmtNode {
     
     private JottNode id;
     private ArrayList<ExprNode> exprNodes;
+    private HashMap symTab;
 
     public Boolean endStmt;
-    public FuncCallNode(JottNode id, ArrayList<ExprNode> exprNodes)
+    public FuncCallNode(JottNode id, ArrayList<ExprNode> exprNodes, HashMap symTab)
     {
         this.id = id;
         this.exprNodes = exprNodes;
         this.endStmt = true;
+        this.symTab = symTab;
     }
 
     public void setEndStmt() {
         this.endStmt = false;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens) throws Exception {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -27,14 +30,14 @@ public class FuncCallNode extends StmtNode {
         ArrayList<ExprNode> exprNodes = new ArrayList<>();
 
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-            ExprNode exprNode = ExprNode.ParseExprNode(tokens);
+            ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab);
             exprNodes.add(exprNode);
         }
 
         // remove ]
         tokens.remove(0);
 
-        return new FuncCallNode(idNode, exprNodes);
+        return new FuncCallNode(idNode, exprNodes, symTab);
 
     }
 

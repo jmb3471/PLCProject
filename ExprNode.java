@@ -1,38 +1,41 @@
 import java.rmi.server.Operation;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ExprNode extends JottNode {
 
     private JottNode expr;
+    private HashMap symTab;
 
     public ExprNode() {}
     
-    public ExprNode(JottNode node) {
+    public ExprNode(JottNode node, HashMap symTab) {
         this.expr = node;
+        this.symTab = symTab;
     }
 
-    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType)
+    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType, HashMap symTab)
     {
-        return new ExprNode(new OperationNode(left, op, right, opType));
+        return new ExprNode(new OperationNode(left, op, right, opType, symTab), symTab);
     }
 
-    public static ExprNode ParseExprNode(ArrayList<Token> tokens) throws Exception {
+    public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
         
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 if (tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
-                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens);
-                    return new ExprNode(operationNode);
+                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
+                    return new ExprNode(operationNode, symTab);
                 }
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
                 tokens.remove(0);
-                return new ExprNode(constantNode);
+                return new ExprNode(constantNode, symTab);
             }
             else {
                 Token secondToken = tokens.get(1);
                 if (secondToken.getTokenType().equals(TokenType.L_BRACKET)) {
-                    FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens);
+                    FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens, symTab);
                     funcCallNode.setEndStmt();
                     if (tokens.get(0).getTokenType().equals(TokenType.REL_OP))
                     {
@@ -42,21 +45,21 @@ public class ExprNode extends JottNode {
                             tokens.remove(1);
                         }
                         tokens.remove(0);
-                        ExprNode rightNode = ExprNode.ParseExprNode(tokens);
-                        JottNode tempNode = makeNestedExprNode(new ExprNode(funcCallNode), op, rightNode, "relational");
-                        return new ExprNode(tempNode);
+                        ExprNode rightNode = ExprNode.ParseExprNode(tokens, symTab);
+                        JottNode tempNode = makeNestedExprNode(new ExprNode(funcCallNode, symTab), op, rightNode, "relational", symTab);
+                        return new ExprNode(tempNode, symTab);
                     }
-                    return new ExprNode(funcCallNode);
+                    return new ExprNode(funcCallNode, symTab);
                 }
                 else if (secondToken.getTokenType().equals(TokenType.MATH_OP) ||
                         secondToken.getTokenType().equals(TokenType.REL_OP)) {
-                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens);
-                    return new ExprNode(operationNode);
+                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
+                    return new ExprNode(operationNode, symTab);
                 }
                 else {
                     VarNode varNode = VarNode.ParseVarNode(tokens);
                     tokens.remove(0);
-                    return new ExprNode(varNode);
+                    return new ExprNode(varNode, symTab);
                 }
             }
         }
@@ -64,8 +67,8 @@ public class ExprNode extends JottNode {
             if (token.getTokenType().equals(TokenType.NUMBER)) {
                 if (tokens.get(1).getTokenType().equals(TokenType.MATH_OP) ||
                         tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
-                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens);
-                    return new ExprNode(operationNode);
+                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
+                    return new ExprNode(operationNode, symTab);
                 }
                 else {
                     ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
@@ -73,13 +76,13 @@ public class ExprNode extends JottNode {
                     // remove constant
                     tokens.remove(0);
 
-                    return new ExprNode(constantNode);
+                    return new ExprNode(constantNode, symTab);
                 }
             }
             if (token.getTokenType().equals(TokenType.STRING)) {
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
                 tokens.remove(0);
-                return new ExprNode(constantNode);
+                return new ExprNode(constantNode, symTab);
             }
             else {
                 ExprNode.reportError("Incorrect expression", tokens.get(0).getFilename(), tokens.get(0).getLineNum());

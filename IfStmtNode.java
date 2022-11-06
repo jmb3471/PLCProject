@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IfStmtNode extends BodyStmtNode {
 
@@ -17,7 +18,7 @@ public class IfStmtNode extends BodyStmtNode {
         this.elseBody = elseBody;
     }
 
-    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens) throws Exception {
+    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             IfStmtNode.reportError("Expected [ for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -28,7 +29,7 @@ public class IfStmtNode extends BodyStmtNode {
         tokens.remove(0);
 
         // parse b_expr
-        ExprNode expr = ExprNode.ParseExprNode(tokens);
+        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             IfStmtNode.reportError("Expected ] for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -44,7 +45,7 @@ public class IfStmtNode extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
             IfStmtNode.reportError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -69,7 +70,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens);
+            ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens, symTab);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
                 IfStmtNode.reportError("Expected ] for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -85,7 +86,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens);
+            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -109,7 +110,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            elseNode = BodyNode.ParseBodyNode(tokens);
+            elseNode = BodyNode.ParseBodyNode(tokens, symTab);
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
