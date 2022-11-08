@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FunctionDefParamsNode extends JottNode{
 
@@ -12,7 +13,7 @@ public class FunctionDefParamsNode extends JottNode{
         this.ID = id;
     }
 
-    public static FunctionDefParamsNode ParseFunctionDefParamsNode(ArrayList<Token> tokens) throws Exception {
+    public static FunctionDefParamsNode ParseFunctionDefParamsNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         // Check if first token is an ID
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
             FunctionDefParamsNode.reportError("Expected ID for first token for FunctionDefParam", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -39,6 +40,9 @@ public class FunctionDefParamsNode extends JottNode{
         tokens.remove(2);
         tokens.remove(1);
         tokens.remove(0);
+
+        // Update the symbol table
+        symTab.put(id, type);
 
         // Return a FunctionDefParamsNode object with the correct id and type
         return new FunctionDefParamsNode(id, type);

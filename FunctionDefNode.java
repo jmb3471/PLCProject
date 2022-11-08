@@ -7,20 +7,23 @@ public class FunctionDefNode extends JottNode {
     private ArrayList<FunctionDefParamsNode> params;
     private String return_type;
     private BodyNode Body;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
 
     /**
      * FunctionDefNode constructor
      * @param id            The ID/Keyword of the function
      * @param params        An arraylist of FunctionDefParamsNodes for the params of the function
+     * @param body          The BodyNode for the body of the function
      * @param return_type   The return type of the fundtion
+     * @param symTab        The symbol table for the function
      */
-    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, String return_type) {
+    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, BodyNode body, String return_type, HashMap<String, String> symTab) {
         this.ID = id;
         this.params = params;
+        this.Body = body;
         this.return_type = return_type;
-        this.symTab = new HashMap();
+        this.symTab = symTab;
     }
 
 
@@ -49,6 +52,7 @@ public class FunctionDefNode extends JottNode {
         tokens.remove(0);
 
         ArrayList<FunctionDefParamsNode> params = new ArrayList<>();
+        HashMap<String, String> symTab = new HashMap<>();
         boolean firstParam = true;
 
         // While a "]" hasn't been seen yet, create new FunctionDefParamsNodes and add
@@ -69,7 +73,7 @@ public class FunctionDefNode extends JottNode {
                 firstParam = false;
             }
 
-            params.add(FunctionDefParamsNode.ParseFunctionDefParamsNode(tokens));
+            params.add(FunctionDefParamsNode.ParseFunctionDefParamsNode(tokens, symTab));
         }
 
         // Remove the "]"
@@ -90,6 +94,9 @@ public class FunctionDefNode extends JottNode {
             return null;
         }
 
+        // Add the return type to the symbol table
+        symTab.put("return", type);
+
         // Check if the next element is a "{"
         if (tokens.get(2).getTokenType() != TokenType.L_BRACE) {
             FunctionDefNode.reportError("Expected function to start with { for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -101,18 +108,12 @@ public class FunctionDefNode extends JottNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        FunctionDefNode funcDef = new FunctionDefNode(id, params, type);
-
         // Parse the body
-        BodyNode body = BodyNode.ParseBodyNode(tokens, funcDef.symTab);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
 
-        funcDef.addBody(body);
+        FunctionDefNode funcDef = new FunctionDefNode(id, params, body, type, symTab);
 
         return funcDef;
-    }
-
-    private void addBody(BodyNode bodyNode) {
-        this.Body = bodyNode;
     }
 
 

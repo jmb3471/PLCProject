@@ -5,15 +5,15 @@ public class BodyNode extends JottNode {
 
     private ArrayList<BodyStmtNode> bodyStmts;
     private ExprNode ReturnStmt;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
-    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt, HashMap symTab) {
+    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt, HashMap<String, String> symTab) {
         this.bodyStmts = bodyStmts;
         this.ReturnStmt = returnStmt;
         this.symTab = symTab;
     }
 
-    public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
         ExprNode exprNode = null;
 

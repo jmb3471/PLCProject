@@ -6,7 +6,7 @@ public class StmtNode extends BodyStmtNode {
     private JottNode asmtNode;
     private JottNode varDecNode;
     private JottNode funcCallNode;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
 
     public StmtNode()
@@ -16,7 +16,7 @@ public class StmtNode extends BodyStmtNode {
         funcCallNode = null;
     }
 
-    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         StmtNode stmtNode;
         if (tokens.get(2).getToken().equals("=") || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && (tokens.get(1).getToken().equals("=") || tokens.get(2).getToken().equals("=")))) {
             stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab);

@@ -17,6 +17,10 @@ public class IdNode extends JottNode implements JottTree {
         return new IdNode(tokens.get(0).getToken());
     }
 
+    public String getId(){
+        return id;
+    }
+
     @Override
     public String convertToJott() {
         return this.id;

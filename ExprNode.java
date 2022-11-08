@@ -1,25 +1,24 @@
-import java.rmi.server.Operation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExprNode extends JottNode {
 
     private JottNode expr;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
     public ExprNode() {}
     
-    public ExprNode(JottNode node, HashMap symTab) {
+    public ExprNode(JottNode node, HashMap<String, String> symTab) {
         this.expr = node;
         this.symTab = symTab;
     }
 
-    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType, HashMap symTab)
+    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType, HashMap<String, String> symTab)
     {
         return new ExprNode(new OperationNode(left, op, right, opType, symTab), symTab);
     }
 
-    public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {

@@ -15,7 +15,7 @@ public class VarDecNode extends StmtNode {
         this.id = id;
     }
 
-    public static VarDecNode ParseVarDecNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static VarDecNode ParseVarDecNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         List<String> Types = Arrays.asList("Double", "Integer", "String", "Boolean");
         String type = tokens.get(0).getToken();
         if (!Types.contains(type)) {
@@ -31,6 +31,7 @@ public class VarDecNode extends StmtNode {
                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
+        symTab.put(idNode.getId(), type + "_undf");
         return new VarDecNode(type, idNode);
     }
     @Override

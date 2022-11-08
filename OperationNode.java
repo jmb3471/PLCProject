@@ -6,10 +6,10 @@ public class OperationNode extends JottNode implements JottTree {
     private String operator;
     private JottNode right;
     private String opType;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
 
-    public OperationNode(JottNode left, String operator, JottNode right, String opType, HashMap symTab) {
+    public OperationNode(JottNode left, String operator, JottNode right, String opType, HashMap<String, String> symTab) {
         this.left = left;
         this.right = right;
         this.operator = operator;
@@ -17,7 +17,7 @@ public class OperationNode extends JottNode implements JottTree {
         this.symTab = symTab;
     }
 
-    public static OperationNode ParseOperationNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static OperationNode ParseOperationNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         Token token = tokens.get(0);
         JottNode left = null;
         String operator = null;
