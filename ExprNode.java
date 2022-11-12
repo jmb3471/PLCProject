@@ -18,7 +18,7 @@ public class ExprNode extends JottNode {
         return new ExprNode(new OperationNode(left, op, right, opType, symTab), symTab);
     }
 
-    public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
+    public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth) throws Exception {
         
         Token token = tokens.get(0);
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
@@ -44,7 +44,7 @@ public class ExprNode extends JottNode {
                             tokens.remove(1);
                         }
                         tokens.remove(0);
-                        ExprNode rightNode = ExprNode.ParseExprNode(tokens, symTab);
+                        ExprNode rightNode = ExprNode.ParseExprNode(tokens, symTab, depth);
                         JottNode tempNode = makeNestedExprNode(new ExprNode(funcCallNode, symTab), op, rightNode, "relational", symTab);
                         return new ExprNode(tempNode, symTab);
                     }

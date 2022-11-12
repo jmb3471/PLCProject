@@ -14,7 +14,7 @@ public class AsmtNode extends StmtNode {
         this.type = type;
     }
 
-    public static AsmtNode ParseAsmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
+    public static AsmtNode ParseAsmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth) throws Exception {
 
         ExprNode cond = null;
         String id = null;
@@ -35,7 +35,7 @@ public class AsmtNode extends StmtNode {
             tokens.remove(2);
             tokens.remove(1);
             tokens.remove(0);
-            cond = ExprNode.ParseExprNode(tokens, symTab);
+            cond = ExprNode.ParseExprNode(tokens, symTab, depth);
         }
         // if the assignment begins with an <id>
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
@@ -43,7 +43,7 @@ public class AsmtNode extends StmtNode {
             // remove <id> and "="
             tokens.remove(1);
             tokens.remove(0);
-            cond = ExprNode.ParseExprNode(tokens, symTab);
+            cond = ExprNode.ParseExprNode(tokens, symTab, depth);
         }
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
             AsmtNode.reportError("Expected Semicolon, found none", tokens.get(0).getFilename(), tokens.get(0).getLineNum());

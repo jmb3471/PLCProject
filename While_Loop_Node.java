@@ -15,7 +15,7 @@ public class While_Loop_Node extends BodyStmtNode {
         this.symTab = symTab;
     }
 
-    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             While_Loop_Node.reportError("Expected [ for while loop",
@@ -26,7 +26,7 @@ public class While_Loop_Node extends BodyStmtNode {
         // remove left bracket
         tokens.remove(0);
 
-        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab);
+        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             While_Loop_Node.reportError("Expected ] for while loop",
@@ -44,9 +44,10 @@ public class While_Loop_Node extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth + 1);
 
         While_Loop_Node while_loop_node = new While_Loop_Node(expr, body, symTab);
+        while_loop_node.depth = depth;
         return while_loop_node;
     }
 
@@ -62,12 +63,16 @@ public class While_Loop_Node extends BodyStmtNode {
 
     @Override
     public String convertToC() {
-        return "while (" + cond.convertToC() + ") {\n\t" + body.convertToC() + "}\n";
+        return "while (" + cond.convertToC() + ") {" + body.convertToC() + "}";
     }
 
     @Override
     public String convertToPython() {
-        return "while " + cond.convertToPython() + ":\n\t" + body.convertToPython();
+        String tabs = "";
+        for (int i = 0; i < this.depth + 1; i++) {
+                tabs += "\t";
+        }
+        return tabs + "while " + cond.convertToPython() + ":\n\t" + tabs + body.convertToPython();
     }
 
     @Override

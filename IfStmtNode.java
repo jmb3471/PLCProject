@@ -18,7 +18,7 @@ public class IfStmtNode extends BodyStmtNode {
         this.elseBody = elseBody;
     }
 
-    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             IfStmtNode.reportError("Expected [ for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -29,7 +29,7 @@ public class IfStmtNode extends BodyStmtNode {
         tokens.remove(0);
 
         // parse b_expr
-        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab);
+        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             IfStmtNode.reportError("Expected ] for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -45,7 +45,7 @@ public class IfStmtNode extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth+1);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
             IfStmtNode.reportError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -70,7 +70,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens, symTab);
+            ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens, symTab, depth);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
                 IfStmtNode.reportError("Expected ] for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -86,7 +86,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab);
+            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab, depth+1);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -110,7 +110,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            elseNode = BodyNode.ParseBodyNode(tokens, symTab);
+            elseNode = BodyNode.ParseBodyNode(tokens, symTab, depth+1);
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
@@ -121,6 +121,7 @@ public class IfStmtNode extends BodyStmtNode {
         }
 
         IfStmtNode ifNode = new IfStmtNode(expr, body, elseIFBodys, elseIfExprs, elseNode);
+        ifNode.depth = depth;
 
         return ifNode;
     }
@@ -163,12 +164,16 @@ public class IfStmtNode extends BodyStmtNode {
 
     @Override
     public String convertToPython() {
-        String python = "if " + this.cond.convertToPython() + ":\n\t" + this.Body.convertToPython() + "\n";
+        String tabs = "";
+        for (int i = 0; i < this.depth + 1; i++) {
+            tabs += "\t";
+        }
+        String python = tabs + "if " + this.cond.convertToPython() + ":\n\t" + tabs + this.Body.convertToPython() + "\n";
         for (int i = 0; i < this.elseIfBodys.size(); i++) {
-            python += "elif " + this.elseIfExprs.get(i).convertToPython() + ":\n\t" + this.elseIfBodys.get(i).convertToPython() + "\n";
+            python += tabs + "elif " + this.elseIfExprs.get(i).convertToPython() + ":\n\t" + tabs + this.elseIfBodys.get(i).convertToPython() + "\n";
         }
         if (this.elseBody != null) {
-            python += "else:\n\t" + this.elseBody.convertToPython() + "\n";
+            python += tabs + "else:\n\t" + tabs + this.elseBody.convertToPython() + "\n";
         }
         return python;
     }

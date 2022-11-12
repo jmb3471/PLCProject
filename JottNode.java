@@ -9,6 +9,7 @@ abstract class JottNode implements JottTree {
     public String value;
 
     public String type;
+    public int depth = 0;
 
     public JottNode() {
 

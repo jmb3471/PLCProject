@@ -30,7 +30,7 @@ public class FuncCallNode extends StmtNode {
         ArrayList<ExprNode> exprNodes = new ArrayList<>();
 
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-            ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab);
+            ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab, depth);
             exprNodes.add(exprNode);
         }
 

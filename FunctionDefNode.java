@@ -109,7 +109,7 @@ public class FunctionDefNode extends JottNode {
         tokens.remove(0);
 
         // Parse the body
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, 1);
 
         FunctionDefNode funcDef = new FunctionDefNode(id, params, body, type, symTab);
 

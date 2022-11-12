@@ -16,10 +16,10 @@ public class StmtNode extends BodyStmtNode {
         funcCallNode = null;
     }
 
-    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
+    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth) throws Exception {
         StmtNode stmtNode;
         if (tokens.get(2).getToken().equals("=") || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && (tokens.get(1).getToken().equals("=") || tokens.get(2).getToken().equals("=")))) {
-            stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab);
+            stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab, depth);
         }
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
             stmtNode = FuncCallNode.ParseFuncCallNode(tokens, symTab);
@@ -34,7 +34,7 @@ public class StmtNode extends BodyStmtNode {
 
         // remove ;
         tokens.remove(0);
-
+        stmtNode.depth = depth;
         return stmtNode;
     }
 
@@ -72,19 +72,5 @@ public class StmtNode extends BodyStmtNode {
         return false;
     }
 
-    public void setAsmtNode(AsmtNode node)
-    {
-        asmtNode = node;
-    }
-
-    public void setVarDecNode(VarDecNode node)
-    {
-        varDecNode = node;
-    }
-
-    public void setFuncCallNode(FuncCallNode node)
-    {
-        funcCallNode = node;
-    }
 
 }
