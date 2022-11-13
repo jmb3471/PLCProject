@@ -49,7 +49,6 @@ public class VarDecNode extends StmtNode {
         return this.type + " " + this.id + ";";
     }
 
-    // Someone should double check this but i think this is right because python doesn't do type declaration
     @Override
     public String convertToPython() {
         return "\n";

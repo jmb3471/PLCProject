@@ -20,7 +20,7 @@ public class FuncCallNode extends StmtNode {
         this.endStmt = false;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab) throws Exception {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -98,13 +98,13 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToPython() {
-        String python = this.id.convertToJava() + "(";
+        String python = this.id.convertToPython() + "(";
         for (int i = 0; i < exprNodes.size(); i++) {
             if (i == exprNodes.size() - 1) {
-                python += this.exprNodes.get(i).convertToJava();
+                python += this.exprNodes.get(i).convertToPython();
             }
             else {
-                python += this.exprNodes.get(i).convertToJava() + ",";
+                python += this.exprNodes.get(i).convertToPython() + ",";
             }
         }
         python += ")";

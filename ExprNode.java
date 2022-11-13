@@ -34,7 +34,7 @@ public class ExprNode extends JottNode {
             else {
                 Token secondToken = tokens.get(1);
                 if (secondToken.getTokenType().equals(TokenType.L_BRACKET)) {
-                    FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens, symTab);
+                    FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens, symTab, depth);
                     funcCallNode.setEndStmt();
                     if (tokens.get(0).getTokenType().equals(TokenType.REL_OP))
                     {

@@ -49,12 +49,13 @@ public class AsmtNode extends StmtNode {
             AsmtNode.reportError("Expected Semicolon, found none", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
         symTab.put(id, type);
-        return new AsmtNode(id, cond, type);
+        AsmtNode asmtNode = new AsmtNode(id, cond, type);
+        asmtNode.depth = depth;
+        return asmtNode;
     }
 
     @Override
     public String convertToJott() {
-
         String jott = "";
         if (type != null)
             jott += type + " ";
@@ -69,17 +70,45 @@ public class AsmtNode extends StmtNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = "";
+        if (type != null)
+            java += type + " ";
+        java += id + " = ";
+        java += cond.convertToJava();
+        if (java.charAt(java.length() - 1) != ';') {
+            java += ';';
+        }
+
+        return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String c = "";
+        if (type != null)
+            c += type + " ";
+        c += id + " = ";
+        c += cond.convertToJava();
+        if (c.charAt(c.length() - 1) != ';') {
+            c += ';';
+        }
+
+        return c;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String python = "";
+        String tabs = "";
+        for (int i = 0; i < this.depth + 1; i++) {
+            tabs += "\t";
+        }
+        python += tabs + id + " = ";
+        python += cond.convertToJava();
+        if (python.charAt(python.length() - 1) == ';') {
+            python = python.replace(python.substring(python.length()-1), "");
+        }
+        return python;
     }
 
     @Override
