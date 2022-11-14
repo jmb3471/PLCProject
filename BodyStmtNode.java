@@ -16,26 +16,26 @@ public class BodyStmtNode extends JottNode {
     }
 
 
-    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
+    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         BodyStmtNode bodyStmt;
         // Check if the BodyStmt is an if stmt
         if (tokens.get(0).getToken().equals("if")) {
             // Remove the "if"
             tokens.remove(0);
-            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab, depth);
+            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab, depth, funcDefs);
             bodyStmt.depth = depth;
         }
 
          // Check if the BodyStmt is a while loop
         else if (tokens.get(0).getToken().equals("while")) {
             tokens.remove(0);
-            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens, symTab, depth);
+            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens, symTab, depth, funcDefs);
             bodyStmt.depth = depth;
         }
 
         // The BodyStmt must just be a stmt
         else {
-            bodyStmt = StmtNode.ParseStmtNode(tokens, symTab, depth);
+            bodyStmt = StmtNode.ParseStmtNode(tokens, symTab, depth, funcDefs);
             bodyStmt.depth = depth;
         }
         return bodyStmt;

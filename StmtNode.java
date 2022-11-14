@@ -16,13 +16,13 @@ public class StmtNode extends BodyStmtNode {
         funcCallNode = null;
     }
 
-    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth) throws Exception {
+    public static StmtNode ParseStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         StmtNode stmtNode;
         if (tokens.get(2).getToken().equals("=") || (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD && (tokens.get(1).getToken().equals("=") || tokens.get(2).getToken().equals("=")))) {
-            stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab, depth);
+            stmtNode = AsmtNode.ParseAsmtNode(tokens, symTab, depth, funcDefs);
         }
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
-            stmtNode = FuncCallNode.ParseFuncCallNode(tokens, symTab, depth);
+            stmtNode = FuncCallNode.ParseFuncCallNode(tokens, symTab, depth, funcDefs);
         }
         else {
             stmtNode = VarDecNode.ParseVarDecNode(tokens, symTab);

@@ -20,7 +20,7 @@ public class ProgramNode extends JottNode {
 
         ArrayList<FunctionDefNode> funcDefs = new ArrayList<>();
         while (!tokens.isEmpty()){
-            FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens);
+            FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens, funcDefs);
             for (FunctionDefNode funcDef : funcDefs) {
                 if (Objects.equals(funcDef.ID, funcDefNode.ID)) {
                     hasDuplicate = true;

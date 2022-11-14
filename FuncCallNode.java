@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class FuncCallNode extends StmtNode {
     
-    private JottNode id;
+    public IdNode id;
     private ArrayList<ExprNode> exprNodes;
     private HashMap symTab;
+    public ArrayList<FunctionDefNode> funcdefs;
 
     public Boolean endStmt;
-    public FuncCallNode(JottNode id, ArrayList<ExprNode> exprNodes, HashMap symTab)
+    public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap symTab)
     {
         this.id = id;
         this.exprNodes = exprNodes;
@@ -20,7 +22,7 @@ public class FuncCallNode extends StmtNode {
         this.endStmt = false;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -30,14 +32,16 @@ public class FuncCallNode extends StmtNode {
         ArrayList<ExprNode> exprNodes = new ArrayList<>();
 
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-            ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab, depth);
+            ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
             exprNodes.add(exprNode);
         }
 
         // remove ]
         tokens.remove(0);
 
-        return new FuncCallNode(idNode, exprNodes, symTab);
+        FuncCallNode funcCallNode = new FuncCallNode(idNode, exprNodes, symTab);
+        funcCallNode.funcdefs = funcDefs;
+        return funcCallNode;
 
     }
 
@@ -115,7 +119,24 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        FunctionDefNode functionDefNode = null;
+        for (int i = 0; i < this.funcdefs.size(); i++) {
+            if (Objects.equals(this.funcdefs.get(i).ID, this.id.getId())) {
+                functionDefNode = this.funcdefs.get(i);
+            }
+        }
+        Boolean funcDefExists = functionDefNode != null;
+        Boolean numCorrectParams = this.exprNodes.size() == this.funcdefs.size();
+        Boolean correctParamTypes = true;
+        for (int i = 0; i < functionDefNode.params.size(); i++) {
+            if (this.exprNodes.get(i).evaluate() == functionDefNode.params.get(i).type) {
+                correctParamTypes = true;
+            }
+            else {
+                correctParamTypes = false;
+            }
+        }
+         return funcDefExists && numCorrectParams && correctParamTypes;
     }
 
 }

@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class While_Loop_Node extends BodyStmtNode {
 
@@ -15,7 +14,7 @@ public class While_Loop_Node extends BodyStmtNode {
         this.symTab = symTab;
     }
 
-    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab, int depth) throws Exception {
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             While_Loop_Node.reportError("Expected [ for while loop",
@@ -26,7 +25,7 @@ public class While_Loop_Node extends BodyStmtNode {
         // remove left bracket
         tokens.remove(0);
 
-        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth);
+        ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             While_Loop_Node.reportError("Expected ] for while loop",
@@ -44,7 +43,7 @@ public class While_Loop_Node extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth + 1);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth + 1, funcDefs);
 
         While_Loop_Node while_loop_node = new While_Loop_Node(expr, body, symTab);
         while_loop_node.depth = depth;
@@ -77,6 +76,6 @@ public class While_Loop_Node extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return this.body.validateTree() && this.cond.validateTree();
     }
 }

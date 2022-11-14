@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class ConstantNode extends JottNode implements JottTree {
     private String value;
-    private String type;
+    public String type;
 
 
     public ConstantNode(String value, String type) {

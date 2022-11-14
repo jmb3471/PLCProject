@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class VarNode extends JottNode implements JottTree {
-    private String id;
+    public String id;
 
 
     public VarNode(String id) {

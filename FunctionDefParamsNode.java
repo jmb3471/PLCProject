@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class FunctionDefParamsNode extends JottNode{
 
-    private String type;
+    public String type;
 
     private String ID;
 

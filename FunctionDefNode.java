@@ -4,8 +4,8 @@ import java.util.HashMap;
 public class FunctionDefNode extends JottNode {
 
     public String ID;
-    private ArrayList<FunctionDefParamsNode> params;
-    private String return_type;
+    public ArrayList<FunctionDefParamsNode> params;
+    public String return_type;
     private BodyNode Body;
     private HashMap<String, String> symTab;
 
@@ -29,10 +29,12 @@ public class FunctionDefNode extends JottNode {
 
     /**
      * Parses the current tokens and returns a FunctionDefNode object
-     * @param tokens    The tokens of the program
-     * @return          A FunctionDefNode object
+     *
+     * @param tokens   The tokens of the program
+     * @param funcDefs
+     * @return A FunctionDefNode object
      */
-    public static FunctionDefNode ParseFunctionDefNode(ArrayList<Token> tokens) throws Exception {
+    public static FunctionDefNode ParseFunctionDefNode(ArrayList<Token> tokens, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         // Check if first token is an ID
         if (tokens.get(0).getTokenType() != TokenType.ID_KEYWORD) {
             FunctionDefNode.reportError("Expected ID for FunctionDef", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -109,7 +111,7 @@ public class FunctionDefNode extends JottNode {
         tokens.remove(0);
 
         // Parse the body
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, 1);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, 1, funcDefs);
 
         FunctionDefNode funcDef = new FunctionDefNode(id, params, body, type, symTab);
 

@@ -13,7 +13,7 @@ public class BodyNode extends JottNode {
         this.symTab = symTab;
     }
 
-    public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth) throws Exception {
+    public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
         ExprNode exprNode = null;
 
@@ -23,7 +23,7 @@ public class BodyNode extends JottNode {
                 // remove return token
                 tokens.remove(0);
 
-                exprNode = ExprNode.ParseExprNode(tokens, symTab, depth);
+                exprNode = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
 
                 if (tokens.get(0).getToken().equals(";")) {
 
@@ -37,7 +37,7 @@ public class BodyNode extends JottNode {
                 }
             }
             else {
-                BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens, symTab, depth);
+                BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens, symTab, depth, funcDefs);
                 bodyStmts.add(bodyStmt);
             }
         }
