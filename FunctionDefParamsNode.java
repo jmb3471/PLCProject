@@ -70,6 +70,6 @@ public class FunctionDefParamsNode extends JottNode{
 
     @Override
     public boolean validateTree() {
-        return false;
+        return true;
     }
 }

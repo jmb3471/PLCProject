@@ -103,6 +103,15 @@ public class BodyStmtNode extends JottNode {
 
     @Override
     public boolean validateTree() {
+        if (this.if_stmt != null) {
+            return if_stmt.validateTree();
+        }
+        if (this.while_stmt != null) {
+            return while_stmt.validateTree();
+        }
+        if (this.stmt != null) {
+            return stmt.validateTree();
+        }
         return false;
     }
 }

@@ -81,7 +81,12 @@ public class BodyNode extends JottNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        for (BodyStmtNode bodyStmts : this.bodyStmts) {
+            if (!bodyStmts.validateTree()) {
+                return false;
+            }
+        }
+        return  this.ReturnStmt.validateTree();
     }
 
     public boolean validateTree(String type) {

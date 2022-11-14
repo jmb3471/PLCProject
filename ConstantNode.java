@@ -57,6 +57,6 @@ public class ConstantNode extends JottNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return true;
     }
 }

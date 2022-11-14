@@ -113,7 +113,7 @@ public class AsmtNode extends StmtNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return cond.validateTree();
     }
 
 }

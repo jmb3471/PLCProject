@@ -178,6 +178,6 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return this.Body.validateTree();
     }
 }

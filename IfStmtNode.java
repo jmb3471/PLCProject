@@ -180,6 +180,18 @@ public class IfStmtNode extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        Boolean valid = true;
+        if (!(this.cond.validateTree() && this.Body.validateTree())) {
+            return false;
+        }
+        for (int i = 0; i < this.elseIfBodys.size(); i++) {
+            if (!(this.elseIfBodys.get(i).validateTree() && this.elseIfExprs.get(i).validateTree())) {
+                return false;
+            }
+        }
+        if (this.elseBody != null) {
+            return this.elseBody.validateTree();
+        }
+        return true;
     }
 }

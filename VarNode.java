@@ -34,6 +34,6 @@ public class VarNode extends JottNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return true;
     }
 }
