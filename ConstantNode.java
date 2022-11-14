@@ -25,7 +25,12 @@ public class ConstantNode extends JottNode implements JottTree {
                 type = "String";
             }
             else if (token.getTokenType().equals(TokenType.NUMBER)) {
-                type = "Number";
+                if (token.getToken().contains(".")) {
+                    type = "Double";
+                }
+                else {
+                    type = "Integer";
+                }
             }
             else {
                 AsmtNode.reportError("Incorrect Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());

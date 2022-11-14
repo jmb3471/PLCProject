@@ -113,6 +113,14 @@ public class OperationNode extends JottNode implements JottTree {
 
     @Override
     public boolean validateTree() {
-        return false;
+        if (!left.validateTree()) {
+            return false;
+        }
+        else if (!right.validateTree()) {
+            return false;
+        }
+        else {
+            return left.type.equals(right.type);
+        }
     }
 }

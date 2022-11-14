@@ -52,7 +52,7 @@ public class ExprNode extends JottNode {
                     }
                     String type = "String";
                     for (int i = 0; i < funcDefs.size(); i++) {
-                        if (funcDefs.get(i).ID == funcCallNode.id.getId()) {
+                        if (funcDefs.get(i).ID.equals(funcCallNode.id.getId())) {
                             type = funcDefs.get(i).return_type;
                         }
                     }
@@ -125,6 +125,6 @@ public class ExprNode extends JottNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return expr.validateTree();
     }
 }

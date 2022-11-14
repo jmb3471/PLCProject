@@ -99,7 +99,7 @@ public class StmtNode extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
-        return false;
+        return this.validateTree();
     }
 
 
