@@ -128,12 +128,14 @@ public class FuncCallNode extends StmtNode {
         Boolean funcDefExists = functionDefNode != null;
         Boolean numCorrectParams = this.exprNodes.size() == this.funcdefs.size();
         Boolean correctParamTypes = true;
-        for (int i = 0; i < functionDefNode.params.size(); i++) {
-            if (this.exprNodes.get(i).evaluate() == functionDefNode.params.get(i).type) {
-                correctParamTypes = true;
-            }
-            else {
-                correctParamTypes = false;
+        if (funcDefExists) {
+            for (int i = 0; i < functionDefNode.params.size(); i++) {
+                if (this.exprNodes.get(i).evaluate().equals(functionDefNode.params.get(i).type)) {
+                    correctParamTypes = true;
+                }
+                else {
+                    correctParamTypes = false;
+                }
             }
         }
          return funcDefExists && numCorrectParams && correctParamTypes;
