@@ -180,7 +180,6 @@ public class IfStmtNode extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
-        Boolean valid = true;
         if (!(this.cond.validateTree() && this.Body.validateTree())) {
             return false;
         }
