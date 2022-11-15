@@ -5,16 +5,16 @@ public class While_Loop_Node extends BodyStmtNode {
 
     private ExprNode cond;
     private BodyNode body;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
 
 
-    public While_Loop_Node(ExprNode cond, BodyNode body, HashMap symTab) {
+    public While_Loop_Node(ExprNode cond, BodyNode body, HashMap<String, String> symTab) {
         this.body = body;
         this.cond = cond;
         this.symTab = symTab;
     }
 
-    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
+    public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
             While_Loop_Node.reportSyntaxError("Expected [ for while loop",
@@ -76,6 +76,7 @@ public class While_Loop_Node extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
+        System.out.println("Validating " + this.getClass());
         return this.body.validateTree() && this.cond.validateTree();
     }
 }

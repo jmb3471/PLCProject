@@ -31,7 +31,7 @@ public class ExprNode extends Operand {
                 }
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
                 tokens.remove(0);
-                return new ExprNode(constantNode, symTab, constantNode.type);
+                return new ExprNode(constantNode, symTab, constantNode.getType());
             }
             else {
                 Token secondToken = tokens.get(1);
@@ -126,6 +126,7 @@ public class ExprNode extends Operand {
 
     @Override
     public boolean validateTree() {
+        System.out.println("Validating " + this.getClass());
         return expr.validateTree();
     }
 }

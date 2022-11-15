@@ -45,7 +45,7 @@ public class OperationNode extends Operand implements JottTree {
         // remove left operand
         tokens.remove(0);
 
-        // assign opType (might be unnecessary)
+        // assign opType
         Token secondToken = tokens.get(0);
         if (secondToken.getTokenType().equals(TokenType.REL_OP)) {
             opType = "relational";
@@ -118,6 +118,17 @@ public class OperationNode extends Operand implements JottTree {
 
     @Override
     public boolean validateTree() {
+
+        if (opType.equals("relational") && !ValidationUtils.validateRelOp(operator))
+        {
+            return false;
+        }
+
+        if (opType.equals("mathematical") && !ValidationUtils.validateMathOp(operator))
+        {
+            return false;
+        }
+
         if (!left.validateTree()) {
             return false;
         }

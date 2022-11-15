@@ -180,6 +180,7 @@ public class IfStmtNode extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
+        System.out.println("Validating " + this.getClass());
         if (!(this.cond.validateTree() && this.Body.validateTree())) {
             return false;
         }

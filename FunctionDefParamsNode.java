@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FunctionDefParamsNode extends JottNode{
+public class FunctionDefParamsNode extends JottNode {
 
     public String type;
-
     private String ID;
 
 

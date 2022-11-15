@@ -2,13 +2,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VarNode extends Operand implements JottTree {
+
     public String id;
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
     public String type;
 
     public VarNode(String id, String type) {
@@ -40,6 +35,11 @@ public class VarNode extends Operand implements JottTree {
     @Override
     public String convertToPython() {
         return this.id;
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override

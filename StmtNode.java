@@ -3,9 +3,9 @@ import java.util.HashMap;
 
 public class StmtNode extends BodyStmtNode {
 
-    private JottNode asmtNode;
-    private JottNode varDecNode;
-    private JottNode funcCallNode;
+    private AsmtNode asmtNode;
+    private VarDecNode varDecNode;
+    private FuncCallNode funcCallNode;
     private HashMap<String, String> symTab;
 
 
@@ -99,7 +99,8 @@ public class StmtNode extends BodyStmtNode {
 
     @Override
     public boolean validateTree() {
-        return this.validateTree();
+        System.out.println("Validating " + this.getClass());
+        return asmtNode.validateTree() && varDecNode.validateTree() && funcCallNode.validateTree();
     }
 
 

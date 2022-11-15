@@ -81,12 +81,19 @@ public class BodyNode extends JottNode {
 
     @Override
     public boolean validateTree() {
+        //System.out.println("Validating " + this.getClass());
         for (BodyStmtNode bodyStmts : this.bodyStmts) {
             if (!bodyStmts.validateTree()) {
                 return false;
             }
         }
-        return  this.ReturnStmt.validateTree();
+        //System.out.println("test 1");
+        if (!(validateTree(this.type)))
+        {
+            return false;
+        }
+        //System.out.println("test 2");
+        return this.ReturnStmt.validateTree();
     }
 
     public boolean validateTree(String type) {
@@ -96,10 +103,14 @@ public class BodyNode extends JottNode {
             }
         }
         else {
-            if (!this.ReturnStmt.equals(type)) {
+            /*
+            if (!this.ReturnStmt.getType().equalsIgnoreCase(type)) {
                 return false;
             }
+            System.out.println("test 3");
+            */
         }
+
         for (BodyStmtNode bodyStmtNode: this.bodyStmts) {
             if (!bodyStmtNode.validateTree()) {
                 return false;

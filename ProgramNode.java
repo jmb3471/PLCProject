@@ -63,6 +63,7 @@ public class ProgramNode extends JottNode {
 
     @Override
     public boolean validateTree() {
+        //System.out.println("Validating " + this.getClass());
         if (hasMain && !hasDuplicate) {
             for (FunctionDefNode funcDef : funcDefs) {
                 if (!funcDef.validateTree()) {

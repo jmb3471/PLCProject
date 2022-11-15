@@ -6,12 +6,12 @@ public class FuncCallNode extends StmtNode {
     
     public IdNode id;
     private ArrayList<ExprNode> exprNodes;
-    private HashMap symTab;
+    private HashMap<String, String> symTab;
     public ArrayList<FunctionDefNode> funcdefs;
     private int args;
 
     public Boolean endStmt;
-    public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap symTab, int args)
+    public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap<String, String> symTab, int args)
     {
         this.id = id;
         this.exprNodes = exprNodes;
@@ -24,7 +24,7 @@ public class FuncCallNode extends StmtNode {
         this.endStmt = false;
     }
 
-    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
+    public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -135,15 +135,12 @@ public class FuncCallNode extends StmtNode {
         Boolean correctParamTypes = true;
         if (funcDefExists) {
             for (int i = 0; i < functionDefNode.params.size(); i++) {
-                if (this.exprNodes.get(i).getType().equals(functionDefNode.params.get(i).type)) {
-                    correctParamTypes = true;
-                }
-                else {
+                if (!(this.exprNodes.get(i).getType().equals(functionDefNode.params.get(i).type))) {
                     correctParamTypes = false;
                 }
             }
         }
-         return funcDefExists && numCorrectParams && correctParamTypes;
+        return funcDefExists && numCorrectParams && correctParamTypes;
     }
 
 }

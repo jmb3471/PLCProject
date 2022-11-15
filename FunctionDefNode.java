@@ -178,6 +178,7 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public boolean validateTree() {
+        //System.out.println("Validating " + this.getClass());
         return this.Body.validateTree();
     }
 }

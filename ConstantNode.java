@@ -1,14 +1,9 @@
 import java.util.ArrayList;
 
 public class ConstantNode extends Operand implements JottTree {
+
     private String value;
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    public String type;
+    private String type;
 
 
     public ConstantNode(String value, String type) {
@@ -22,28 +17,31 @@ public class ConstantNode extends Operand implements JottTree {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 return new ConstantNode(token.getToken(), "Boolean");
             }
-            ConstantNode.reportSyntaxError("Incorrect ID for Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            ConstantNode.reportSyntaxError("Incorrect ID for Constant", tokens.get(0).getFilename(),
+                    tokens.get(0).getLineNum());
             return null;
-        }
-        else {
+        } else {
             String type = null;
             if (token.getTokenType().equals(TokenType.STRING)) {
                 type = "String";
-            }
-            else if (token.getTokenType().equals(TokenType.NUMBER)) {
+            } else if (token.getTokenType().equals(TokenType.NUMBER)) {
                 if (token.getToken().contains(".")) {
                     type = "Double";
-                }
-                else {
+                } else {
                     type = "Integer";
                 }
-            }
-            else {
-                AsmtNode.reportSyntaxError("Incorrect Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            } else {
+                AsmtNode.reportSyntaxError("Incorrect Constant", tokens.get(0).getFilename(),
+                        tokens.get(0).getLineNum());
                 return null;
             }
             return new ConstantNode(token.getToken(), type);
         }
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -68,6 +66,30 @@ public class ConstantNode extends Operand implements JottTree {
 
     @Override
     public boolean validateTree() {
+
+        if (this.getType().equals("Double"))
+        {
+            return ValidationUtils.validateDouble(Double.parseDouble(value));
+        }
+
+        if (this.getType().equals("Integer"))
+        {
+            return ValidationUtils.validateInt(Integer.parseInt(value));
+        }
+
+        if (this.getType().equals("Boolean"))
+        {
+            if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")))
+            {
+                return false;
+            }
+        }
+
+        if (this.getType().equals("String"))
+        {
+            return ValidationUtils.validateString(value);
+        }
+
         return true;
     }
 }

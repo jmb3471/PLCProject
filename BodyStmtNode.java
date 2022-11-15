@@ -3,9 +3,9 @@ import java.util.HashMap;
 
 public class BodyStmtNode extends JottNode {
 
-    private BodyStmtNode if_stmt;
-    private JottNode while_stmt;
-    private JottNode stmt;
+    private IfStmtNode if_stmt;
+    private While_Loop_Node while_stmt;
+    private StmtNode stmt;
 
 
     public BodyStmtNode() {
@@ -16,7 +16,7 @@ public class BodyStmtNode extends JottNode {
     }
 
 
-    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
+    public static BodyStmtNode ParseBodyStmtNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         BodyStmtNode bodyStmt;
         // Check if the BodyStmt is an if stmt
         if (tokens.get(0).getToken().equals("if")) {
@@ -69,7 +69,8 @@ public class BodyStmtNode extends JottNode {
         if (this.stmt != null) {
             java += this.stmt.convertToJava();
         }
-        return java;    }
+        return java;
+    }
 
     @Override
     public String convertToC() {
@@ -103,6 +104,7 @@ public class BodyStmtNode extends JottNode {
 
     @Override
     public boolean validateTree() {
+        System.out.println("Validating " + this.getClass());
         if (this.if_stmt != null) {
             return if_stmt.validateTree();
         }
