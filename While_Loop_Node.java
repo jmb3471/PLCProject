@@ -17,7 +17,7 @@ public class While_Loop_Node extends BodyStmtNode {
     public static While_Loop_Node ParseWhileLoopNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
-            While_Loop_Node.reportError("Expected [ for while loop",
+            While_Loop_Node.reportSyntaxError("Expected [ for while loop",
                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
@@ -28,13 +28,13 @@ public class While_Loop_Node extends BodyStmtNode {
         ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-            While_Loop_Node.reportError("Expected ] for while loop",
+            While_Loop_Node.reportSyntaxError("Expected ] for while loop",
                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
-            While_Loop_Node.reportError("Expected { for while loop",
+            While_Loop_Node.reportSyntaxError("Expected { for while loop",
                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }

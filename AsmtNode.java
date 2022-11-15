@@ -30,6 +30,7 @@ public class AsmtNode extends StmtNode {
         {
             type = tokens.get(0).getToken();
             id = tokens.get(1).getToken();
+            symTab.put(id, type);
 
             // remove "=" and <id> and string value
             tokens.remove(2);
@@ -46,9 +47,8 @@ public class AsmtNode extends StmtNode {
             cond = ExprNode.ParseExprNode(tokens, symTab, depth, funcdef);
         }
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-            AsmtNode.reportError("Expected Semicolon, found none", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            AsmtNode.reportSyntaxError("Expected Semicolon, found none", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
-        symTab.put(id, type);
         AsmtNode asmtNode = new AsmtNode(id, cond, type);
         asmtNode.depth = depth;
         return asmtNode;

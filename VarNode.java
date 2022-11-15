@@ -1,15 +1,25 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class VarNode extends JottNode implements JottTree {
+public class VarNode extends Operand implements JottTree {
     public String id;
 
-
-    public VarNode(String id) {
-        this.id = id;
+    @Override
+    public String getType() {
+        return type;
     }
 
-    public static VarNode ParseVarNode(ArrayList<Token> tokens) {
-        return new VarNode(tokens.get(0).getToken());
+    public String type;
+
+    public VarNode(String id, String type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    public static VarNode ParseVarNode(ArrayList<Token> tokens, HashMap<String, String> symTab) {
+        String id = tokens.get(0).getToken();
+        String type = symTab.get(id);
+        return new VarNode(id, type);
     }
 
     @Override
@@ -34,6 +44,9 @@ public class VarNode extends JottNode implements JottTree {
 
     @Override
     public boolean validateTree() {
+        /*if (type == null) {
+            reportSemanticError("Undefined variable: " + id, );
+        }*/
         return true;
     }
 }

@@ -8,14 +8,16 @@ public class FuncCallNode extends StmtNode {
     private ArrayList<ExprNode> exprNodes;
     private HashMap symTab;
     public ArrayList<FunctionDefNode> funcdefs;
+    private int args;
 
     public Boolean endStmt;
-    public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap symTab)
+    public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap symTab, int args)
     {
         this.id = id;
         this.exprNodes = exprNodes;
         this.endStmt = true;
         this.symTab = symTab;
+        this.args = args;
     }
 
     public void setEndStmt() {
@@ -31,15 +33,18 @@ public class FuncCallNode extends StmtNode {
 
         ArrayList<ExprNode> exprNodes = new ArrayList<>();
 
+        int args = 0;
+
         while (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
             ExprNode exprNode = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
             exprNodes.add(exprNode);
+            args++;
         }
 
         // remove ]
         tokens.remove(0);
 
-        FuncCallNode funcCallNode = new FuncCallNode(idNode, exprNodes, symTab);
+        FuncCallNode funcCallNode = new FuncCallNode(idNode, exprNodes, symTab, args);
         funcCallNode.funcdefs = funcDefs;
         return funcCallNode;
 
@@ -126,11 +131,11 @@ public class FuncCallNode extends StmtNode {
             }
         }
         Boolean funcDefExists = functionDefNode != null;
-        Boolean numCorrectParams = this.exprNodes.size() == this.funcdefs.size();
+        Boolean numCorrectParams = this.exprNodes.size() == this.args;
         Boolean correctParamTypes = true;
         if (funcDefExists) {
             for (int i = 0; i < functionDefNode.params.size(); i++) {
-                if (this.exprNodes.get(i).evaluate().equals(functionDefNode.params.get(i).type)) {
+                if (this.exprNodes.get(i).getType().equals(functionDefNode.params.get(i).type)) {
                     correctParamTypes = true;
                 }
                 else {

@@ -32,7 +32,7 @@ public class BodyNode extends JottNode {
                     break;
                 }
                 else {
-                    BodyNode.reportError("Expected ';' did not get it", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                    BodyNode.reportSyntaxError("Expected ';' did not get it", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                     return null;
                 }
             }

@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OperationNode extends JottNode implements JottTree {
-    private JottNode left;
+public class OperationNode extends Operand implements JottTree {
+    private Operand left;
     private String operator;
-    private JottNode right;
+    private Operand right;
     private String opType;
     private HashMap<String, String> symTab;
 
 
-    public OperationNode(JottNode left, String operator, JottNode right, String opType, HashMap<String, String> symTab) {
+    public OperationNode(Operand left, String operator, Operand right, String opType, HashMap<String, String> symTab) {
         this.left = left;
         this.right = right;
         this.operator = operator;
@@ -17,11 +17,16 @@ public class OperationNode extends JottNode implements JottTree {
         this.symTab = symTab;
     }
 
+    @Override
+    public String getType() {
+        return this.left.getType();
+    }
+
     public static OperationNode ParseOperationNode(ArrayList<Token> tokens, HashMap<String, String> symTab) throws Exception {
         Token token = tokens.get(0);
-        JottNode left = null;
+        Operand left = null;
         String operator = null;
-        JottNode right = null;
+        Operand right = null;
         String opType = null;
 
         // assign left operand
@@ -33,7 +38,7 @@ public class OperationNode extends JottNode implements JottTree {
                 left = ConstantNode.ParseConstantNode(tokens);
             }
             else {
-                left = VarNode.ParseVarNode(tokens);
+                left = VarNode.ParseVarNode(tokens, symTab);
             }
         }
 
@@ -73,11 +78,11 @@ public class OperationNode extends JottNode implements JottTree {
                         right = ConstantNode.ParseConstantNode(tokens);
                     }
                     else {
-                        right = VarNode.ParseVarNode(tokens);
+                        right = VarNode.ParseVarNode(tokens, symTab);
                     }
                 }
                 else {
-                    OperationNode.reportError("Invalid second operand", thirdToken.getFilename(), thirdToken.getLineNum());
+                    OperationNode.reportSyntaxError("Invalid second operand", thirdToken.getFilename(), thirdToken.getLineNum());
                     return null;
                 }
 
@@ -120,7 +125,7 @@ public class OperationNode extends JottNode implements JottTree {
             return false;
         }
         else {
-            return left.type.equals(right.type);
+            return this.left.getType().equals(this.right.getType());
         }
     }
 }

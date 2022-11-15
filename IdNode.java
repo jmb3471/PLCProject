@@ -12,7 +12,7 @@ public class IdNode extends JottNode implements JottTree {
     public static IdNode ParseIdNode(ArrayList<Token> tokens) throws Exception {
         List<String> keywords = Arrays.asList("while", "if", "return", "else if", "else");
         if (keywords.contains(tokens.get(0).getToken())) {
-            IdNode.reportError("Keyword cannot be used as id", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            IdNode.reportSyntaxError("Keyword cannot be used as id", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
         }
         return new IdNode(tokens.get(0).getToken());
     }

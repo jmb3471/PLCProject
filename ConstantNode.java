@@ -1,7 +1,13 @@
 import java.util.ArrayList;
 
-public class ConstantNode extends JottNode implements JottTree {
+public class ConstantNode extends Operand implements JottTree {
     private String value;
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
     public String type;
 
 
@@ -16,7 +22,7 @@ public class ConstantNode extends JottNode implements JottTree {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 return new ConstantNode(token.getToken(), "Boolean");
             }
-            ConstantNode.reportError("Incorrect ID for Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            ConstantNode.reportSyntaxError("Incorrect ID for Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
         else {
@@ -33,7 +39,7 @@ public class ConstantNode extends JottNode implements JottTree {
                 }
             }
             else {
-                AsmtNode.reportError("Incorrect Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                AsmtNode.reportSyntaxError("Incorrect Constant", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
             return new ConstantNode(token.getToken(), type);

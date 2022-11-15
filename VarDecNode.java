@@ -19,7 +19,7 @@ public class VarDecNode extends StmtNode {
         List<String> Types = Arrays.asList("Double", "Integer", "String", "Boolean");
         String type = tokens.get(0).getToken();
         if (!Types.contains(type)) {
-            VarDecNode.reportError("Expected valid type for variable declaration",
+            VarDecNode.reportSyntaxError("Expected valid type for variable declaration",
                                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
@@ -27,7 +27,7 @@ public class VarDecNode extends StmtNode {
         IdNode idNode = IdNode.ParseIdNode(tokens);
         tokens.remove(0);
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-            VarDecNode.reportError("Expected semicolon end for variable declaration",
+            VarDecNode.reportSyntaxError("Expected semicolon end for variable declaration",
                     tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }

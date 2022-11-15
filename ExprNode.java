@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ExprNode extends JottNode {
+public class ExprNode extends Operand {
 
     private JottNode expr;
     private HashMap<String, String> symTab;
@@ -15,7 +15,7 @@ public class ExprNode extends JottNode {
         this.type = type;
     }
 
-    public static ExprNode makeNestedExprNode(ExprNode left, String op, ExprNode right, String opType, HashMap<String, String> symTab, String type)
+    public static ExprNode makeNestedExprNode(Operand left, String op, Operand right, String opType, HashMap<String, String> symTab, String type)
     {
         return new ExprNode(new OperationNode(left, op, right, opType, symTab), symTab, type);
     }
@@ -64,7 +64,7 @@ public class ExprNode extends JottNode {
                     return new ExprNode(operationNode, symTab, "Boolean");
                 }
                 else {
-                    VarNode varNode = VarNode.ParseVarNode(tokens);
+                    VarNode varNode = VarNode.ParseVarNode(tokens, symTab);
                     tokens.remove(0);
                     String type = symTab.get(varNode.id);
                     return new ExprNode(varNode, symTab, type);
@@ -93,13 +93,14 @@ public class ExprNode extends JottNode {
                 return new ExprNode(constantNode, symTab, "String");
             }
             else {
-                ExprNode.reportError("Incorrect expression", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                ExprNode.reportSyntaxError("Incorrect expression", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
         }
     }
 
-    public String evaluate() {
+    @Override
+    public String getType() {
         return this.type;
     }
 

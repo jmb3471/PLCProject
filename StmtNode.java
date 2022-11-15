@@ -28,7 +28,7 @@ public class StmtNode extends BodyStmtNode {
             stmtNode = VarDecNode.ParseVarDecNode(tokens, symTab);
         }
         if (tokens.get(0).getTokenType() != TokenType.SEMICOLON) {
-            ExprNode.reportError("Expected end of line", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            ExprNode.reportSyntaxError("Expected end of line", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 

@@ -15,8 +15,13 @@ abstract class JottNode implements JottTree {
 
     }
 
-    public static void reportError(String message, String filename, int lineNumber) throws Exception {
+    public static void reportSyntaxError(String message, String filename, int lineNumber) throws Exception {
         System.err.println("Syntax Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
+        throw new Exception();
+    }
+
+    public static void reportSemanticError(String message, String filename, int lineNumber) throws Exception {
+        System.err.println("Semantic Error:" + "\n" + message + "\n" + filename + ":" + lineNumber);
         throw new Exception();
     }
 

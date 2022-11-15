@@ -21,7 +21,7 @@ public class IfStmtNode extends BodyStmtNode {
     public static IfStmtNode ParseIfStmtNode(ArrayList<Token> tokens, HashMap symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
 
         if (tokens.get(0).getTokenType() != TokenType.L_BRACKET) {
-            IfStmtNode.reportError("Expected [ for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            IfStmtNode.reportSyntaxError("Expected [ for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -32,12 +32,12 @@ public class IfStmtNode extends BodyStmtNode {
         ExprNode expr = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-            IfStmtNode.reportError("Expected ] for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            IfStmtNode.reportSyntaxError("Expected ] for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
-            IfStmtNode.reportError("Expected { for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            IfStmtNode.reportSyntaxError("Expected { for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -48,7 +48,7 @@ public class IfStmtNode extends BodyStmtNode {
         BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
 
         if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-            IfStmtNode.reportError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            IfStmtNode.reportSyntaxError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
@@ -62,7 +62,7 @@ public class IfStmtNode extends BodyStmtNode {
 
         while (tokens.get(0).getToken() == "elseif") {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
-                IfStmtNode.reportError("Expected [ for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected [ for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -73,12 +73,12 @@ public class IfStmtNode extends BodyStmtNode {
             ExprNode elseIfExpr = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACKET) {
-                IfStmtNode.reportError("Expected ] for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected ] for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
             if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
-                IfStmtNode.reportError("Expected { for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected { for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -89,7 +89,7 @@ public class IfStmtNode extends BodyStmtNode {
             BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                IfStmtNode.reportError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -102,7 +102,7 @@ public class IfStmtNode extends BodyStmtNode {
 
         if (tokens.get(0).getToken() == "else") {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
-                IfStmtNode.reportError("Expected [ for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected [ for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -112,7 +112,7 @@ public class IfStmtNode extends BodyStmtNode {
 
             elseNode = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                IfStmtNode.reportError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
