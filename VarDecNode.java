@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class VarDecNode extends StmtNode {
 
@@ -46,6 +43,9 @@ public class VarDecNode extends StmtNode {
 
     @Override
     public String convertToC() {
+        if (Objects.equals(this.type, "String")) {
+            return "char " + this.id + "[100];";
+        }
         return this.type + " " + this.id + ";";
     }
 

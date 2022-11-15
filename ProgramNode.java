@@ -48,17 +48,29 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = "import java.util.Scanner;\n";
+        for (int i = 0; i < this.funcDefs.size(); i++) {
+            java += this.funcDefs.get(i).convertToJava();
+        }
+        return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String c = "#include <string.h>\n";
+        for (int i = 0; i < this.funcDefs.size(); i++) {
+            c += this.funcDefs.get(i).convertToC();
+        }
+        return c;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String python = "import java.util.Scanner;\n";
+        for (int i = 0; i < this.funcDefs.size(); i++) {
+            python += this.funcDefs.get(i).convertToPython();
+        }
+        return python;
     }
 
     @Override

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -9,6 +10,8 @@ public class FuncCallNode extends StmtNode {
     private HashMap<String, String> symTab;
     public ArrayList<FunctionDefNode> funcdefs;
     private int args;
+
+    private ArrayList<String> builtinfuncs = new ArrayList<>(Arrays.asList("print", "input", "concat", "length"));
 
     public Boolean endStmt;
     public FuncCallNode(IdNode id, ArrayList<ExprNode> exprNodes, HashMap<String, String> symTab, int args)
@@ -71,7 +74,28 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToJava() {
-        String java = this.id.convertToJava() + "(";
+        String java = "";
+        if (this.builtinfuncs.contains(this.id)) {
+            if (Objects.equals(this.id.getId(), "print")) {
+                java += "System.out.println(";
+            }
+            if (Objects.equals(this.id.getId(), "input")) {
+
+            }
+            if (Objects.equals(this.id.getId(), "concat")) {
+                java += this.exprNodes.get(0).convertToJava() + " + " + this.exprNodes.get(1).convertToJava();
+            }
+            if (Objects.equals(this.id.getId(), "length")) {
+                java += this.exprNodes.get(0).convertToJava() + " .length()";
+                if (this.endStmt) {
+                    java += ';';
+                }
+                return java;
+            }
+        }
+        else {
+            java = this.id.convertToJava() + "(";
+        }
         for (int i = 0; i < exprNodes.size(); i++) {
             if (i == exprNodes.size() - 1) {
                 java += this.exprNodes.get(i).convertToJava();
@@ -89,25 +113,66 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToC() {
-        String c = this.id.convertToJava() + "(";
+        String c = "";
+        if (this.builtinfuncs.contains(this.id)) {
+            if (Objects.equals(this.id.getId(), "print")) {
+                c += "printf(";
+            }
+            if (Objects.equals(this.id.getId(), "input")) {
+
+            }
+            if (Objects.equals(this.id.getId(), "concat")) {
+                c += "strcat(";
+            }
+            if (Objects.equals(this.id.getId(), "length")) {
+                c += "strlen(";
+            }
+        }
+        else {
+            c += this.id.convertToC() + "(";
+        }
         for (int i = 0; i < exprNodes.size(); i++) {
             if (i == exprNodes.size() - 1) {
-                c += this.exprNodes.get(i).convertToJava();
+                c += this.exprNodes.get(i).convertToC();
             }
             else {
-                c += this.exprNodes.get(i).convertToJava() + ",";
+                c += this.exprNodes.get(i).convertToC() + ",";
             }
         }
         c += ")";
         if (this.endStmt) {
             c += ';';
         }
+        if (Objects.equals(this.id.getId(), "print")) {
+            c += "printf(\"\n\")";
+        }
         return c;
     }
 
     @Override
     public String convertToPython() {
-        String python = this.id.convertToPython() + "(";
+        String python = "";
+        if (this.builtinfuncs.contains(this.id)) {
+            if (Objects.equals(this.id.getId(), "print")) {
+                python += "print(";
+            }
+            if (Objects.equals(this.id.getId(), "input")) {
+                python += "input(" + this.exprNodes.get(0).convertToPython() + ")";
+                if (this.endStmt) {
+                    python += '\n';
+                }
+                return python;
+            }
+            if (Objects.equals(this.id.getId(), "concat")) {
+                python += this.exprNodes.get(0).convertToPython() + " + " + this.exprNodes.get(1).convertToPython();
+            }
+            if (Objects.equals(this.id.getId(), "length")) {
+                python += "len(";
+            }
+        }
+        else {
+            python += this.id.convertToPython() + "(";
+        }
         for (int i = 0; i < exprNodes.size(); i++) {
             if (i == exprNodes.size() - 1) {
                 python += this.exprNodes.get(i).convertToPython();
@@ -131,6 +196,40 @@ public class FuncCallNode extends StmtNode {
             }
         }
         Boolean funcDefExists = functionDefNode != null;
+        if (this.builtinfuncs.contains(this.id)) {
+            if (Objects.equals(this.id.getId(), "print")) {
+                if (this.exprNodes.size() == 1) {
+                    return true;
+                }
+                return false;
+            }
+            if (Objects.equals(this.id.getId(), "input")) {
+                if (this.exprNodes.size() == 2) {
+                    if (Objects.equals(this.exprNodes.get(0).type, "String") &&
+                            Objects.equals(this.exprNodes.get(1).type, "Integer")) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (Objects.equals(this.id.getId(), "concat")) {
+                if (this.exprNodes.size() == 2) {
+                    if (Objects.equals(this.exprNodes.get(0).type, "String") &&
+                            Objects.equals(this.exprNodes.get(1).type, "String")) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (Objects.equals(this.id.getId(), "length")) {
+                if (this.exprNodes.size() == 2) {
+                    if (Objects.equals(this.exprNodes.get(0).type, "String")) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         Boolean numCorrectParams = this.exprNodes.size() == this.args;
         Boolean correctParamTypes = true;
         if (funcDefExists) {
