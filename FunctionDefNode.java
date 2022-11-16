@@ -179,13 +179,21 @@ public class FunctionDefNode extends JottNode {
     @Override
     public boolean validateTree() {
         //System.out.println("Validating " + this.getClass());
-        if (this.return_type.equals("Void")) {
-            if (this.Body.getReturnType() != null) {
+        ExprNode returnStmt = this.Body.getReturnStmt();
+        if (returnStmt == null) {
+            if (!this.return_type.equals("Void")) {
                 return false;
             }
         }
-        else if (!this.return_type.equals(this.Body.getReturnType())) {
-            return false;
+        else {
+            if (!this.return_type.equals(returnStmt.getType())) {
+                try {
+                    reportSemanticError("Body return type doesn't match function return type", returnStmt.fileName, returnStmt.lineNumber);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
         }
         return this.Body.validateTree();
     }

@@ -51,11 +51,11 @@ public class BodyNode extends JottNode {
         return bodyNode;
     }
 
-    public String getReturnType() {
+    public ExprNode getReturnStmt() {
         if (this.ReturnStmt == null) {
             return null;
         }
-        return this.ReturnStmt.getType();
+        return this.ReturnStmt;
     }
 
     @Override

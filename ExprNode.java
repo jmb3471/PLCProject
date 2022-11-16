@@ -12,6 +12,8 @@ public class ExprNode extends Operand {
 
     private HashMap<String, String> symTab;
     private ArrayList<FunctionDefNode> funcdefs;
+    public String fileName;
+    public int lineNumber;
 
 
     public void setType(String type) {
@@ -22,34 +24,36 @@ public class ExprNode extends Operand {
 
     public ExprNode() {}
     
-    public ExprNode(JottNode node, HashMap<String, String> symTab, String type) {
+    public ExprNode(JottNode node, HashMap<String, String> symTab, String type, String fileName, int lineNumber) {
         this.expr = node;
         this.symTab = symTab;
         this.type = type;
+        this.fileName = fileName;
+        this.lineNumber = lineNumber;
     }
 
     public static ExprNode makeNestedExprNode(Operand left, String op, Operand right, String opType, HashMap<String, String> symTab, String type, String fileName, int lineNumber)
     {
-        return new ExprNode(new OperationNode(left, op, right, opType, symTab, fileName, lineNumber), symTab, type);
+        return new ExprNode(new OperationNode(left, op, right, opType, symTab, fileName, lineNumber), symTab, type,fileName, lineNumber);
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
         
         Token token = tokens.get(0);
+        String fileName = token.getFilename();
+        int lineNumber = token.getLineNum();
         if (token.getTokenType().equals(TokenType.ID_KEYWORD)) {
             if (token.getToken().equals("True") || token.getToken().equals("False")) {
                 if (tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
-                    return new ExprNode(operationNode, symTab, "Boolean");
+                    return new ExprNode(operationNode, symTab, "Boolean", fileName, lineNumber);
                 }
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
                 tokens.remove(0);
-                return new ExprNode(constantNode, symTab, constantNode.getType());
+                return new ExprNode(constantNode, symTab, constantNode.getType(), fileName, lineNumber);
             }
             else {
                 Token secondToken = tokens.get(1);
-                String fileName = secondToken.getFilename();
-                int lineNumber = secondToken.getLineNum();
                 if (secondToken.getTokenType().equals(TokenType.L_BRACKET)) {
                     FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens, symTab, depth, funcDefs);
                     funcCallNode.setEndStmt();
@@ -62,10 +66,10 @@ public class ExprNode extends Operand {
                         }
                         tokens.remove(0);
                         ExprNode rightNode = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
-                        ExprNode leftNode = new ExprNode(funcCallNode, symTab, "Unknown");
+                        ExprNode leftNode = new ExprNode(funcCallNode, symTab, "Unknown", fileName, lineNumber);
                         leftNode.funcdefs = funcDefs;
                         JottNode tempNode = makeNestedExprNode(leftNode, op, rightNode, "relational", symTab, "Boolean", fileName, lineNumber);
-                        return new ExprNode(tempNode, symTab, "Boolean");
+                        return new ExprNode(tempNode, symTab, "Boolean", fileName, lineNumber);
                     }
                     String type = "String";
                     for (int i = 0; i < funcDefs.size(); i++) {
@@ -73,25 +77,25 @@ public class ExprNode extends Operand {
                             type = funcDefs.get(i).return_type;
                         }
                     }
-                    return new ExprNode(funcCallNode, symTab, type);
+                    return new ExprNode(funcCallNode, symTab, type, fileName, lineNumber);
                 }
                 else if (secondToken.getTokenType().equals(TokenType.REL_OP)) {
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
-                    return new ExprNode(operationNode, symTab, "Boolean");
+                    return new ExprNode(operationNode, symTab, "Boolean", fileName, lineNumber);
                 }
                 else if (secondToken.getTokenType().equals(TokenType.MATH_OP)) {
                     String type = "Integer";
-                    if (secondToken.getToken().contains(".")) {
+                    if (tokens.get(2).getToken().contains(".")) {
                         type = "Double";
                     }
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
-                    return new ExprNode(operationNode, symTab, type);
+                    return new ExprNode(operationNode, symTab, type, fileName, lineNumber);
                 }
                 else {
                     VarNode varNode = VarNode.ParseVarNode(tokens, symTab);
                     tokens.remove(0);
                     String type = symTab.get(varNode.id);
-                    return new ExprNode(varNode, symTab, type);
+                    return new ExprNode(varNode, symTab, type, fileName, lineNumber);
                 }
             }
         }
@@ -100,7 +104,7 @@ public class ExprNode extends Operand {
                 if (tokens.get(1).getTokenType().equals(TokenType.MATH_OP) ||
                         tokens.get(1).getTokenType().equals(TokenType.REL_OP)) {
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
-                    return new ExprNode(operationNode, symTab, "Boolean");
+                    return new ExprNode(operationNode, symTab, "Boolean", fileName, lineNumber);
                 }
                 else {
                     ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
@@ -113,13 +117,13 @@ public class ExprNode extends Operand {
                     // remove constant
                     tokens.remove(0);
 
-                    return new ExprNode(constantNode, symTab, type);
+                    return new ExprNode(constantNode, symTab, type, fileName, lineNumber);
                 }
             }
             if (token.getTokenType().equals(TokenType.STRING)) {
                 ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
                 tokens.remove(0);
-                return new ExprNode(constantNode, symTab, "String");
+                return new ExprNode(constantNode, symTab, "String", fileName, lineNumber);
             }
             else {
                 ExprNode.reportSyntaxError("Incorrect expression", tokens.get(0).getFilename(), tokens.get(0).getLineNum());

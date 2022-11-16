@@ -252,7 +252,7 @@ public class FuncCallNode extends StmtNode {
                 }
             }
             else {
-                reportSemanticError("Call to undefined function " + this.id, this.fileName, this.lineNumber);
+                reportSemanticError("Call to undefined function " + this.id.getId(), this.fileName, this.lineNumber);
             }
         } catch (Exception e) {
             e.printStackTrace();
