@@ -144,17 +144,17 @@ public class ExprNode extends Operand {
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.expr.convertToJava();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.expr.convertToC();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.expr.convertToPython();
     }
 
     @Override

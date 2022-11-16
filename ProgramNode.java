@@ -66,7 +66,7 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToPython() {
-        String python = "import java.util.Scanner;\n";
+        String python = "";
         for (int i = 0; i < this.funcDefs.size(); i++) {
             python += this.funcDefs.get(i).convertToPython();
         }
