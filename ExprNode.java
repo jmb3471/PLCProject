@@ -5,21 +5,10 @@ import java.util.Objects;
 public class ExprNode extends Operand {
 
     private JottNode expr;
-
-    public HashMap<String, String> getSymTab() {
-        return symTab;
-    }
-
     private HashMap<String, String> symTab;
     private ArrayList<FunctionDefNode> funcdefs;
     public String fileName;
     public int lineNumber;
-
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String type;
 
     public ExprNode() {}
@@ -34,7 +23,7 @@ public class ExprNode extends Operand {
 
     public static ExprNode makeNestedExprNode(Operand left, String op, Operand right, String opType, HashMap<String, String> symTab, String type, String fileName, int lineNumber)
     {
-        return new ExprNode(new OperationNode(left, op, right, opType, symTab, fileName, lineNumber), symTab, type,fileName, lineNumber);
+        return new ExprNode(new OperationNode(left, op, right, opType, symTab, fileName, lineNumber), symTab, type, fileName, lineNumber);
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
@@ -137,6 +126,14 @@ public class ExprNode extends Operand {
         return this.type;
     }
 
+    public HashMap<String, String> getSymTab() {
+        return symTab;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String convertToJott() {
         return this.expr.convertToJott();
@@ -144,17 +141,17 @@ public class ExprNode extends Operand {
 
     @Override
     public String convertToJava() {
-        return null;
+        return this.expr.convertToJava();
     }
 
     @Override
     public String convertToC() {
-        return null;
+        return this.expr.convertToC();
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        return this.expr.convertToPython();
     }
 
     @Override
