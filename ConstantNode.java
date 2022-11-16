@@ -67,7 +67,7 @@ public class ConstantNode extends Operand implements JottTree {
     @Override
     public boolean validateTree() {
 
-        if (this.getType().equals("Double"))
+        /*if (this.getType().equals("Double"))
         {
             return ValidationUtils.validateDouble(Double.parseDouble(value));
         }
@@ -88,7 +88,7 @@ public class ConstantNode extends Operand implements JottTree {
         if (this.getType().equals("String"))
         {
             return ValidationUtils.validateString(value);
-        }
+        }*/
 
         return true;
     }

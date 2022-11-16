@@ -7,14 +7,17 @@ public class OperationNode extends Operand implements JottTree {
     private Operand right;
     private String opType;
     private HashMap<String, String> symTab;
+    private String fileName;
+    private int lineNumber;
 
-
-    public OperationNode(Operand left, String operator, Operand right, String opType, HashMap<String, String> symTab) {
+    public OperationNode(Operand left, String operator, Operand right, String opType, HashMap<String, String> symTab, String fileName, int lineNumber) {
         this.left = left;
         this.right = right;
         this.operator = operator;
         this.opType = opType;
         this.symTab = symTab;
+        this.fileName = fileName;
+        this.lineNumber = lineNumber;
     }
 
     @Override
@@ -28,6 +31,9 @@ public class OperationNode extends Operand implements JottTree {
         String operator = null;
         Operand right = null;
         String opType = null;
+
+        String fileName = token.getFilename();
+        int lineNumber = token.getLineNum();
 
         // assign left operand
         if (token.getTokenType().equals(TokenType.NUMBER)) {
@@ -92,7 +98,7 @@ public class OperationNode extends Operand implements JottTree {
         }
 
 
-        return new OperationNode(left, operator, right, opType, symTab);
+        return new OperationNode(left, operator, right, opType, symTab, fileName, lineNumber);
     }
 
     @Override
@@ -136,7 +142,15 @@ public class OperationNode extends Operand implements JottTree {
             return false;
         }
         else {
-            return this.left.getType().equals(this.right.getType());
+            if (!this.left.getType().equals(this.right.getType())) {
+                try {
+                    reportSemanticError("Operand types do not match", this.fileName, this.lineNumber);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

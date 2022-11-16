@@ -1,10 +1,23 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ExprNode extends Operand {
 
     private JottNode expr;
+
+    public HashMap<String, String> getSymTab() {
+        return symTab;
+    }
+
     private HashMap<String, String> symTab;
+    private ArrayList<FunctionDefNode> funcdefs;
+
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String type;
 
     public ExprNode() {}
@@ -15,9 +28,9 @@ public class ExprNode extends Operand {
         this.type = type;
     }
 
-    public static ExprNode makeNestedExprNode(Operand left, String op, Operand right, String opType, HashMap<String, String> symTab, String type)
+    public static ExprNode makeNestedExprNode(Operand left, String op, Operand right, String opType, HashMap<String, String> symTab, String type, String fileName, int lineNumber)
     {
-        return new ExprNode(new OperationNode(left, op, right, opType, symTab), symTab, type);
+        return new ExprNode(new OperationNode(left, op, right, opType, symTab, fileName, lineNumber), symTab, type);
     }
 
     public static ExprNode ParseExprNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
@@ -35,6 +48,8 @@ public class ExprNode extends Operand {
             }
             else {
                 Token secondToken = tokens.get(1);
+                String fileName = secondToken.getFilename();
+                int lineNumber = secondToken.getLineNum();
                 if (secondToken.getTokenType().equals(TokenType.L_BRACKET)) {
                     FuncCallNode funcCallNode = FuncCallNode.ParseFuncCallNode(tokens, symTab, depth, funcDefs);
                     funcCallNode.setEndStmt();
@@ -47,7 +62,9 @@ public class ExprNode extends Operand {
                         }
                         tokens.remove(0);
                         ExprNode rightNode = ExprNode.ParseExprNode(tokens, symTab, depth, funcDefs);
-                        JottNode tempNode = makeNestedExprNode(new ExprNode(funcCallNode, symTab, "Boolean"), op, rightNode, "relational", symTab, "Boolean");
+                        ExprNode leftNode = new ExprNode(funcCallNode, symTab, "Unknown");
+                        leftNode.funcdefs = funcDefs;
+                        JottNode tempNode = makeNestedExprNode(leftNode, op, rightNode, "relational", symTab, "Boolean", fileName, lineNumber);
                         return new ExprNode(tempNode, symTab, "Boolean");
                     }
                     String type = "String";
@@ -88,10 +105,15 @@ public class ExprNode extends Operand {
                 else {
                     ConstantNode constantNode = ConstantNode.ParseConstantNode(tokens);
 
+                    String type = "Integer";
+                    if (token.getToken().contains(".")) {
+                        type = "Double";
+                    }
+
                     // remove constant
                     tokens.remove(0);
 
-                    return new ExprNode(constantNode, symTab, "Integer");
+                    return new ExprNode(constantNode, symTab, type);
                 }
             }
             if (token.getTokenType().equals(TokenType.STRING)) {
@@ -134,6 +156,16 @@ public class ExprNode extends Operand {
     @Override
     public boolean validateTree() {
         System.out.println("Validating " + this.getClass());
+        if (this.getType().equals("Unknown")) {
+            FuncCallNode node = ((FuncCallNode)this.expr);
+            FunctionDefNode functionDefNode = null;
+            for (int i = 0; i < this.funcdefs.size(); i++) {
+                if (Objects.equals(this.funcdefs.get(i).ID, node.getId().getId())) {
+                    functionDefNode = this.funcdefs.get(i);
+                }
+            }
+            this.setType(functionDefNode.return_type);
+        }
         return expr.validateTree();
     }
 }
