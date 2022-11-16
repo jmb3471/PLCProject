@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class FuncCallNode extends StmtNode {
-    
+
+    public IdNode getId() {
+        return id;
+    }
+
     public IdNode id;
     private ArrayList<ExprNode> exprNodes;
     private HashMap<String, String> symTab;
