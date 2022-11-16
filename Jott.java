@@ -18,7 +18,7 @@ public class Jott {
             //System.out.println("args[3] = " + args[3]);
 
             System.out.println("Tokenizing...");
-            ArrayList<Token> tokens = JottTokenizer.tokenize(args[1]);
+            ArrayList<Token> tokens = JottTokenizer.tokenize(args[0]);
             System.out.println("Parsing...");
             JottTree tree = ProgramNode.ParseProgram(tokens);
             boolean valid = false;

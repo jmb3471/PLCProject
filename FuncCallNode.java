@@ -10,6 +10,8 @@ public class FuncCallNode extends StmtNode {
     private HashMap<String, String> symTab;
     public ArrayList<FunctionDefNode> funcdefs;
     private int args;
+    private String fileName;
+    private int lineNumber;
 
     private ArrayList<String> builtinfuncs = new ArrayList<>(Arrays.asList("print", "input", "concat", "length"));
 
@@ -28,6 +30,10 @@ public class FuncCallNode extends StmtNode {
     }
 
     public static FuncCallNode ParseFuncCallNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
+        Token token = tokens.get(0);
+        String fileName = token.getFilename();
+        int lineNumber = token.getLineNum();
+
         IdNode idNode = IdNode.ParseIdNode(tokens);
 
         // remove id and [
@@ -49,6 +55,8 @@ public class FuncCallNode extends StmtNode {
 
         FuncCallNode funcCallNode = new FuncCallNode(idNode, exprNodes, symTab, args);
         funcCallNode.funcdefs = funcDefs;
+        funcCallNode.fileName = fileName;
+        funcCallNode.lineNumber = lineNumber;
         return funcCallNode;
 
     }
@@ -189,57 +197,63 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public boolean validateTree() {
-        FunctionDefNode functionDefNode = null;
-        for (int i = 0; i < this.funcdefs.size(); i++) {
-            if (Objects.equals(this.funcdefs.get(i).ID, this.id.getId())) {
-                functionDefNode = this.funcdefs.get(i);
-            }
-        }
-        Boolean funcDefExists = functionDefNode != null;
-        if (this.builtinfuncs.contains(this.id)) {
-            if (Objects.equals(this.id.getId(), "print")) {
-                if (this.exprNodes.size() == 1) {
-                    return true;
+        try {
+            FunctionDefNode functionDefNode = null;
+            for (int i = 0; i < this.funcdefs.size(); i++) {
+                if (Objects.equals(this.funcdefs.get(i).ID, this.id.getId())) {
+                    functionDefNode = this.funcdefs.get(i);
                 }
+            }
+            Boolean funcDefExists = functionDefNode != null;
+            if (this.builtinfuncs.contains(this.id.getId())) {
+                if (Objects.equals(this.id.getId(), "print")) {
+                    return this.exprNodes.size() == 1;
+                }
+                if (Objects.equals(this.id.getId(), "input")) {
+                    if (this.exprNodes.size() == 2) {
+                        if (Objects.equals(this.exprNodes.get(0).type, "String") &&
+                                Objects.equals(this.exprNodes.get(1).type, "Integer")) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                if (Objects.equals(this.id.getId(), "concat")) {
+                    if (this.exprNodes.size() == 2) {
+                        if (Objects.equals(this.exprNodes.get(0).type, "String") &&
+                                Objects.equals(this.exprNodes.get(1).type, "String")) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                if (Objects.equals(this.id.getId(), "length")) {
+                    if (this.exprNodes.size() == 1) {
+                        return Objects.equals(this.exprNodes.get(0).type, "String");
+                    }
+                    return false;
+                }
+            }
+            Boolean numCorrectParams = this.exprNodes.size() == this.args;
+            if (!numCorrectParams) {
                 return false;
             }
-            if (Objects.equals(this.id.getId(), "input")) {
-                if (this.exprNodes.size() == 2) {
-                    if (Objects.equals(this.exprNodes.get(0).type, "String") &&
-                            Objects.equals(this.exprNodes.get(1).type, "Integer")) {
-                        return true;
+            if (funcDefExists) {
+                for (int i = 0; i < functionDefNode.params.size(); i++) {
+                    if (!(this.exprNodes.get(i).getType().equals(functionDefNode.params.get(i).type))) {
+                        reportSemanticError("Argument type does not match parameter type", this.fileName, this.lineNumber);
+                        return false;
                     }
                 }
-                return false;
             }
-            if (Objects.equals(this.id.getId(), "concat")) {
-                if (this.exprNodes.size() == 2) {
-                    if (Objects.equals(this.exprNodes.get(0).type, "String") &&
-                            Objects.equals(this.exprNodes.get(1).type, "String")) {
-                        return true;
-                    }
-                }
-                return false;
+            else {
+                reportSemanticError("Call to undefined function " + this.id, this.fileName, this.lineNumber);
             }
-            if (Objects.equals(this.id.getId(), "length")) {
-                if (this.exprNodes.size() == 2) {
-                    if (Objects.equals(this.exprNodes.get(0).type, "String")) {
-                        return true;
-                    }
-                }
-                return false;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        Boolean numCorrectParams = this.exprNodes.size() == this.args;
-        Boolean correctParamTypes = true;
-        if (funcDefExists) {
-            for (int i = 0; i < functionDefNode.params.size(); i++) {
-                if (!(this.exprNodes.get(i).getType().equals(functionDefNode.params.get(i).type))) {
-                    correctParamTypes = false;
-                }
-            }
-        }
-        return funcDefExists && numCorrectParams && correctParamTypes;
+        return true;
     }
 
 }

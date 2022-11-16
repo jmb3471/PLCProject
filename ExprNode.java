@@ -58,10 +58,17 @@ public class ExprNode extends Operand {
                     }
                     return new ExprNode(funcCallNode, symTab, type);
                 }
-                else if (secondToken.getTokenType().equals(TokenType.MATH_OP) ||
-                        secondToken.getTokenType().equals(TokenType.REL_OP)) {
+                else if (secondToken.getTokenType().equals(TokenType.REL_OP)) {
                     OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
                     return new ExprNode(operationNode, symTab, "Boolean");
+                }
+                else if (secondToken.getTokenType().equals(TokenType.MATH_OP)) {
+                    String type = "Integer";
+                    if (secondToken.getToken().contains(".")) {
+                        type = "Double";
+                    }
+                    OperationNode operationNode = OperationNode.ParseOperationNode(tokens, symTab);
+                    return new ExprNode(operationNode, symTab, type);
                 }
                 else {
                     VarNode varNode = VarNode.ParseVarNode(tokens, symTab);

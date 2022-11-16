@@ -50,7 +50,13 @@ public class BodyNode extends JottNode {
 
         return bodyNode;
     }
-    
+
+    public String getReturnType() {
+        if (this.ReturnStmt == null) {
+            return null;
+        }
+        return this.ReturnStmt.getType();
+    }
 
     @Override
     public String convertToJott() {
@@ -88,12 +94,15 @@ public class BodyNode extends JottNode {
             }
         }
         //System.out.println("test 1");
-        if (!(validateTree(this.type)))
+        /*if (!(validateTree(this.type)))
         {
             return false;
-        }
+        }*/
         //System.out.println("test 2");
-        return this.ReturnStmt.validateTree();
+        if (this.ReturnStmt != null) {
+            return this.ReturnStmt.validateTree();
+        }
+        return true;
     }
 
     public boolean validateTree(String type) {
