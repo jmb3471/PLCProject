@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -239,7 +240,7 @@ public class FuncCallNode extends StmtNode {
                     return false;
                 }
             }
-            Boolean numCorrectParams = this.exprNodes.size() == this.args;
+            Boolean numCorrectParams = this.exprNodes.size() == functionDefNode.params.size();
             if (!numCorrectParams) {
                 return false;
             }
