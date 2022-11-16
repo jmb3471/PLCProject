@@ -6,14 +6,17 @@ public class BodyNode extends JottNode {
     private ArrayList<BodyStmtNode> bodyStmts;
     private ExprNode ReturnStmt;
     private HashMap<String, String> symTab;
+    private boolean ifStmt;
 
-    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt, HashMap<String, String> symTab) {
+    public BodyNode(ArrayList<BodyStmtNode> bodyStmts, ExprNode returnStmt, HashMap<String, String> symTab, boolean ifStmt) {
         this.bodyStmts = bodyStmts;
         this.ReturnStmt = returnStmt;
         this.symTab = symTab;
+        this.ifStmt = ifStmt;
     }
 
     public static BodyNode ParseBodyNode(ArrayList<Token> tokens, HashMap<String, String> symTab, int depth, ArrayList<FunctionDefNode> funcDefs) throws Exception {
+        boolean ifStmt = false;
         ArrayList<BodyStmtNode> bodyStmts = new ArrayList<>();
         ExprNode exprNode = null;
 
@@ -38,6 +41,9 @@ public class BodyNode extends JottNode {
             }
             else {
                 BodyStmtNode bodyStmt = BodyStmtNode.ParseBodyStmtNode(tokens, symTab, depth, funcDefs);
+                if (bodyStmt.isIfStmt()) {
+                    ifStmt = true;
+                }
                 bodyStmts.add(bodyStmt);
             }
         }
@@ -45,7 +51,7 @@ public class BodyNode extends JottNode {
         // remove }
         tokens.remove(0);
 
-        BodyNode bodyNode = new BodyNode(bodyStmts, exprNode, symTab);
+        BodyNode bodyNode = new BodyNode(bodyStmts, exprNode, symTab, ifStmt);
         bodyNode.depth = 1;
 
         return bodyNode;
@@ -144,6 +150,21 @@ public class BodyNode extends JottNode {
         for (BodyStmtNode bodyStmtNode: this.bodyStmts) {
             if (!bodyStmtNode.validateTree()) {
                 return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasIfStmt() {
+        return ifStmt;
+    }
+
+    public boolean validReturn() {
+        for (BodyStmtNode bodyStmtNode: this.bodyStmts) {
+            if (bodyStmtNode.isIfStmt()) {
+                if(!((IfStmtNode)bodyStmtNode).validReturn()) {
+                    return false;
+                }
             }
         }
         return true;

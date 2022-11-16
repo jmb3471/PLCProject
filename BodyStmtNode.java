@@ -6,6 +6,7 @@ public class BodyStmtNode extends JottNode {
     private IfStmtNode if_stmt;
     private While_Loop_Node while_stmt;
     private StmtNode stmt;
+    private boolean ifStmt;
 
 
     public BodyStmtNode() {
@@ -13,6 +14,7 @@ public class BodyStmtNode extends JottNode {
         this.while_stmt = null;
         this.stmt = null;
         this.type = "BodyStmt";
+        this.ifStmt = false;
     }
 
 
@@ -24,6 +26,7 @@ public class BodyStmtNode extends JottNode {
             tokens.remove(0);
             bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab, depth, funcDefs);
             bodyStmt.depth = depth;
+            bodyStmt.ifStmt = true;
         }
 
          // Check if the BodyStmt is a while loop
@@ -115,5 +118,9 @@ public class BodyStmtNode extends JottNode {
             return stmt.validateTree();
         }
         return false;
+    }
+
+    public boolean isIfStmt() {
+        return ifStmt;
     }
 }

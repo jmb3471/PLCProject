@@ -8,6 +8,13 @@ public class FunctionDefNode extends JottNode {
     public String return_type;
     private BodyNode Body;
     private HashMap<String, String> symTab;
+    private String fileName;
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    private int lineNumber;
 
 
     /**
@@ -18,12 +25,14 @@ public class FunctionDefNode extends JottNode {
      * @param return_type   The return type of the fundtion
      * @param symTab        The symbol table for the function
      */
-    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, BodyNode body, String return_type, HashMap<String, String> symTab) {
+    public FunctionDefNode(String id, ArrayList<FunctionDefParamsNode> params, BodyNode body, String return_type, HashMap<String, String> symTab, String fileName, int lineNumber) {
         this.ID = id;
         this.params = params;
         this.Body = body;
         this.return_type = return_type;
         this.symTab = symTab;
+        this.fileName = fileName;
+        this.lineNumber = lineNumber;
     }
 
 
@@ -42,6 +51,8 @@ public class FunctionDefNode extends JottNode {
         }
 
         String id = tokens.get(0).getToken();
+        String fileName = tokens.get(0).getFilename();
+        int lineNumber = tokens.get(0).getLineNum();
 
         // Check if there is a "[" in the correct spot
         if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
@@ -113,7 +124,7 @@ public class FunctionDefNode extends JottNode {
         // Parse the body
         BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, 1, funcDefs);
 
-        FunctionDefNode funcDef = new FunctionDefNode(id, params, body, type, symTab);
+        FunctionDefNode funcDef = new FunctionDefNode(id, params, body, type, symTab, fileName, lineNumber);
 
         return funcDef;
     }
@@ -179,10 +190,20 @@ public class FunctionDefNode extends JottNode {
     @Override
     public boolean validateTree() {
         //System.out.println("Validating " + this.getClass());
+        if (this.Body.hasIfStmt()) {
+            if (this.Body.validReturn()) {
+                return this.Body.validateTree();
+            }
+        }
         ExprNode returnStmt = this.Body.getReturnStmt();
         if (returnStmt == null) {
             if (!this.return_type.equals("Void")) {
-                return false;
+                try {
+                    reportSemanticError("Function missing return statement", this.fileName, this.lineNumber);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
         }
         else {

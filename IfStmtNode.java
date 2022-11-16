@@ -47,20 +47,20 @@ public class IfStmtNode extends BodyStmtNode {
 
         BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
 
-        if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+        /*if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
             IfStmtNode.reportSyntaxError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
             return null;
         }
 
         // remove right brace
-        tokens.remove(0);
+        tokens.remove(0);*/
 
         ArrayList<BodyNode> elseIFBodys = new ArrayList<>();
         ArrayList<ExprNode> elseIfExprs = new ArrayList<>();
 
         BodyNode elseNode = null;
 
-        while (tokens.get(0).getToken() == "elseif") {
+        while (tokens.get(0).getToken().equals("elseif")) {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACKET) {
                 IfStmtNode.reportSyntaxError("Expected [ for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
@@ -100,9 +100,9 @@ public class IfStmtNode extends BodyStmtNode {
             elseIfExprs.add(elseIfExpr);
         }
 
-        if (tokens.get(0).getToken() == "else") {
+        if (tokens.get(0).getToken().equals("else")) {
             if (tokens.get(1).getTokenType() != TokenType.L_BRACE) {
-                IfStmtNode.reportSyntaxError("Expected [ for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+                IfStmtNode.reportSyntaxError("Expected { for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
@@ -111,13 +111,13 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(0);
 
             elseNode = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
-            if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
-                IfStmtNode.reportSyntaxError("Expected ] for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
+            /*if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
+                IfStmtNode.reportSyntaxError("Expected } for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
             }
 
             // remove right brace
-            tokens.remove(0);
+            tokens.remove(0);*/
         }
 
         IfStmtNode ifNode = new IfStmtNode(expr, body, elseIFBodys, elseIfExprs, elseNode);
@@ -191,6 +191,25 @@ public class IfStmtNode extends BodyStmtNode {
         }
         if (this.elseBody != null) {
             return this.elseBody.validateTree();
+        }
+        return true;
+    }
+
+    public boolean validReturn() {
+        if (this.elseBody == null) {
+            return false;
+        }
+        if (this.elseBody.getReturnStmt() == null) {
+            return false;
+
+        }
+        for (BodyNode elseIfBody : this.elseIfBodys) {
+            if (elseIfBody.getReturnStmt() == null) {
+                return false;
+            }
+        }
+        if (this.Body.getReturnStmt() == null) {
+            return false;
         }
         return true;
     }

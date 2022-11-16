@@ -8,9 +8,13 @@ public class ProgramNode extends JottNode {
     private ArrayList<FunctionDefNode> funcDefs;
     public static boolean hasDuplicate = false;
     public static boolean hasMain = false;
+    private String fileName;
+    private int lineNumber;
 
-    public ProgramNode(ArrayList<FunctionDefNode> funcDefs) {
+    public ProgramNode(ArrayList<FunctionDefNode> funcDefs, String fileName, int lineNumber) {
         this.funcDefs = funcDefs;
+        this.fileName = fileName;
+        this.lineNumber = lineNumber;
     }
 
 
@@ -19,11 +23,15 @@ public class ProgramNode extends JottNode {
         // and add them to the ArrayList of FunctionDefNodes
 
         ArrayList<FunctionDefNode> funcDefs = new ArrayList<>();
+        String fileName = "";
+        int lineNumber = 0;
         while (!tokens.isEmpty()){
+            fileName = tokens.get(0).getFilename();
             FunctionDefNode funcDefNode = FunctionDefNode.ParseFunctionDefNode(tokens, funcDefs);
             for (FunctionDefNode funcDef : funcDefs) {
                 if (Objects.equals(funcDef.ID, funcDefNode.ID)) {
                     hasDuplicate = true;
+                    lineNumber = funcDef.getLineNumber();
                 }
             }
             if (Objects.equals(funcDefNode.ID, "main")) {
@@ -32,7 +40,7 @@ public class ProgramNode extends JottNode {
             funcDefs.add(funcDefNode);
         }
 
-        ProgramNode program = new ProgramNode(funcDefs);
+        ProgramNode program = new ProgramNode(funcDefs, fileName, lineNumber);
         return program;
     }
     
@@ -78,12 +86,32 @@ public class ProgramNode extends JottNode {
         //System.out.println("Validating " + this.getClass());
         if (hasMain && !hasDuplicate) {
             for (FunctionDefNode funcDef : funcDefs) {
+                if (funcDef.ID.equals("main")) {
+                    if (!funcDef.return_type.equals("Void")) {
+                        try {
+                            reportSemanticError("Main should be Void", this.fileName, funcDef.getLineNumber());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                }
                 if (!funcDef.validateTree()) {
                     return false;
                 }
             }
         }
         else {
+                try {
+                    if (!hasMain) {
+                        reportSemanticError("Missing main function", this.fileName, 0);
+                    }
+                    if (hasDuplicate) {
+                        reportSemanticError("Duplicate functions declared", this.fileName, this.lineNumber);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             return false;
         }
         return true;
