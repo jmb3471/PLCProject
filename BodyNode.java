@@ -61,8 +61,8 @@ public class BodyNode extends JottNode {
     @Override
     public String convertToJott() {
         String jott = "";
-        for (int i = 0; i < this.bodyStmts.size(); i++) {
-            jott += this.bodyStmts.get(i).convertToJott();
+        for (BodyStmtNode bodyStmt : this.bodyStmts) {
+            jott += bodyStmt.convertToJott();
         }
         if (this.ReturnStmt != null) {
             jott += "return " + this.ReturnStmt.convertToJott() + ";";
@@ -72,17 +72,38 @@ public class BodyNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        return null;
+        String java = "";
+        for (BodyStmtNode bodyStmt : this.bodyStmts) {
+            java += bodyStmt.convertToJava();
+        }
+        if (this.ReturnStmt != null) {
+            java += "return " + this.ReturnStmt.convertToJava() + ";";
+        }
+        return java;
     }
 
     @Override
     public String convertToC() {
-        return null;
+        String c = "";
+        for (BodyStmtNode bodyStmt : this.bodyStmts) {
+            c += bodyStmt.convertToC();
+        }
+        if (this.ReturnStmt != null) {
+            c += "return " + this.ReturnStmt.convertToC() + ";";
+        }
+        return c;
     }
 
     @Override
     public String convertToPython() {
-        return null;
+        String python = "";
+        for (BodyStmtNode bodyStmt : this.bodyStmts) {
+            python += bodyStmt.convertToPython();
+        }
+        if (this.ReturnStmt != null) {
+            python += "return " + this.ReturnStmt.convertToPython();
+        }
+        return python;
     }
 
     @Override

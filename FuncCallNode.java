@@ -83,7 +83,8 @@ public class FuncCallNode extends StmtNode {
     @Override
     public String convertToJava() {
         String java = "";
-        if (this.builtinfuncs.contains(this.id)) {
+        System.out.println(this.id.getId());
+        if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {
                 java += "System.out.println(";
             }
@@ -122,7 +123,7 @@ public class FuncCallNode extends StmtNode {
     @Override
     public String convertToC() {
         String c = "";
-        if (this.builtinfuncs.contains(this.id)) {
+        if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {
                 c += "printf(";
             }
@@ -160,7 +161,7 @@ public class FuncCallNode extends StmtNode {
     @Override
     public String convertToPython() {
         String python = "";
-        if (this.builtinfuncs.contains(this.id)) {
+        if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {
                 python += "print(";
             }
