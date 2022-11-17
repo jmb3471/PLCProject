@@ -156,7 +156,7 @@ public class ExprNode extends Operand {
 
     @Override
     public boolean validateTree() {
-        System.out.println("Validating " + this.getClass());
+        //System.out.println("Validating " + this.getClass());
         if (this.getType().equals("Unknown")) {
             FuncCallNode node = ((FuncCallNode)this.expr);
             FunctionDefNode functionDefNode = null;
