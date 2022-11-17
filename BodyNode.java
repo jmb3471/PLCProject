@@ -107,12 +107,18 @@ public class BodyNode extends JottNode {
         for (int i = 0; i < this.depth; i++) {
             tabs += "\t";
         }
-        String python = tabs;
+        String python = "";
         for (BodyStmtNode bodyStmt : this.bodyStmts) {
-            if (bodyStmt instanceof StmtNode) {
-                python += tabs;
+            if (bodyStmt instanceof While_Loop_Node) {
+                String tabs1 = "";
+                for (int i = 0; i < this.depth - 1; i++) {
+                    tabs1 += "\t";
+                }
+                python += tabs1 + bodyStmt.convertToPython();
             }
-            python += bodyStmt.convertToPython();
+            else {
+                python += tabs + bodyStmt.convertToPython();
+            }
         }
         if (this.ReturnStmt != null) {
             python += tabs + "return " + this.ReturnStmt.convertToPython();
