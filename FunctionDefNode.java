@@ -173,7 +173,7 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToPython() {
-        String python = "def " + this.ID + "(";
+        String python = "\ndef " + this.ID + "(";
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 python += this.params.get(i).convertToPython();
@@ -182,7 +182,7 @@ public class FunctionDefNode extends JottNode {
                 python += this.params.get(i).convertToPython() + ",";
             }
         }
-        python += "):\n\t" + this.Body.convertToPython();
+        python += "):\n" + this.Body.convertToPython();
 
         return python;
     }

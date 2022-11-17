@@ -1,3 +1,4 @@
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,7 +53,7 @@ public class BodyNode extends JottNode {
         tokens.remove(0);
 
         BodyNode bodyNode = new BodyNode(bodyStmts, exprNode, symTab, ifStmt);
-        bodyNode.depth = 1;
+        bodyNode.depth = depth;
 
         return bodyNode;
     }
@@ -102,12 +103,19 @@ public class BodyNode extends JottNode {
 
     @Override
     public String convertToPython() {
-        String python = "";
+        String tabs = "";
+        for (int i = 0; i < this.depth; i++) {
+            tabs += "\t";
+        }
+        String python = tabs;
         for (BodyStmtNode bodyStmt : this.bodyStmts) {
+            if (bodyStmt instanceof StmtNode) {
+                python += tabs;
+            }
             python += bodyStmt.convertToPython();
         }
         if (this.ReturnStmt != null) {
-            python += "return " + this.ReturnStmt.convertToPython();
+            python += tabs + "return " + this.ReturnStmt.convertToPython();
         }
         return python;
     }
@@ -120,12 +128,6 @@ public class BodyNode extends JottNode {
                 return false;
             }
         }
-        //System.out.println("test 1");
-        /*if (!(validateTree(this.type)))
-        {
-            return false;
-        }*/
-        //System.out.println("test 2");
         if (this.ReturnStmt != null) {
             return this.ReturnStmt.validateTree();
         }
@@ -137,14 +139,6 @@ public class BodyNode extends JottNode {
             if (!type.equals("Void")) {
                 return false;
             }
-        }
-        else {
-            /*
-            if (!this.ReturnStmt.getType().equalsIgnoreCase(type)) {
-                return false;
-            }
-            System.out.println("test 3");
-            */
         }
 
         for (BodyStmtNode bodyStmtNode: this.bodyStmts) {
