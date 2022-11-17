@@ -41,6 +41,9 @@ public class AsmtNode extends StmtNode {
         // if the assignment begins with an <id>
         else if (tokens.get(0).getTokenType() == TokenType.ID_KEYWORD) {
             id = tokens.get(0).getToken();
+            if (symTab.containsKey(id)) {
+                type = symTab.get(id);
+            }
             // remove <id> and "="
             tokens.remove(1);
             tokens.remove(0);
