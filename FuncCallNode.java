@@ -88,13 +88,12 @@ public class FuncCallNode extends StmtNode {
     @Override
     public String convertToJava() {
         String java = "";
-        System.out.println(this.id.getId());
         if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {
                 java += "System.out.println(";
             }
             if (Objects.equals(this.id.getId(), "input")) {
-
+                java += "input(";
             }
             if (Objects.equals(this.id.getId(), "concat")) {
                 java += this.exprNodes.get(0).convertToJava() + " + " + this.exprNodes.get(1).convertToJava();

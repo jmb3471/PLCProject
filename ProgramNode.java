@@ -56,11 +56,11 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        String java = "import java.util.Scanner;\n";
+        String java = "import java.util.Scanner;\npublic class Program { public String input(String prompt, int chars){ Scanner scanner = new Scanner(System.in); System.out.println(prompt); return scanner.nextLine(); }\n";
         for (int i = 0; i < this.funcDefs.size(); i++) {
             java += this.funcDefs.get(i).convertToJava();
         }
-        return java;
+        return java += "}";
     }
 
     @Override
