@@ -78,6 +78,7 @@ public class ProgramNode extends JottNode {
         for (int i = 0; i < this.funcDefs.size(); i++) {
             python += this.funcDefs.get(i).convertToPython();
         }
+        python += "main()";
         return python;
     }
 
