@@ -1,3 +1,4 @@
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,7 +53,7 @@ public class BodyNode extends JottNode {
         tokens.remove(0);
 
         BodyNode bodyNode = new BodyNode(bodyStmts, exprNode, symTab, ifStmt);
-        bodyNode.depth = 1;
+        bodyNode.depth = depth;
 
         return bodyNode;
     }
@@ -102,12 +103,25 @@ public class BodyNode extends JottNode {
 
     @Override
     public String convertToPython() {
+        String tabs = "";
+        for (int i = 0; i < this.depth; i++) {
+            tabs += "\t";
+        }
         String python = "";
         for (BodyStmtNode bodyStmt : this.bodyStmts) {
-            python += bodyStmt.convertToPython();
+            if (bodyStmt instanceof While_Loop_Node) {
+                String tabs1 = "";
+                for (int i = 0; i < this.depth - 1; i++) {
+                    tabs1 += "\t";
+                }
+                python += tabs1 + bodyStmt.convertToPython();
+            }
+            else {
+                python += tabs + bodyStmt.convertToPython();
+            }
         }
         if (this.ReturnStmt != null) {
-            python += "return " + this.ReturnStmt.convertToPython();
+            python += tabs + "return " + this.ReturnStmt.convertToPython();
         }
         return python;
     }
@@ -120,12 +134,6 @@ public class BodyNode extends JottNode {
                 return false;
             }
         }
-        //System.out.println("test 1");
-        /*if (!(validateTree(this.type)))
-        {
-            return false;
-        }*/
-        //System.out.println("test 2");
         if (this.ReturnStmt != null) {
             return this.ReturnStmt.validateTree();
         }
@@ -137,14 +145,6 @@ public class BodyNode extends JottNode {
             if (!type.equals("Void")) {
                 return false;
             }
-        }
-        else {
-            /*
-            if (!this.ReturnStmt.getType().equalsIgnoreCase(type)) {
-                return false;
-            }
-            System.out.println("test 3");
-            */
         }
 
         for (BodyStmtNode bodyStmtNode: this.bodyStmts) {

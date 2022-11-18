@@ -165,6 +165,10 @@ public class FuncCallNode extends StmtNode {
 
     @Override
     public String convertToPython() {
+        String tabs = "";
+        for (int i = 0; i < this.depth; i++) {
+            tabs += "\t";
+        }
         String python = "";
         if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {

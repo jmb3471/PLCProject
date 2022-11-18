@@ -102,26 +102,25 @@ public class AsmtNode extends StmtNode {
     @Override
     public String convertToPython() {
         String python = "";
-        String tabs = "";
-        for (int i = 0; i < this.depth + 1; i++) {
-            tabs += "\t";
-        }
-        python += tabs + id + " = ";
+
+        python += id + " = ";
         python += cond.convertToJava();
         if (python.charAt(python.length() - 1) == ';') {
             python = python.replace(python.substring(python.length()-1), "");
         }
-        return python;
+        return python + "\n";
     }
 
     @Override
     public boolean validateTree() {
-        if (this.type.equals(cond.type)){
-            return cond.validateTree();
+        if (this.type != null) {
+            if (this.type.equals(cond.type)) {
+                return cond.validateTree();
+            } else {
+                return false;
+            }
         }
-        else{
-            return false;
-        }
+        return cond.validateTree();
     }
 
 }

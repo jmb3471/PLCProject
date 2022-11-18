@@ -24,7 +24,7 @@ public class BodyStmtNode extends JottNode {
         if (tokens.get(0).getToken().equals("if")) {
             // Remove the "if"
             tokens.remove(0);
-            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab, depth, funcDefs);
+            bodyStmt = IfStmtNode.ParseIfStmtNode(tokens, symTab, depth+1, funcDefs);
             bodyStmt.depth = depth;
             bodyStmt.ifStmt = true;
         }
@@ -32,13 +32,13 @@ public class BodyStmtNode extends JottNode {
          // Check if the BodyStmt is a while loop
         else if (tokens.get(0).getToken().equals("while")) {
             tokens.remove(0);
-            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens, symTab, depth, funcDefs);
+            bodyStmt = While_Loop_Node.ParseWhileLoopNode(tokens, symTab, depth+1, funcDefs);
             bodyStmt.depth = depth;
         }
 
         // The BodyStmt must just be a stmt
         else {
-            bodyStmt = StmtNode.ParseStmtNode(tokens, symTab, depth, funcDefs);
+            bodyStmt = StmtNode.ParseStmtNode(tokens, symTab, depth+1, funcDefs);
             bodyStmt.depth = depth;
         }
         return bodyStmt;
@@ -92,15 +92,19 @@ public class BodyStmtNode extends JottNode {
 
     @Override
     public String convertToPython() {
+        String tabs = "";
+        for (int i = 0; i < this.depth; i++) {
+            tabs += "\t";
+        }
         String python = "";
         if (this.if_stmt != null) {
             python += this.if_stmt.convertToPython();
         }
         if (this.while_stmt != null) {
-            python += this.while_stmt.convertToPython();
+            python +=  this.while_stmt.convertToPython();
         }
         if (this.stmt != null) {
-            python += this.stmt.convertToPython();
+            python += tabs + this.stmt.convertToPython();
         }
         return python;
     }

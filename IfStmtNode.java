@@ -45,7 +45,7 @@ public class IfStmtNode extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth, funcDefs);
 
         /*if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
             IfStmtNode.reportSyntaxError("Expected } for ifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -86,7 +86,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
+            BodyNode elseIfBody = BodyNode.ParseBodyNode(tokens, symTab, depth, funcDefs);
 
             if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportSyntaxError("Expected } for elseifstmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
@@ -110,7 +110,7 @@ public class IfStmtNode extends BodyStmtNode {
             tokens.remove(1);
             tokens.remove(0);
 
-            elseNode = BodyNode.ParseBodyNode(tokens, symTab, depth+1, funcDefs);
+            elseNode = BodyNode.ParseBodyNode(tokens, symTab, depth, funcDefs);
             /*if (tokens.get(0).getTokenType() != TokenType.R_BRACE) {
                 IfStmtNode.reportSyntaxError("Expected } for elsestmt", tokens.get(0).getFilename(), tokens.get(0).getLineNum());
                 return null;
@@ -165,12 +165,12 @@ public class IfStmtNode extends BodyStmtNode {
     @Override
     public String convertToPython() {
         String tabs = "";
-        for (int i = 0; i < this.depth + 1; i++) {
+        for (int i = 0; i < this.depth; i++) {
             tabs += "\t";
         }
-        String python = tabs + "if " + this.cond.convertToPython() + ":\n\t" + tabs + this.Body.convertToPython() + "\n";
+        String python = "\n" + tabs + "if " + this.cond.convertToPython() + ":\n" + this.Body.convertToPython() + "\n";
         for (int i = 0; i < this.elseIfBodys.size(); i++) {
-            python += tabs + "elif " + this.elseIfExprs.get(i).convertToPython() + ":\n\t" + tabs + this.elseIfBodys.get(i).convertToPython() + "\n";
+            python += tabs + "elif " + this.elseIfExprs.get(i).convertToPython() + ":\n" + this.elseIfBodys.get(i).convertToPython() + "\n";
         }
         if (this.elseBody != null) {
             python += tabs + "else:\n\t" + tabs + this.elseBody.convertToPython() + "\n";

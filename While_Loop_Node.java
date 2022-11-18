@@ -43,7 +43,7 @@ public class While_Loop_Node extends BodyStmtNode {
         tokens.remove(1);
         tokens.remove(0);
 
-        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth + 1, funcDefs);
+        BodyNode body = BodyNode.ParseBodyNode(tokens, symTab, depth, funcDefs);
 
         While_Loop_Node while_loop_node = new While_Loop_Node(expr, body, symTab);
         while_loop_node.depth = depth;
@@ -68,10 +68,10 @@ public class While_Loop_Node extends BodyStmtNode {
     @Override
     public String convertToPython() {
         String tabs = "";
-        for (int i = 0; i < this.depth + 1; i++) {
+        for (int i = 0; i < this.depth; i++) {
                 tabs += "\t";
         }
-        return tabs + "while " + cond.convertToPython() + ":\n\t" + tabs + body.convertToPython();
+        return tabs + "while " + cond.convertToPython() + ":\n" + body.convertToPython();
     }
 
     @Override
