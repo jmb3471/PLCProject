@@ -157,7 +157,13 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToC() {
-        String c = this.return_type + " " + this.ID + "(";
+        String c;
+        if (this.ID.equals("main")) {
+            c = "int main(void";
+        }
+        else {
+            c = this.return_type + " " + this.ID + "(";
+        }
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 c += this.params.get(i).convertToC();
@@ -166,8 +172,12 @@ public class FunctionDefNode extends JottNode {
                 c += this.params.get(i).convertToC() + ",";
             }
         }
-        c += ") { " + this.Body.convertToC() + "}";
-
+        if (this.ID.equals("main")) {
+            c += ") { " + this.Body.convertToC() + "return 1;}";
+        }
+        else {
+            c += ") { " + this.Body.convertToC() + "}";
+        }
         return c;
     }
 

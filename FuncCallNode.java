@@ -129,7 +129,39 @@ public class FuncCallNode extends StmtNode {
         String c = "";
         if (this.builtinfuncs.contains(this.id.getId())) {
             if (Objects.equals(this.id.getId(), "print")) {
-                c += "printf(";
+                c += "printf(\"";
+                for (int i = 0; i < exprNodes.size(); i++) {
+                    ExprNode node = this.exprNodes.get(i);
+                    String type;
+
+                    switch (node.type) {
+                        case "Integer":
+                            type= "%d";
+                            break;
+
+                        case "String":
+                            type = "%s";
+                            break;
+
+                        case "Boolean":
+                            type = "%d";
+                            break;
+
+                        case "Double":
+                            type = "%f";
+
+                        default:
+                            System.out.println("Invalid type for printf");
+                            return "";
+                    }
+
+                    if (i == exprNodes.size() - 1) {
+                        c += type + "\", ";
+                    }
+                    else {
+                        c += type;
+                    }
+                }
             }
             if (Objects.equals(this.id.getId(), "input")) {
 
@@ -155,9 +187,6 @@ public class FuncCallNode extends StmtNode {
         c += ")";
         if (this.endStmt) {
             c += ';';
-        }
-        if (Objects.equals(this.id.getId(), "print")) {
-            c += "printf(\"\n\")";
         }
         return c;
     }

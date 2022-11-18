@@ -11,6 +11,8 @@ public class ProgramNode extends JottNode {
     private String fileName;
     private int lineNumber;
 
+    public String c_input_func = "char* input(char* str, int numchars) {\n\tprintf(\"%s\", str);\n\tchar userin[numchars + 1]\n\tscanf(\"%s\", userin);\n\treturn userin;\n}\n\n";
+
     public ProgramNode(ArrayList<FunctionDefNode> funcDefs, String fileName, int lineNumber) {
         this.funcDefs = funcDefs;
         this.fileName = fileName;
@@ -65,7 +67,7 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToC() {
-        String c = "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n\n";
+        String c = "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n\n" + c_input_func;
         for (int i = 0; i < this.funcDefs.size(); i++) {
             c += this.funcDefs.get(i).convertToC();
         }
