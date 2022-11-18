@@ -11,9 +11,9 @@ We have included the JottParserTester as well if it is desired to use that to bu
 ## Phase 3/4
 To build phase 3 call the Jott Class main function with arguments input file, output file, language
 So an example call would be 
-```Java Jott.java input.jott output.language language
-Java Jott.java input.jott output.lan Language
+```Java Jott input.jott output.language language
+Java Jott input.jott output.lan Language
 
-Java Jott.java helloWorld.jott helloWorld.py Python
+Java Jott helloWorld.jott helloWorld.py Python
 
 ```
