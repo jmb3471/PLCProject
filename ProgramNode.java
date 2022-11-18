@@ -65,7 +65,7 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToC() {
-        String c = "#include <string.h>\n";
+        String c = "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n\n";
         for (int i = 0; i < this.funcDefs.size(); i++) {
             c += this.funcDefs.get(i).convertToC();
         }
