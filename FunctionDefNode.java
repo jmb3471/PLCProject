@@ -162,7 +162,33 @@ public class FunctionDefNode extends JottNode {
             c = "int main(void";
         }
         else {
-            c = this.return_type + " " + this.ID + "(";
+            String c_return;
+            switch(this.return_type) {
+                case "Integer":
+                    c_return= "int";
+                    break;
+
+                case "String":
+                    c_return = "char*";
+                    break;
+
+                case "Boolean":
+                    c_return = "bool";
+                    break;
+
+                case "Double":
+                    c_return = "double";
+                    break;
+
+                case "Void":
+                    c_return = "void";
+                    break;
+
+                default:
+                    System.out.println("Invalid type");
+                    return "";
+            }
+            c = c_return + " " + this.ID + "(";
         }
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {

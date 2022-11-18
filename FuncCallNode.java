@@ -149,6 +149,7 @@ public class FuncCallNode extends StmtNode {
 
                         case "Double":
                             type = "%f";
+                            break;
 
                         default:
                             System.out.println("Invalid type for printf");

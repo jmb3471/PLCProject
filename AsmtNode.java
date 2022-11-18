@@ -88,8 +88,31 @@ public class AsmtNode extends StmtNode {
     @Override
     public String convertToC() {
         String c = "";
-        if (type != null)
-            c += type + " ";
+        if (type != null) {
+            String c_type;
+            switch(type) {
+                case "Integer":
+                    c_type= "int";
+                    break;
+
+                case "String":
+                    c_type = "char*";
+                    break;
+
+                case "Boolean":
+                    c_type = "bool";
+                    break;
+
+                case "Double":
+                    c_type = "double";
+                    break;
+
+                default:
+                    System.out.println("Invalid type");
+                    return "";
+            }
+            c += c_type + " ";
+        }  
         c += id + " = ";
         c += cond.convertToJava();
         if (c.charAt(c.length() - 1) != ';') {
