@@ -142,7 +142,33 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        String java = "public " + this.return_type + " " + this.ID + "(";
+        String j_return;
+        switch(this.return_type) {
+            case "Integer":
+                j_return= "int";
+                break;
+
+            case "String":
+                j_return = "String";
+                break;
+
+            case "Boolean":
+                j_return = "boolean";
+                break;
+
+            case "Double":
+                j_return = "double";
+                break;
+
+            case "Void":
+                j_return = "void";
+                break;
+
+            default:
+                System.out.println("Invalid type");
+                return "";
+        }
+        String java = "public " + j_return + " " + this.ID + "(";
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 java += this.params.get(i).convertToJava();
