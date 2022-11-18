@@ -168,7 +168,7 @@ public class FunctionDefNode extends JottNode {
                 System.out.println("Invalid type");
                 return "";
         }
-        String java = "public " + j_return + " " + this.ID + "(";
+        String java = "public static " + j_return + " " + this.ID + "(";
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 java += this.params.get(i).convertToJava();

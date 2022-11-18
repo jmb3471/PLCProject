@@ -72,6 +72,11 @@ public class Jott {
                 return;
             }
 
+            if (args[2].equals("Java")) {
+                String header = "import java.util.Scanner;\npublic class " + args[1].substring(0, args[1].length() - 5) + " { public static String input(String prompt, int chars){ Scanner scanner = new Scanner(System.in); System.out.println(prompt); return scanner.nextLine(); }\n";
+                output = header + output;
+            }
+
             FileWriter fileWriter = new FileWriter(args[1]);
             fileWriter.write(output);
             fileWriter.close();
