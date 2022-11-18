@@ -164,7 +164,7 @@ public class FuncCallNode extends StmtNode {
                 }
             }
             if (Objects.equals(this.id.getId(), "input")) {
-
+                c += "input(";
             }
             if (Objects.equals(this.id.getId(), "concat")) {
                 c += "strcat(";
