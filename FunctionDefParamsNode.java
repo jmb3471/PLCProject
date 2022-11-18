@@ -54,12 +54,56 @@ public class FunctionDefParamsNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        return this.type + " " + this.ID;
+        String j_type;
+        switch(type) {
+            case "Integer":
+                j_type= "int";
+                break;
+
+            case "String":
+                j_type = "String";
+                break;
+
+            case "Boolean":
+                j_type = "boolean";
+                break;
+
+            case "Double":
+                j_type = "double";
+                break;
+
+            default:
+                System.out.println("Invalid type");
+                return "";
+        }
+        return j_type + " " + this.ID;
     }
 
     @Override
     public String convertToC() {
-        return this.type + " " + this.ID;
+        String c_type;
+        switch(this.type) {
+            case "Integer":
+                c_type= "int";
+                break;
+
+            case "String":
+                c_type = "char*";
+                break;
+
+            case "Boolean":
+                c_type = "bool";
+                break;
+
+            case "Double":
+                c_type = "double";
+                break;
+
+            default:
+                System.out.println("Invalid type");
+                return "";
+        }
+        return c_type + " " + this.ID;
     }
 
     @Override

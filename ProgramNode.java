@@ -11,6 +11,10 @@ public class ProgramNode extends JottNode {
     private String fileName;
     private int lineNumber;
 
+    public String c_input_func = "char* input(char* str, int numchars) {\n\tprintf(\"%s\", str);\n\tchar userin[numchars + 1]\n\tscanf(\"%s\", userin);\n\treturn userin;\n}\n\n";
+    public String c_conct_func = "char* concat(char* first, char* second) {\n\tstrcat(first, second);\n\treturn first;\n}\n\n";
+    public String c_length_func = "int length(char* str) {\n\treturn strlen(str);\n}\n\n";
+
     public ProgramNode(ArrayList<FunctionDefNode> funcDefs, String fileName, int lineNumber) {
         this.funcDefs = funcDefs;
         this.fileName = fileName;
@@ -56,7 +60,8 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        String java = "import java.util.Scanner;\npublic class Program { public String input(String prompt, int chars){ Scanner scanner = new Scanner(System.in); System.out.println(prompt); return scanner.nextLine(); }\n";
+        //String java = "import java.util.Scanner;\npublic class Program { public String input(String prompt, int chars){ Scanner scanner = new Scanner(System.in); System.out.println(prompt); return scanner.nextLine(); }\n";
+        String java = "";
         for (int i = 0; i < this.funcDefs.size(); i++) {
             java += this.funcDefs.get(i).convertToJava();
         }
@@ -65,7 +70,7 @@ public class ProgramNode extends JottNode {
 
     @Override
     public String convertToC() {
-        String c = "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n\n";
+        String c = "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n\n" + c_input_func + c_conct_func +c_length_func;
         for (int i = 0; i < this.funcDefs.size(); i++) {
             c += this.funcDefs.get(i).convertToC();
         }

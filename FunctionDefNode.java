@@ -142,7 +142,33 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToJava() {
-        String java = "public " + this.return_type + " " + this.ID + "(";
+        String j_return;
+        switch(this.return_type) {
+            case "Integer":
+                j_return= "int";
+                break;
+
+            case "String":
+                j_return = "String";
+                break;
+
+            case "Boolean":
+                j_return = "boolean";
+                break;
+
+            case "Double":
+                j_return = "double";
+                break;
+
+            case "Void":
+                j_return = "void";
+                break;
+
+            default:
+                System.out.println("Invalid type");
+                return "";
+        }
+        String java = "public static " + j_return + " " + this.ID + "(";
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 java += this.params.get(i).convertToJava();
@@ -157,7 +183,39 @@ public class FunctionDefNode extends JottNode {
 
     @Override
     public String convertToC() {
-        String c = this.return_type + " " + this.ID + "(";
+        String c;
+        if (this.ID.equals("main")) {
+            c = "int main(void";
+        }
+        else {
+            String c_return;
+            switch(this.return_type) {
+                case "Integer":
+                    c_return= "int";
+                    break;
+
+                case "String":
+                    c_return = "char*";
+                    break;
+
+                case "Boolean":
+                    c_return = "bool";
+                    break;
+
+                case "Double":
+                    c_return = "double";
+                    break;
+
+                case "Void":
+                    c_return = "void";
+                    break;
+
+                default:
+                    System.out.println("Invalid type");
+                    return "";
+            }
+            c = c_return + " " + this.ID + "(";
+        }
         for (int i = 0; i < this.params.size(); i++) {
             if (i == this.params.size() - 1) {
                 c += this.params.get(i).convertToC();
@@ -166,8 +224,12 @@ public class FunctionDefNode extends JottNode {
                 c += this.params.get(i).convertToC() + ",";
             }
         }
-        c += ") { " + this.Body.convertToC() + "}";
-
+        if (this.ID.equals("main")) {
+            c += ") { " + this.Body.convertToC() + "return 1;}";
+        }
+        else {
+            c += ") { " + this.Body.convertToC() + "}";
+        }
         return c;
     }
 

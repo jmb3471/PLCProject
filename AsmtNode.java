@@ -74,8 +74,31 @@ public class AsmtNode extends StmtNode {
     @Override
     public String convertToJava() {
         String java = "";
-        if (type != null)
-            java += type + " ";
+        if (type != null) {
+            String j_type;
+            switch(type) {
+                case "Integer":
+                    j_type= "int";
+                    break;
+
+                case "String":
+                    j_type = "String";
+                    break;
+
+                case "Boolean":
+                    j_type = "boolean";
+                    break;
+
+                case "Double":
+                    j_type = "double";
+                    break;
+
+                default:
+                    System.out.println("Invalid type");
+                    return "";
+            }
+            java += j_type + " ";
+        }
         java += id + " = ";
         java += cond.convertToJava();
         if (java.charAt(java.length() - 1) != ';') {
@@ -88,10 +111,33 @@ public class AsmtNode extends StmtNode {
     @Override
     public String convertToC() {
         String c = "";
-        if (type != null)
-            c += type + " ";
+        if (type != null) {
+            String c_type;
+            switch(type) {
+                case "Integer":
+                    c_type= "int";
+                    break;
+
+                case "String":
+                    c_type = "char*";
+                    break;
+
+                case "Boolean":
+                    c_type = "bool";
+                    break;
+
+                case "Double":
+                    c_type = "double";
+                    break;
+
+                default:
+                    System.out.println("Invalid type");
+                    return "";
+            }
+            c += c_type + " ";
+        }  
         c += id + " = ";
-        c += cond.convertToJava();
+        c += cond.convertToC();
         if (c.charAt(c.length() - 1) != ';') {
             c += ';';
         }
